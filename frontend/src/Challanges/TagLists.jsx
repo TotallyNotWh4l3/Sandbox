@@ -3,7 +3,7 @@ import { useState } from "react";
 import "./tag-lists.css";
 
 // List of usable TAGS
-const TAGS = ["React", "JavaScript", "CSS", "Node.js"];
+const TAGS = ["React", "JavaScript", "CSS", "HTML","Node.js", "Express.js", "Python"];
 
 export default function Taglist() {
     // useState for "currently selected tags (selected) and change/set selected tags (setSelected)"
