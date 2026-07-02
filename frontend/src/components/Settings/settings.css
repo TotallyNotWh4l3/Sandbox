@@ -1,4 +1,50 @@
+/* Full-screen floating layer */
+.settings-overlay {
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(8px);
+
+    z-index: 9999; /* key part: above everything */
+
+    pointer-events: auto;
+}
+
+/* Floating panel */
 .settings {
-    width: 60rem;
-    height: 40rem;
+    width: min(900px, 92vw);
+    height: min(600px, 85vh);
+
+    display: flex;
+    flex-direction: column;
+
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: 1rem;
+
+    box-shadow:
+        0 25px 80px rgba(0, 0, 0, 0.65),
+        0 0 0 1px rgba(124, 58, 237, 0.08);
+
+    overflow: hidden;
+
+    transform: translateY(0);
+    animation: settings-pop 120ms ease-out;
+}
+
+/* subtle entrance animation */
+@keyframes settings-pop {
+    from {
+        transform: translateY(10px) scale(0.98);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
 }

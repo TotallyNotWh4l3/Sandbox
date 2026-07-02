@@ -1,16 +1,20 @@
 // JSX
+import { useState } from "react";
 import DashboardHeader from "./DashboardHeader";
 import DashboardWorkspace from "./DashboardWorkspace";
+import Settings from "../Settings/Settings";
 
 // CSS
-import "./dashboard.css"
-
+import "./dashboard.css";
 
 export default function Dashboard() {
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     return (
         <div className="dashboard">
-            <DashboardHeader />
+            <DashboardHeader setIsSettingsOpen={setIsSettingsOpen} />
             <DashboardWorkspace />
+
+            {isSettingsOpen && <Settings onClose={() => setIsSettingsOpen(false)} />}
         </div>
-    )
+    );
 }

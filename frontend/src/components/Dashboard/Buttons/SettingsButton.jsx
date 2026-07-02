@@ -1,24 +1,19 @@
+// Functions
+import { useState } from "react";
+
+// Designs
 import { Settings } from "lucide-react";
-import "./settings-button.css";
+
+// JS
 import { T } from "../../../contants/i18n";
 
-export default function SettingsButton() {
-    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-    const LANG = T.en;
+// CSS
+import "./settings-button.css";
 
-    function handleOnClick() {
-        setIsSettingsOpen((prev) => !prev);
-    }
-
+export default function SettingsButton({ setIsOpen }) {
     return (
-        <div>
-            <button
-                className="settings-button"
-                onClick={handleOnClick()}
-            >
-                <Settings size={16} />
-                {LANG.dashboard.header.buttonCustomize.toUpperCase()}
-            </button>
-        </div>
+        <button className="settings-button" onClick={() => setIsOpen(true)}>
+            Settings
+        </button>
     );
 }
