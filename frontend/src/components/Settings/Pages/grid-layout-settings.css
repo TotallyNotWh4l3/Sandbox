@@ -1,0 +1,155 @@
+/* ============================================================================
+   GRID LAYOUT SETTINGS PAGE
+   ============================================================================ */
+
+.grid-layout-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+.grid-layout-settings__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0 0 0.5rem 0;
+}
+
+.grid-layout-settings__section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.grid-layout-settings__subtitle {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+.grid-layout-settings__description {
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+/* ============================================================================
+   COLUMNS BUTTONS
+   ============================================================================ */
+
+.grid-layout-settings__options {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.grid-layout-settings__button {
+    padding: 0.875rem 1.5rem;
+
+    background: var(--color-bg-secondary);
+    border: 2px solid var(--color-border);
+    border-radius: 0.5rem;
+
+    color: var(--color-text-primary);
+    font-weight: 500;
+    cursor: pointer;
+
+    transition: all 150ms ease-out;
+}
+
+.grid-layout-settings__button:hover {
+    background: var(--color-bg-hover);
+    border-color: var(--color-text-secondary);
+}
+
+.grid-layout-settings__button--active {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: white;
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
+}
+
+/* ============================================================================
+   GAP OPTIONS
+   ============================================================================ */
+
+.grid-layout-settings__gap-options {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.grid-layout-settings__gap-button {
+    flex: 1;
+    min-width: 120px;
+    padding: 0.875rem 1rem;
+
+    background: var(--color-bg-secondary);
+    border: 2px solid var(--color-border);
+    border-radius: 0.5rem;
+
+    color: var(--color-text-primary);
+    font-weight: 500;
+    cursor: pointer;
+
+    transition: all 150ms ease-out;
+}
+
+.grid-layout-settings__gap-button:hover {
+    background: var(--color-bg-hover);
+    border-color: var(--color-text-secondary);
+}
+
+.grid-layout-settings__gap-button--active {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: white;
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
+}
+
+/* ============================================================================
+   PREVIEW GRID
+   ============================================================================ */
+
+.grid-layout-settings__preview {
+    padding: 1.5rem;
+    background: var(--color-bg-secondary);
+    border-radius: 0.75rem;
+    border: 1px dashed var(--color-border);
+
+    min-height: 200px;
+}
+
+.grid-layout-settings__preview-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 1.5rem;
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+
+    min-height: 100px;
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+@media (max-width: 600px) {
+    .grid-layout-settings__preview {
+        min-height: 150px;
+    }
+
+    .grid-layout-settings__preview-item {
+        min-height: 80px;
+        padding: 1rem;
+        font-size: 0.8rem;
+    }
+}

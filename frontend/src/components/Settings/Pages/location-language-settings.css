@@ -1,0 +1,126 @@
+/* ============================================================================
+   LOCATION & LANGUAGE SETTINGS PAGE
+   ============================================================================ */
+
+.location-language-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+.location-language-settings__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0 0 0.5rem 0;
+}
+
+.location-language-settings__section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.location-language-settings__subtitle {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+/* ============================================================================
+   INPUT GROUP
+   ============================================================================ */
+
+.location-language-settings__input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.location-language-settings__input-group label {
+    font-weight: 500;
+    color: var(--color-text-primary);
+    font-size: 0.95rem;
+}
+
+.location-language-settings__input {
+    padding: 0.875rem 1rem;
+
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+
+    color: var(--color-text-primary);
+    font-size: 1rem;
+
+    transition: all 150ms ease-out;
+}
+
+.location-language-settings__input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+.location-language-settings__hint {
+    color: var(--color-text-secondary);
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+/* ============================================================================
+   LANGUAGE RADIO GROUP
+   ============================================================================ */
+
+.location-language-settings__language-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.location-language-settings__radio-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    padding: 0.75rem 1rem;
+
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+
+    cursor: pointer;
+    transition: all 150ms ease-out;
+
+    color: var(--color-text-primary);
+    font-size: 0.95rem;
+}
+
+.location-language-settings__radio-label:hover {
+    background: var(--color-bg-hover);
+    border-color: var(--color-text-secondary);
+}
+
+.location-language-settings__radio-label input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--color-accent);
+}
+
+.location-language-settings__radio-label input[type="radio"]:checked + span {
+    font-weight: 600;
+    color: var(--color-accent);
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+@media (max-width: 600px) {
+    .location-language-settings__input-group,
+    .location-language-settings__language-group {
+        gap: 0.5rem;
+    }
+}

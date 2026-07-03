@@ -1,3 +1,5 @@
+// Dashboard.jsx
+
 // JSX
 import { useState } from "react";
 import DashboardHeader from "./DashboardHeader";

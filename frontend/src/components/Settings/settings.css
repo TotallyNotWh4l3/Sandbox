@@ -1,4 +1,8 @@
-/* Full-screen floating layer */
+/* ============================================================================
+   SETTINGS MODAL - Main Container
+   ============================================================================ */
+
+/* Full-screen overlay */
 .settings-overlay {
     position: fixed;
     inset: 0;
@@ -10,12 +14,11 @@
     background: rgba(0, 0, 0, 0.55);
     backdrop-filter: blur(8px);
 
-    z-index: 9999; /* key part: above everything */
-
+    z-index: 9999;
     pointer-events: auto;
 }
 
-/* Floating panel */
+/* Floating panel container */
 .settings {
     width: min(900px, 92vw);
     height: min(600px, 85vh);
@@ -33,11 +36,9 @@
 
     overflow: hidden;
 
-    transform: translateY(0);
     animation: settings-pop 120ms ease-out;
 }
 
-/* subtle entrance animation */
 @keyframes settings-pop {
     from {
         transform: translateY(10px) scale(0.98);
@@ -46,5 +47,246 @@
     to {
         transform: translateY(0) scale(1);
         opacity: 1;
+    }
+}
+
+/* ============================================================================
+   HEADER
+   ============================================================================ */
+
+.settings__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+
+    background: var(--color-bg-primary);
+}
+
+.settings__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+.settings__close-btn {
+    width: 2.5rem;
+    height: 2.5rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+
+    color: var(--color-text-secondary);
+    font-size: 1.2rem;
+    cursor: pointer;
+
+    transition: all 150ms ease-out;
+}
+
+.settings__close-btn:hover {
+    background: var(--color-bg-hover);
+    color: var(--color-text-primary);
+}
+
+.settings__close-btn:active {
+    transform: scale(0.95);
+}
+
+/* ============================================================================
+   BODY - Layout
+   ============================================================================ */
+
+.settings__body {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+
+    background: var(--color-bg-primary);
+}
+
+/* ============================================================================
+   AUTHENTICATION FORM
+   ============================================================================ */
+
+.settings__auth {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    padding: 3rem 2rem;
+
+    background: linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 100%);
+}
+
+.settings__auth-form {
+    width: 100%;
+    max-width: 400px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.settings__auth-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0;
+    text-align: center;
+}
+
+.settings__auth-description {
+    color: var(--color-text-secondary);
+    text-align: center;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+.settings__auth-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.settings__auth-input {
+    width: 100%;
+    padding: 0.875rem 1rem;
+
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+
+    color: var(--color-text-primary);
+    font-size: 1rem;
+
+    transition: all 150ms ease-out;
+}
+
+.settings__auth-input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+.settings__auth-error {
+    color: var(--color-error);
+    font-size: 0.875rem;
+    margin: 0;
+}
+
+.settings__auth-button {
+    padding: 0.875rem 1.5rem;
+
+    background: var(--color-accent);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+
+    font-weight: 600;
+    cursor: pointer;
+
+    transition: all 150ms ease-out;
+}
+
+.settings__auth-button:hover:not(:disabled) {
+    background: var(--color-accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(124, 58, 237, 0.2);
+}
+
+.settings__auth-button:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.settings__auth-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.settings__auth-hint {
+    font-size: 0.8rem;
+    color: var(--color-text-tertiary);
+    text-align: center;
+    margin: 0;
+}
+
+/* ============================================================================
+   FOOTER
+   ============================================================================ */
+
+.settings__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--color-border);
+
+    background: var(--color-bg-secondary);
+}
+
+.settings__logout-btn {
+    padding: 0.5rem 1rem;
+
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+
+    color: var(--color-text-primary);
+    font-size: 0.875rem;
+    cursor: pointer;
+
+    transition: all 150ms ease-out;
+}
+
+.settings__logout-btn:hover {
+    background: var(--color-bg-hover);
+    border-color: var(--color-text-secondary);
+}
+
+.settings__footer-info {
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+@media (max-width: 600px) {
+    .settings {
+        width: 95vw;
+        height: 90vh;
+    }
+
+    .settings__header {
+        padding: 1rem;
+    }
+
+    .settings__title {
+        font-size: 1.25rem;
+    }
+
+    .settings__body {
+        flex-direction: column;
+    }
+
+    .settings__auth {
+        padding: 2rem 1rem;
+    }
+
+    .settings__footer {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
     }
 }
