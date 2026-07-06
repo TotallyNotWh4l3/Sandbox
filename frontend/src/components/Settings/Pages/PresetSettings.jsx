@@ -1,15 +1,16 @@
-// PresetSettings.jsx
-
 import { useState } from "react";
 import "./preset-settings.css";
 
-/**
- * PresetsSettings Component
- * Manage theme presets and custom configurations
- */
 import { DEFAULT_PRESETS } from "../../../constants/settingsOption";
 
-export default function PresetsSettings({
+import SettingsPageTitle from "../Shared/SettingsPageTitle";
+import SettingsHeader from "../Shared/SettingsHeader";
+
+/**
+ * PresetSettings Component
+ * Manage theme presets and custom configurations.
+ */
+export default function PresetSettings({
     settings,
     applyPreset,
     saveCustomPreset,
@@ -27,11 +28,11 @@ export default function PresetsSettings({
     };
 
     const handleSaveCustomPreset = () => {
-        if (customPresetName.trim()) {
-            saveCustomPreset(customPresetName);
-            setCustomPresetName("");
-            setShowSavePrompt(false);
-        }
+        if (!customPresetName.trim()) return;
+
+        saveCustomPreset(customPresetName.trim());
+        setCustomPresetName("");
+        setShowSavePrompt(false);
     };
 
     const handleDeletePreset = (presetName) => {
@@ -48,11 +49,15 @@ export default function PresetsSettings({
 
     return (
         <div className="presets-settings">
-            <h2 className="presets-settings__title">Presets & Configuration</h2>
+            <SettingsPageTitle>Presets & Configuration</SettingsPageTitle>
 
-            {/* Default Presets */}
+            {/* Built-in Presets */}
             <section className="presets-settings__section">
-                <h3 className="presets-settings__subtitle">Built-in Presets</h3>
+                <SettingsHeader
+                    title="Built-in Presets"
+                    description="Quickly switch between predefined dashboard configurations."
+                />
+
                 <div className="presets-settings__grid">
                     {DEFAULT_PRESETS.map((preset) => (
                         <button
@@ -66,6 +71,7 @@ export default function PresetsSettings({
                             aria-pressed={currentPreset === preset.id}
                         >
                             <span className="presets-settings__preset-label">{preset.name}</span>
+
                             {currentPreset === preset.id && (
                                 <span className="presets-settings__checkmark">✓</span>
                             )}
@@ -77,7 +83,11 @@ export default function PresetsSettings({
             {/* Custom Presets */}
             {customPresets.length > 0 && (
                 <section className="presets-settings__section">
-                    <h3 className="presets-settings__subtitle">Your Custom Presets</h3>
+                    <SettingsHeader
+                        title="Custom Presets"
+                        description="Your saved dashboard configurations."
+                    />
+
                     <div className="presets-settings__custom-presets">
                         {customPresets.map((preset) => (
                             <div key={preset.name} className="presets-settings__custom-item">
@@ -90,14 +100,16 @@ export default function PresetsSettings({
                                     onClick={() => handleApplyPreset(preset.name)}
                                 >
                                     <span>{preset.name}</span>
+
                                     {currentPreset === preset.name && (
                                         <span className="presets-settings__checkmark">✓</span>
                                     )}
                                 </button>
+
                                 <button
                                     className="presets-settings__delete-btn"
-                                    onClick={() => handleDeletePreset(preset.name)}
                                     title="Delete preset"
+                                    onClick={() => handleDeletePreset(preset.name)}
                                 >
                                     ✕
                                 </button>
@@ -107,9 +119,13 @@ export default function PresetsSettings({
                 </section>
             )}
 
-            {/* Save Current as Preset */}
+            {/* Save Preset */}
             <section className="presets-settings__section">
-                <h3 className="presets-settings__subtitle">Save Current Settings</h3>
+                <SettingsHeader
+                    title="Save Current Settings"
+                    description="Store your current configuration as a reusable preset."
+                />
+
                 {!showSavePrompt ? (
                     <button
                         className="presets-settings__save-btn"
@@ -121,26 +137,32 @@ export default function PresetsSettings({
                     <div className="presets-settings__save-prompt">
                         <input
                             type="text"
+                            className="presets-settings__input"
                             placeholder="Enter preset name..."
                             value={customPresetName}
                             onChange={(e) => setCustomPresetName(e.target.value)}
-                            className="presets-settings__input"
-                            onKeyPress={(e) => e.key === "Enter" && handleSaveCustomPreset()}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    handleSaveCustomPreset();
+                                }
+                            }}
                         />
+
                         <div className="presets-settings__prompt-buttons">
                             <button
-                                onClick={handleSaveCustomPreset}
                                 className="presets-settings__confirm-btn"
                                 disabled={!customPresetName.trim()}
+                                onClick={handleSaveCustomPreset}
                             >
                                 Save
                             </button>
+
                             <button
+                                className="presets-settings__cancel-btn"
                                 onClick={() => {
                                     setShowSavePrompt(false);
                                     setCustomPresetName("");
                                 }}
-                                className="presets-settings__cancel-btn"
                             >
                                 Cancel
                             </button>
@@ -149,15 +171,18 @@ export default function PresetsSettings({
                 )}
             </section>
 
-            {/* Reset to Defaults */}
+            {/* Reset */}
             <section className="presets-settings__section">
-                <h3 className="presets-settings__subtitle">Reset</h3>
-                <button onClick={handleResetAll} className="presets-settings__reset-btn">
-                    Reset All Settings to Defaults
+                <SettingsHeader
+                    title="Reset Settings"
+                    description="Restore every setting back to its default value."
+                />
+
+                <button className="presets-settings__reset-btn" onClick={handleResetAll}>
+                    Reset All Settings
                 </button>
-                <p className="presets-settings__warning">
-                    This will reset all settings to their default values.
-                </p>
+
+                <p className="presets-settings__warning">This action cannot be undone.</p>
             </section>
         </div>
     );

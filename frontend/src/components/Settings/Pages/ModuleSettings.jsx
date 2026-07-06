@@ -3,9 +3,13 @@ import "./module-settings.css";
 import { MODULE_CONFIG } from "../../../constants/moduleSettings";
 import { useLanguage } from "../../../hooks/useLanguage";
 
+import SettingsPageTitle from "../Shared/SettingsPageTitle";
+import SettingsHeader from "../Shared/SettingsHeader";
+import SettingsSelect from "../Shared/SettingsSelect";
+
 /**
  * ModuleSettings Component
- * Enable/disable modules and configure module-specific settings
+ * Enable/disable modules and configure module-specific settings.
  */
 export default function ModuleSettings({ settings, updateModuleSetting }) {
     const T = useLanguage();
@@ -16,7 +20,7 @@ export default function ModuleSettings({ settings, updateModuleSetting }) {
     };
 
     const handleRangeChange = (moduleName, key, value) => {
-        updateModuleSetting(moduleName, key, parseInt(value));
+        updateModuleSetting(moduleName, key, parseInt(value, 10));
     };
 
     const handleSelectChange = (moduleName, key, value) => {
@@ -36,7 +40,9 @@ export default function ModuleSettings({ settings, updateModuleSetting }) {
                             onChange={() => handleToggle(moduleName, setting.key)}
                             className="module-settings__toggle-input"
                         />
-                        <span className="module-settings__toggle-slider"></span>
+
+                        <span className="module-settings__toggle-slider" />
+
                         <span className="module-settings__toggle-text">
                             {currentValue ? T.settings.modules.on : T.settings.modules.off}
                         </span>
@@ -56,25 +62,20 @@ export default function ModuleSettings({ settings, updateModuleSetting }) {
                             }
                             className="module-settings__range"
                         />
+
                         <span className="module-settings__range-value">{currentValue}</span>
                     </div>
                 );
 
             case "select":
                 return (
-                    <select
+                    <SettingsSelect
                         value={currentValue}
-                        onChange={(e) =>
-                            handleSelectChange(moduleName, setting.key, e.target.value)
-                        }
-                        className="module-settings__select"
-                    >
-                        {setting.options.map((option) => (
-                            <option key={option.value} value={option.value}>
-                                {T.settings.modules.options[option.labelKey]}
-                            </option>
-                        ))}
-                    </select>
+                        options={setting.options}
+                        valueKey="value"
+                        labelTransform={(option) => T.settings.modules.options[option.labelKey]}
+                        onChange={(value) => handleSelectChange(moduleName, setting.key, value)}
+                    />
                 );
 
             default:
@@ -84,19 +85,14 @@ export default function ModuleSettings({ settings, updateModuleSetting }) {
 
     return (
         <div className="module-settings">
-            <h2 className="module-settings__title">{T.settings.modules.title}</h2>
+            <SettingsPageTitle>{T.settings.modules.title}</SettingsPageTitle>
 
             {MODULE_CONFIG.map((module) => (
                 <section key={module.id} className="module-settings__module">
-                    <div className="module-settings__header">
-                        <h3 className="module-settings__module-name">
-                            {T.settings.modules.names[module.nameKey]}
-                        </h3>
-
-                        <p className="module-settings__module-description">
-                            {T.settings.modules.descriptions[module.descriptionKey]}
-                        </p>
-                    </div>
+                    <SettingsHeader
+                        title={T.settings.modules.names[module.nameKey]}
+                        description={T.settings.modules.descriptions[module.descriptionKey]}
+                    />
 
                     <div className="module-settings__controls">
                         {module.settings.map((setting) => (

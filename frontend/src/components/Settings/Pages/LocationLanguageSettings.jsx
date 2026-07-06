@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Select from "react-select";
 import "./location-language-settings.css";
 
 import { LANGUAGE_OPTIONS } from "../../../constants/settingsOption";
@@ -7,6 +8,7 @@ import { useLanguage } from "../../../hooks/useLanguage";
 import SettingsPageTitle from "../Shared/SettingsPageTitle";
 import SettingsSection from "../Shared/SettingsSection";
 import SettingsInstruction from "../Shared/SettingsInstruction";
+import SettingsSelect from "../Shared/SettingsSelect";
 
 /**
  * LocationLanguageSettings Component
@@ -50,28 +52,19 @@ export default function LocationLanguageSettings({ settings, updateGlobalSetting
                         placeholder={T.settings.location.placeholder}
                     />
 
-
-                    <SettingsInstruction>
-                        {T.settings.location.hint}
-                    </SettingsInstruction>
+                    <SettingsInstruction>{T.settings.location.hint}</SettingsInstruction>
                 </div>
             </SettingsSection>
 
             <SettingsSection title={T.settings.location.language}>
                 <div className="location-language-settings__language-group">
-                    {LANGUAGE_OPTIONS.map((lang) => (
-                        <label key={lang.id} className="location-language-settings__radio-label">
-                            <input
-                                type="radio"
-                                name="language"
-                                value={lang.id}
-                                checked={currentLanguage === lang.id}
-                                onChange={() => handleLanguageChange(lang.id)}
-                            />
-
-                            <span>{lang.label}</span>
-                        </label>
-                    ))}
+                    <SettingsSelect
+                        value={currentLanguage}
+                        options={LANGUAGE_OPTIONS}
+                        valueKey="id"
+                        labelKey="label"
+                        onChange={handleLanguageChange}
+                    />
                 </div>
             </SettingsSection>
         </div>
