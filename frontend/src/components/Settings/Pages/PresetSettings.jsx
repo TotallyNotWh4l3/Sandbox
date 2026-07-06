@@ -1,19 +1,12 @@
 import { useState } from "react";
 import "./preset-settings.css";
 
-const DEFAULT_PRESETS = [
-    { id: "dark-default", name: "Dark (Default)", type: "default" },
-    { id: "dark-minimal", name: "Dark (Minimal)", type: "default" },
-    { id: "dark-accent", name: "Dark (Accent)", type: "default" },
-    { id: "light-default", name: "Light (Default)", type: "default" },
-    { id: "light-minimal", name: "Light (Minimal)", type: "default" },
-    { id: "light-accent", name: "Light (Accent)", type: "default" },
-];
-
 /**
  * PresetsSettings Component
  * Manage theme presets and custom configurations
  */
+import { DEFAULT_PRESETS } from "../../../contants/settingsOption";
+
 export default function PresetsSettings({
     settings,
     applyPreset,

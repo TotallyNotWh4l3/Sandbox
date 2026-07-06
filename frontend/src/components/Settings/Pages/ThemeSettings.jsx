@@ -1,13 +1,6 @@
 import "./theme-settings.css";
 
-const THEME_OPTIONS = [
-    { id: "dark-default", label: "Dark (Default)", preview: "🌙" },
-    { id: "dark-minimal", label: "Dark (Minimal)", preview: "⚫" },
-    { id: "dark-accent", label: "Dark (Accent)", preview: "💜" },
-    { id: "light-default", label: "Light (Default)", preview: "☀️" },
-    { id: "light-minimal", label: "Light (Minimal)", preview: "⚪" },
-    { id: "light-accent", label: "Light (Accent)", preview: "💛" },
-];
+import { THEME_OPTIONS } from "../../../contants/settingsOption";
 
 /**
  * ThemeSettings Component

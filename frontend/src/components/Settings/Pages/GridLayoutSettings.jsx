@@ -1,12 +1,6 @@
 import "./grid-layout-settings.css";
 
-const COLUMN_OPTIONS = [2, 3, 4, 6];
-const GAP_OPTIONS = [
-    { value: "0.5rem", label: "Tight" },
-    { value: "1rem", label: "Normal" },
-    { value: "1.5rem", label: "Spacious" },
-    { value: "2rem", label: "Extra Spacious" },
-];
+import { COLUMN_OPTIONS, GAP_OPTIONS } from "../../../contants/settingsOption";
 
 /**
  * GridLayoutSettings Component

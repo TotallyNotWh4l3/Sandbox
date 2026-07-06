@@ -1,17 +1,13 @@
 import { useState } from "react";
 import "./location-language-settings.css";
 
-const LANGUAGE_OPTIONS = [
-    { id: "en", label: "English" },
-    { id: "ja", label: "日本語" },
-    { id: "fr", label: "Français" },
-    { id: "de", label: "Deutsch" },
-];
+import { LANGUAGE_OPTIONS } from "../../../contants/settingsOption";
 
 /**
  * LocationLanguageSettings Component
  * Location and language configuration
  */
+
 export default function LocationLanguageSettings({ settings, updateGlobalSetting }) {
     const [locationInput, setLocationInput] = useState(settings.location.name);
     const currentLanguage = settings.language;
