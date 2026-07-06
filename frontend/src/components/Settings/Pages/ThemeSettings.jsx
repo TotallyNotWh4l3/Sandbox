@@ -3,6 +3,8 @@ import "./theme-settings.css";
 import { THEME_OPTIONS } from "../../../constants/settingsOption";
 import { useLanguage } from "../../../hooks/useLanguage";
 
+import * as SettingsUI from "../Shared/SettingsComponents";
+
 /**
  * ThemeSettings Component
  * Configure dashboard theme and appearance
@@ -18,10 +20,10 @@ export default function ThemeSettings({ settings, updateGlobalSetting }) {
 
     return (
         <div className="theme-settings">
-            <h2 className="theme-settings__title">{T.settings.theme.title}</h2>
+            <SettingsUI.PageTitle>{T.settings.theme.title}</SettingsUI.PageTitle>
 
-            <section className="theme-settings__section">
-                <h3 className="theme-settings__subtitle">{T.settings.theme.presets}</h3>
+            <SettingsUI.Section>
+                <SettingsUI.Header>{T.settings.theme.presets}</SettingsUI.Header>
 
                 <div className="theme-settings__grid">
                     {THEME_OPTIONS.map((theme) => (
@@ -40,15 +42,15 @@ export default function ThemeSettings({ settings, updateGlobalSetting }) {
                         </button>
                     ))}
                 </div>
-            </section>
+            </SettingsUI.Section>
 
-            <section className="theme-settings__section">
-                <h3 className="theme-settings__subtitle">{T.settings.theme.customization}</h3>
+            <SettingsUI.Section>
+                <SettingsUI.Header>{T.settings.theme.customization}</SettingsUI.Header>
 
-                <p className="theme-settings__description">
+                <SettingsUI.Instructions>
                     {T.settings.theme.customizationDescription}
-                </p>
-            </section>
+                </SettingsUI.Instructions>
+            </SettingsUI.Section>
         </div>
     );
 }

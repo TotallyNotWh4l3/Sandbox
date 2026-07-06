@@ -18,3 +18,7 @@
 #root {
     color: var(--color-text);
 }
+
+svg {
+    display: block;
+}

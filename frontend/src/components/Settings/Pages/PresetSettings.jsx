@@ -3,8 +3,7 @@ import "./preset-settings.css";
 
 import { DEFAULT_PRESETS } from "../../../constants/settingsOption";
 
-import SettingsPageTitle from "../Shared/SettingsPageTitle";
-import SettingsHeader from "../Shared/SettingsHeader";
+import * as SettingsUI from "../Shared/SettingsComponents"
 
 /**
  * PresetSettings Component
@@ -49,14 +48,15 @@ export default function PresetSettings({
 
     return (
         <div className="presets-settings">
-            <SettingsPageTitle>Presets & Configuration</SettingsPageTitle>
+            <SettingsUI.PageTitle>Presets & Configuration</SettingsUI.PageTitle>
 
             {/* Built-in Presets */}
-            <section className="presets-settings__section">
-                <SettingsHeader
-                    title="Built-in Presets"
-                    description="Quickly switch between predefined dashboard configurations."
-                />
+            <SettingsUI.Section>
+                <SettingsUI.Header>Built-in Presets</SettingsUI.Header>
+
+                <SettingsUI.Instructions>
+                    Quickly switch between predefined dashboard configurations.
+                </SettingsUI.Instructions>
 
                 <div className="presets-settings__grid">
                     {DEFAULT_PRESETS.map((preset) => (
@@ -78,15 +78,16 @@ export default function PresetSettings({
                         </button>
                     ))}
                 </div>
-            </section>
+            </SettingsUI.Section>
 
             {/* Custom Presets */}
             {customPresets.length > 0 && (
-                <section className="presets-settings__section">
-                    <SettingsHeader
-                        title="Custom Presets"
-                        description="Your saved dashboard configurations."
-                    />
+                <SettingsUI.Section>
+                    <SettingsUI.Header>Custom Presets</SettingsUI.Header>
+
+                    <SettingsUI.Instructions>
+                        Your saved dashboard configurations.
+                    </SettingsUI.Instructions>
 
                     <div className="presets-settings__custom-presets">
                         {customPresets.map((preset) => (
@@ -116,15 +117,16 @@ export default function PresetSettings({
                             </div>
                         ))}
                     </div>
-                </section>
+                </SettingsUI.Section>
             )}
 
             {/* Save Preset */}
-            <section className="presets-settings__section">
-                <SettingsHeader
-                    title="Save Current Settings"
-                    description="Store your current configuration as a reusable preset."
-                />
+            <SettingsUI.Section>
+                <SettingsUI.Header>Save Current Settings</SettingsUI.Header>
+
+                <SettingsUI.Instructions>
+                    Store your current configuration as a reusable preset.
+                </SettingsUI.Instructions>
 
                 {!showSavePrompt ? (
                     <button
@@ -169,21 +171,22 @@ export default function PresetSettings({
                         </div>
                     </div>
                 )}
-            </section>
+            </SettingsUI.Section>
 
             {/* Reset */}
-            <section className="presets-settings__section">
-                <SettingsHeader
-                    title="Reset Settings"
-                    description="Restore every setting back to its default value."
-                />
+            <SettingsUI.Section>
+                <SettingsUI.Header>Reset Settings</SettingsUI.Header>
+
+                <SettingsUI.Instructions>
+                    Restore every setting back to its default value.
+                </SettingsUI.Instructions>
 
                 <button className="presets-settings__reset-btn" onClick={handleResetAll}>
                     Reset All Settings
                 </button>
 
                 <p className="presets-settings__warning">This action cannot be undone.</p>
-            </section>
+            </SettingsUI.Section>
         </div>
     );
 }

@@ -3,8 +3,7 @@ import "./grid-layout-settings.css";
 import { COLUMN_OPTIONS, GAP_OPTIONS } from "../../../constants/settingsOption";
 import { useLanguage } from "../../../hooks/useLanguage";
 
-import SettingsPageTitle from "../Shared/SettingsPageTitle";
-import SettingsSection from "../Shared/SettingsSection";
+import * as SettingsUI from "../Shared/SettingsComponents";
 
 /**
  * GridLayoutSettings Component
@@ -26,12 +25,15 @@ export default function GridLayoutSettings({ settings, updateGlobalSetting }) {
 
     return (
         <div className="grid-layout-settings">
-            <SettingsPageTitle>{T.settings.grid.title}</SettingsPageTitle>
+            <SettingsUI.PageTitle>{T.settings.grid.title}</SettingsUI.PageTitle>
 
-            <SettingsSection
-                title={T.settings.grid.columns}
-                description={T.settings.grid.columnsDescription}
-            >
+            <SettingsUI.Section>
+                <SettingsUI.Header>{T.settings.grid.columns}</SettingsUI.Header>
+
+                <SettingsUI.Instructions>
+                    {T.settings.grid.columnsDescription}
+                </SettingsUI.Instructions>
+
                 <div className="grid-layout-settings__options">
                     {COLUMN_OPTIONS.map((cols) => (
                         <button
@@ -49,12 +51,15 @@ export default function GridLayoutSettings({ settings, updateGlobalSetting }) {
                         </button>
                     ))}
                 </div>
-            </SettingsSection>
+            </SettingsUI.Section>
 
-            <SettingsSection
-                title={T.settings.grid.spacing}
-                description={T.settings.grid.spacingDescription}
-            >
+            <SettingsUI.Section>
+                <SettingsUI.Header>{T.settings.grid.spacing}</SettingsUI.Header>
+
+                <SettingsUI.Instructions>
+                    {T.settings.grid.spacingDescription}
+                </SettingsUI.Instructions>
+
                 <div className="grid-layout-settings__gap-options">
                     {GAP_OPTIONS.map((option) => (
                         <button
@@ -71,9 +76,11 @@ export default function GridLayoutSettings({ settings, updateGlobalSetting }) {
                         </button>
                     ))}
                 </div>
-            </SettingsSection>
+            </SettingsUI.Section>
 
-            <SettingsSection title={T.settings.grid.preview}>
+            <SettingsUI.Section>
+                <SettingsUI.Header>{T.settings.grid.preview}</SettingsUI.Header>
+
                 <div
                     className="grid-layout-settings__preview"
                     style={{
@@ -88,7 +95,7 @@ export default function GridLayoutSettings({ settings, updateGlobalSetting }) {
                         </div>
                     ))}
                 </div>
-            </SettingsSection>
+            </SettingsUI.Section>
         </div>
     );
 }

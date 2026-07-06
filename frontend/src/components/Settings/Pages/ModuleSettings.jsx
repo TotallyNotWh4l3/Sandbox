@@ -3,8 +3,7 @@ import "./module-settings.css";
 import { MODULE_CONFIG } from "../../../constants/moduleSettings";
 import { useLanguage } from "../../../hooks/useLanguage";
 
-import SettingsPageTitle from "../Shared/SettingsPageTitle";
-import SettingsHeader from "../Shared/SettingsHeader";
+import * as SettingsUI from "../Shared/SettingsComponents"
 import SettingsSelect from "../Shared/SettingsSelect";
 
 /**
@@ -85,14 +84,17 @@ export default function ModuleSettings({ settings, updateModuleSetting }) {
 
     return (
         <div className="module-settings">
-            <SettingsPageTitle>{T.settings.modules.title}</SettingsPageTitle>
+            <SettingsUI.PageTitle>{T.settings.modules.title}</SettingsUI.PageTitle>
 
             {MODULE_CONFIG.map((module) => (
-                <section key={module.id} className="module-settings__module">
-                    <SettingsHeader
-                        title={T.settings.modules.names[module.nameKey]}
-                        description={T.settings.modules.descriptions[module.descriptionKey]}
-                    />
+                <SettingsUI.Section key={module.id} className="module-settings__module">
+                    <SettingsUI.Header>
+                        {T.settings.modules.names[module.nameKey]}
+                    </SettingsUI.Header>
+
+                    <SettingsUI.Instructions>
+                        {T.settings.modules.descriptions[module.descriptionKey]}
+                    </SettingsUI.Instructions>
 
                     <div className="module-settings__controls">
                         {module.settings.map((setting) => (
@@ -105,7 +107,7 @@ export default function ModuleSettings({ settings, updateModuleSetting }) {
                             </div>
                         ))}
                     </div>
-                </section>
+                </SettingsUI.Section>
             ))}
         </div>
     );

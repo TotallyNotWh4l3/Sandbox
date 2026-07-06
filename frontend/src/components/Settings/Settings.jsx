@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useSettings } from "../../hooks/useSettings";
 import SettingsSidebar from "./Sidebar/SettingsSidebar";
 import SettingsContent from "./Content/SettingsContent";
+import * as SettingsUI from "./Shared/SettingsComponents"
 import "./settings.css";
 
 /**
@@ -51,7 +52,9 @@ export default function Settings({ onClose }) {
             <div className="settings" onClick={(e) => e.stopPropagation()}>
                 {/* Header */}
                 <header className="settings__header">
-                    <h1 className="settings__title">Settings</h1>
+                    <SettingsUI.Header >
+                        Settings
+                    </SettingsUI.Header>
                     <button
                         className="settings__close-btn"
                         onClick={onClose}

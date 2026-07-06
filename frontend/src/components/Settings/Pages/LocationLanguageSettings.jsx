@@ -5,9 +5,7 @@ import "./location-language-settings.css";
 import { LANGUAGE_OPTIONS } from "../../../constants/settingsOption";
 import { useLanguage } from "../../../hooks/useLanguage";
 
-import SettingsPageTitle from "../Shared/SettingsPageTitle";
-import SettingsSection from "../Shared/SettingsSection";
-import SettingsInstruction from "../Shared/SettingsInstruction";
+import * as SettingsUI from "../Shared/SettingsComponents";
 import SettingsSelect from "../Shared/SettingsSelect";
 
 /**
@@ -37,36 +35,37 @@ export default function LocationLanguageSettings({ settings, updateGlobalSetting
 
     return (
         <div className="location-language-settings">
-            <SettingsPageTitle>{T.settings.location.title}</SettingsPageTitle>
+            <SettingsUI.PageTitle>{T.settings.location.title}</SettingsUI.PageTitle>
 
-            <SettingsSection title={T.settings.location.location}>
-                <div className="location-language-settings__input-group">
-                    <label htmlFor="location-input">{T.settings.location.dashboardLocation}</label>
+            <SettingsUI.Section>
+                <SettingsUI.Header>{T.settings.location.location}</SettingsUI.Header>
 
-                    <input
-                        id="location-input"
-                        type="text"
-                        className="location-language-settings__input"
-                        value={locationInput}
-                        onChange={handleLocationChange}
-                        placeholder={T.settings.location.placeholder}
-                    />
+                <SettingsUI.Instructions>{T.settings.location.hint}</SettingsUI.Instructions>
 
-                    <SettingsInstruction>{T.settings.location.hint}</SettingsInstruction>
-                </div>
-            </SettingsSection>
+                <label htmlFor="location-input">{T.settings.location.dashboardLocation}</label>
 
-            <SettingsSection title={T.settings.location.language}>
-                <div className="location-language-settings__language-group">
-                    <SettingsSelect
-                        value={currentLanguage}
-                        options={LANGUAGE_OPTIONS}
-                        valueKey="id"
-                        labelKey="label"
-                        onChange={handleLanguageChange}
-                    />
-                </div>
-            </SettingsSection>
+                <input
+                    id="location-input"
+                    type="text"
+                    className="location-language-settings__input"
+                    value={locationInput}
+                    onChange={handleLocationChange}
+                    placeholder={T.settings.location.placeholder}
+                />
+            </SettingsUI.Section>
+
+            <SettingsUI.Section>
+                <SettingsUI.Header>{T.settings.location.language}</SettingsUI.Header>
+
+                <SettingsSelect
+                    value={currentLanguage}
+                    options={LANGUAGE_OPTIONS}
+                    valueKey="id"
+                    labelKey="label"
+                    onChange={handleLanguageChange}
+                />
+            </SettingsUI.Section>
+
         </div>
     );
 }
