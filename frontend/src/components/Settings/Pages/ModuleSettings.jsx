@@ -1,0 +1,112 @@
+import "./module-settings.css";
+
+import { MODULE_CONFIG } from "../../../constants/moduleSettings";
+import { useLanguage } from "../../../hooks/useLanguage";
+
+import SettingsPageTitle from "../Shared/SettingsPageTitle";
+import SettingsHeader from "../Shared/SettingsHeader";
+import SettingsSelect from "../Shared/SettingsSelect";
+
+/**
+ * ModuleSettings Component
+ * Enable/disable modules and configure module-specific settings.
+ */
+export default function ModuleSettings({ settings, updateModuleSetting }) {
+    const T = useLanguage();
+
+    const handleToggle = (moduleName, key) => {
+        const currentValue = settings.modules[moduleName][key];
+        updateModuleSetting(moduleName, key, !currentValue);
+    };
+
+    const handleRangeChange = (moduleName, key, value) => {
+        updateModuleSetting(moduleName, key, parseInt(value, 10));
+    };
+
+    const handleSelectChange = (moduleName, key, value) => {
+        updateModuleSetting(moduleName, key, value);
+    };
+
+    const renderSettingControl = (moduleName, setting) => {
+        const currentValue = settings.modules[moduleName][setting.key];
+
+        switch (setting.type) {
+            case "toggle":
+                return (
+                    <label className="module-settings__toggle-label">
+                        <input
+                            type="checkbox"
+                            checked={currentValue}
+                            onChange={() => handleToggle(moduleName, setting.key)}
+                            className="module-settings__toggle-input"
+                        />
+
+                        <span className="module-settings__toggle-slider" />
+
+                        <span className="module-settings__toggle-text">
+                            {currentValue ? T.settings.modules.on : T.settings.modules.off}
+                        </span>
+                    </label>
+                );
+
+            case "range":
+                return (
+                    <div className="module-settings__range-group">
+                        <input
+                            type="range"
+                            min={setting.min}
+                            max={setting.max}
+                            value={currentValue}
+                            onChange={(e) =>
+                                handleRangeChange(moduleName, setting.key, e.target.value)
+                            }
+                            className="module-settings__range"
+                        />
+
+                        <span className="module-settings__range-value">{currentValue}</span>
+                    </div>
+                );
+
+            case "select":
+                return (
+                    <SettingsSelect
+                        value={currentValue}
+                        options={setting.options}
+                        valueKey="value"
+                        labelTransform={(option) => T.settings.modules.options[option.labelKey]}
+                        onChange={(value) => handleSelectChange(moduleName, setting.key, value)}
+                    />
+                );
+
+            default:
+                return null;
+        }
+    };
+
+    return (
+        <div className="module-settings">
+            <SettingsPageTitle>{T.settings.modules.title}</SettingsPageTitle>
+
+            {MODULE_CONFIG.map((module) => (
+                <section key={module.id} className="module-settings__module">
+                    <SettingsHeader
+                        title={T.settings.modules.names[module.nameKey]}
+                        description={T.settings.modules.descriptions[module.descriptionKey]}
+                    />
+
+                    <div className="module-settings__controls">
+                        {module.settings.map((setting) => (
+                            <div key={setting.key} className="module-settings__control-group">
+                                <label className="module-settings__label">
+                                    {T.settings.modules.labels[setting.labelKey]}
+                                </label>
+
+                                {renderSettingControl(module.id, setting)}
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            ))}
+        </div>
+    );
+}

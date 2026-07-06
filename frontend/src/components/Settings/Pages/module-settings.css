@@ -1,0 +1,219 @@
+/* ==========================================================================
+   MODULE SETTINGS
+   ========================================================================== */
+
+.module-settings {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==========================================================================
+   MODULE CARD
+   ========================================================================== */
+
+.module-settings__module {
+    padding: 1rem;
+
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+}
+
+.module-settings__module + .module-settings__module {
+    margin-top: 1rem;
+}
+
+/* ==========================================================================
+   CONTROLS
+   ========================================================================== */
+
+.module-settings__controls {
+    display: flex;
+    flex-direction: column;
+}
+
+.module-settings__control-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+
+    padding: 0.75rem 0;
+}
+
+.module-settings__control-group:not(:last-child) {
+    border-bottom: 1px solid var(--color-border);
+}
+
+.module-settings__label {
+    flex: 1;
+
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* ==========================================================================
+   TOGGLE
+   ========================================================================== */
+
+.module-settings__toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+
+    position: relative;
+    cursor: pointer;
+}
+
+.module-settings__toggle-input {
+    position: absolute;
+    opacity: 0;
+}
+
+.module-settings__toggle-slider {
+    position: relative;
+
+    width: 40px;
+    height: 22px;
+
+    background: var(--color-border);
+    border-radius: 999px;
+
+    transition: background 150ms ease;
+}
+
+.module-settings__toggle-slider::after {
+    content: "";
+
+    position: absolute;
+    top: 2px;
+    left: 2px;
+
+    width: 18px;
+    height: 18px;
+
+    background: #fff;
+    border-radius: 50%;
+
+    transition: transform 150ms ease;
+}
+
+.module-settings__toggle-input:checked + .module-settings__toggle-slider {
+    background: var(--color-accent);
+}
+
+.module-settings__toggle-input:checked + .module-settings__toggle-slider::after {
+    transform: translateX(18px);
+}
+
+.module-settings__toggle-text {
+    min-width: 2rem;
+
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+}
+
+.module-settings__toggle-input:checked ~ .module-settings__toggle-text {
+    color: var(--color-accent);
+}
+
+/* ==========================================================================
+   RANGE
+   ========================================================================== */
+
+.module-settings__range-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    width: 220px;
+}
+
+.module-settings__range {
+    flex: 1;
+    height: 5px;
+
+    appearance: none;
+
+    background: var(--color-border);
+    border-radius: 999px;
+    cursor: pointer;
+}
+
+.module-settings__range::-webkit-slider-thumb {
+    appearance: none;
+
+    width: 16px;
+    height: 16px;
+
+    border-radius: 50%;
+    background: var(--color-accent);
+
+    box-shadow: 0 2px 6px rgba(124, 58, 237, 0.25);
+}
+
+.module-settings__range::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+
+    border: none;
+    border-radius: 50%;
+    background: var(--color-accent);
+
+    box-shadow: 0 2px 6px rgba(124, 58, 237, 0.25);
+}
+
+.module-settings__range-value {
+    min-width: 2rem;
+
+    text-align: right;
+    font-weight: 600;
+    color: var(--color-accent);
+}
+
+/* ==========================================================================
+   SELECT
+   ========================================================================== */
+
+.module-settings__select {
+    min-width: 170px;
+    padding: 0.5rem 0.75rem;
+
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+
+    color: var(--color-text-primary);
+    font-size: 0.9rem;
+
+    transition:
+        border-color 150ms ease,
+        box-shadow 150ms ease;
+}
+
+.module-settings__select:hover {
+    border-color: var(--color-text-secondary);
+}
+
+.module-settings__select:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+/* ==========================================================================
+   MOBILE
+   ========================================================================== */
+
+@media (max-width: 600px) {
+    .module-settings__control-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .module-settings__range-group,
+    .module-settings__select {
+        width: 100%;
+    }
+}

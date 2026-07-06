@@ -1,15 +1,20 @@
-
 // JSX
 import Dashboard from "./components/Dashboard/Dashboard";
 
+// Hooks
+import { useSettingsState } from "./hooks/useSettings";
+import { SettingsProvider } from "./context/SettingsContext";
+
 // CSS
-import "./styles/global.css"
-import "./styles/variable.css"
+import "./styles/global.css";
+import "./styles/variable.css";
 
 export default function App() {
+    const settingsState = useSettingsState();
+
     return (
-        <div className="App">
+        <SettingsProvider value={settingsState}>
             <Dashboard />
-        </div>
+        </SettingsProvider>
     );
 }

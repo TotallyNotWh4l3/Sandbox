@@ -1,0 +1,98 @@
+/* ==========================================================================
+   LOCATION & LANGUAGE SETTINGS
+   ========================================================================== */
+
+.location-language-settings {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==========================================================================
+   LOCATION
+   ========================================================================== */
+
+.location-language-settings__input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.location-language-settings__input-group label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+}
+
+.location-language-settings__input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+
+    color: var(--color-text-primary);
+    font-size: 0.95rem;
+
+    transition:
+        border-color 150ms ease,
+        box-shadow 150ms ease;
+}
+
+.location-language-settings__input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+.location-language-settings__hint {
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--color-text-secondary);
+}
+
+/* ==========================================================================
+   LANGUAGE
+   ========================================================================== */
+
+.location-language-settings__language-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.location-language-settings__radio-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    padding: 0.75rem 1rem;
+
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+
+    color: var(--color-text-primary);
+    cursor: pointer;
+
+    transition:
+        background 150ms ease,
+        border-color 150ms ease;
+}
+
+.location-language-settings__radio-label:hover {
+    background: var(--color-bg-hover);
+    border-color: var(--color-text-secondary);
+}
+
+.location-language-settings__radio-label input[type="radio"] {
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--color-accent);
+}
+
+.location-language-settings__radio-label input[type="radio"]:checked + span {
+    font-weight: 600;
+    color: var(--color-accent);
+}
