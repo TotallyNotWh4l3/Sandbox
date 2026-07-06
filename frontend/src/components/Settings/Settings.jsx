@@ -1,3 +1,5 @@
+// Settings.jsx
+
 import { useState } from "react";
 import { useSettings } from "../../hooks/useSettings";
 import SettingsSidebar from "./Sidebar/SettingsSidebar";

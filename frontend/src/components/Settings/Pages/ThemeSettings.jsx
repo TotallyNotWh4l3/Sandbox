@@ -1,12 +1,15 @@
 import "./theme-settings.css";
 
-import { THEME_OPTIONS } from "../../../contants/settingsOption";
+import { THEME_OPTIONS } from "../../../constants/settingsOption";
+import { useLanguage } from "../../../hooks/useLanguage";
 
 /**
  * ThemeSettings Component
- * Theme/appearance selection and customization
+ * Configure dashboard theme and appearance
  */
 export default function ThemeSettings({ settings, updateGlobalSetting }) {
+    const T = useLanguage();
+
     const currentTheme = settings.theme;
 
     const handleThemeChange = (themeId) => {
@@ -15,10 +18,11 @@ export default function ThemeSettings({ settings, updateGlobalSetting }) {
 
     return (
         <div className="theme-settings">
-            <h2 className="theme-settings__title">Theme & Appearance</h2>
+            <h2 className="theme-settings__title">{T.settings.theme.title}</h2>
 
             <section className="theme-settings__section">
-                <h3 className="theme-settings__subtitle">Preset Themes</h3>
+                <h3 className="theme-settings__subtitle">{T.settings.theme.presets}</h3>
+
                 <div className="theme-settings__grid">
                     {THEME_OPTIONS.map((theme) => (
                         <button
@@ -27,23 +31,23 @@ export default function ThemeSettings({ settings, updateGlobalSetting }) {
                                 currentTheme === theme.id ? "theme-settings__card--active" : ""
                             }`}
                             onClick={() => handleThemeChange(theme.id)}
-                            aria-pressed={currentTheme === theme.id}
                         >
                             <span className="theme-settings__preview">{theme.preview}</span>
-                            <span className="theme-settings__label">{theme.label}</span>
+
+                            <span className="theme-settings__label">
+                                {T.settings.theme.options[theme.labelKey]}
+                            </span>
                         </button>
                     ))}
                 </div>
             </section>
 
             <section className="theme-settings__section">
-                <h3 className="theme-settings__subtitle">Custom Color Options</h3>
-                <div className="theme-settings__custom">
-                    <p className="theme-settings__note">
-                        Fine-tuning of colors, fonts, and opacity will be available in a future
-                        update.
-                    </p>
-                </div>
+                <h3 className="theme-settings__subtitle">{T.settings.theme.customization}</h3>
+
+                <p className="theme-settings__description">
+                    {T.settings.theme.customizationDescription}
+                </p>
             </section>
         </div>
     );

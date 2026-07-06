@@ -1,14 +1,20 @@
 import { useState } from "react";
 import "./location-language-settings.css";
 
-import { LANGUAGE_OPTIONS } from "../../../contants/settingsOption";
+import { LANGUAGE_OPTIONS } from "../../../constants/settingsOption";
+import { useLanguage } from "../../../hooks/useLanguage";
+
+import SettingsPageTitle from "../Shared/SettingsPageTitle";
+import SettingsSection from "../Shared/SettingsSection";
+import SettingsInstruction from "../Shared/SettingsInstruction";
 
 /**
  * LocationLanguageSettings Component
  * Location and language configuration
  */
-
 export default function LocationLanguageSettings({ settings, updateGlobalSetting }) {
+    const T = useLanguage();
+
     const [locationInput, setLocationInput] = useState(settings.location.name);
     const currentLanguage = settings.language;
 
@@ -19,38 +25,39 @@ export default function LocationLanguageSettings({ settings, updateGlobalSetting
     const handleLocationChange = (e) => {
         const newLocation = e.target.value;
         setLocationInput(newLocation);
-        // In a real app, this would geocode the location
+
         updateGlobalSetting("location", {
             name: newLocation,
-            lat: 35.6762, // placeholder
-            lng: 139.6503, // placeholder
+            lat: 35.6762,
+            lng: 139.6503,
         });
     };
 
     return (
         <div className="location-language-settings">
-            <h2 className="location-language-settings__title">Location & Language</h2>
+            <SettingsPageTitle>{T.settings.location.title}</SettingsPageTitle>
 
-            <section className="location-language-settings__section">
-                <h3 className="location-language-settings__subtitle">Location</h3>
+            <SettingsSection title={T.settings.location.location}>
                 <div className="location-language-settings__input-group">
-                    <label htmlFor="location-input">Dashboard Location (for weather)</label>
+                    <label htmlFor="location-input">{T.settings.location.dashboardLocation}</label>
+
                     <input
                         id="location-input"
                         type="text"
                         className="location-language-settings__input"
                         value={locationInput}
                         onChange={handleLocationChange}
-                        placeholder="e.g., Tokyo, New York"
+                        placeholder={T.settings.location.placeholder}
                     />
-                    <p className="location-language-settings__hint">
-                        Enter a city name to update weather location
-                    </p>
-                </div>
-            </section>
 
-            <section className="location-language-settings__section">
-                <h3 className="location-language-settings__subtitle">Language</h3>
+
+                    <SettingsInstruction>
+                        {T.settings.location.hint}
+                    </SettingsInstruction>
+                </div>
+            </SettingsSection>
+
+            <SettingsSection title={T.settings.location.language}>
                 <div className="location-language-settings__language-group">
                     {LANGUAGE_OPTIONS.map((lang) => (
                         <label key={lang.id} className="location-language-settings__radio-label">
@@ -61,11 +68,12 @@ export default function LocationLanguageSettings({ settings, updateGlobalSetting
                                 checked={currentLanguage === lang.id}
                                 onChange={() => handleLanguageChange(lang.id)}
                             />
+
                             <span>{lang.label}</span>
                         </label>
                     ))}
                 </div>
-            </section>
+            </SettingsSection>
         </div>
     );
 }

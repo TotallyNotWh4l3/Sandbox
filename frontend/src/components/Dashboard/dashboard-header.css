@@ -22,6 +22,7 @@
 /* Wordmark */
 .dashboard-header__wordmark {
     gap: 0.5rem;
+    flex-direction: row;
 }
 
 .dashboard-header__logo {

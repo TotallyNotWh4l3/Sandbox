@@ -1,12 +1,18 @@
 import "./grid-layout-settings.css";
 
-import { COLUMN_OPTIONS, GAP_OPTIONS } from "../../../contants/settingsOption";
+import { COLUMN_OPTIONS, GAP_OPTIONS } from "../../../constants/settingsOption";
+import { useLanguage } from "../../../hooks/useLanguage";
+
+import SettingsPageTitle from "../Shared/SettingsPageTitle";
+import SettingsSection from "../Shared/SettingsSection";
 
 /**
  * GridLayoutSettings Component
  * Configure dashboard grid layout (columns, gaps)
  */
 export default function GridLayoutSettings({ settings, updateGlobalSetting }) {
+    const T = useLanguage();
+
     const currentColumns = settings.gridColumns;
     const currentGap = settings.moduleGaps;
 
@@ -20,13 +26,12 @@ export default function GridLayoutSettings({ settings, updateGlobalSetting }) {
 
     return (
         <div className="grid-layout-settings">
-            <h2 className="grid-layout-settings__title">Grid Layout</h2>
+            <SettingsPageTitle>{T.settings.grid.title}</SettingsPageTitle>
 
-            <section className="grid-layout-settings__section">
-                <h3 className="grid-layout-settings__subtitle">Number of Columns</h3>
-                <p className="grid-layout-settings__description">
-                    How many modules should fit horizontally on the dashboard?
-                </p>
+            <SettingsSection
+                title={T.settings.grid.columns}
+                description={T.settings.grid.columnsDescription}
+            >
                 <div className="grid-layout-settings__options">
                     {COLUMN_OPTIONS.map((cols) => (
                         <button
@@ -39,17 +44,17 @@ export default function GridLayoutSettings({ settings, updateGlobalSetting }) {
                             onClick={() => handleColumnsChange(cols)}
                             aria-pressed={currentColumns === cols}
                         >
-                            {cols} Column{cols > 1 ? "s" : ""}
+                            {cols}{" "}
+                            {cols === 1 ? T.settings.grid.column : T.settings.grid.columnsPlural}
                         </button>
                     ))}
                 </div>
-            </section>
+            </SettingsSection>
 
-            <section className="grid-layout-settings__section">
-                <h3 className="grid-layout-settings__subtitle">Module Spacing</h3>
-                <p className="grid-layout-settings__description">
-                    Adjust the gap between dashboard modules.
-                </p>
+            <SettingsSection
+                title={T.settings.grid.spacing}
+                description={T.settings.grid.spacingDescription}
+            >
                 <div className="grid-layout-settings__gap-options">
                     {GAP_OPTIONS.map((option) => (
                         <button
@@ -62,14 +67,13 @@ export default function GridLayoutSettings({ settings, updateGlobalSetting }) {
                             onClick={() => handleGapChange(option.value)}
                             aria-pressed={currentGap === option.value}
                         >
-                            <span>{option.label}</span>
+                            <span>{T.settings.grid.gapOptions[option.labelKey]}</span>
                         </button>
                     ))}
                 </div>
-            </section>
+            </SettingsSection>
 
-            <section className="grid-layout-settings__section">
-                <h3 className="grid-layout-settings__subtitle">Preview</h3>
+            <SettingsSection title={T.settings.grid.preview}>
                 <div
                     className="grid-layout-settings__preview"
                     style={{
@@ -80,11 +84,11 @@ export default function GridLayoutSettings({ settings, updateGlobalSetting }) {
                 >
                     {Array.from({ length: 6 }).map((_, i) => (
                         <div key={i} className="grid-layout-settings__preview-item">
-                            Module {i + 1}
+                            {i + 1}
                         </div>
                     ))}
                 </div>
-            </section>
+            </SettingsSection>
         </div>
     );
 }

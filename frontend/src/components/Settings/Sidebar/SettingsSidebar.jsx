@@ -1,35 +1,36 @@
-import { useState } from "react";
 import "./settings-sidebar.css";
 
-const SETTINGS_TABS = [
-    { id: "theme", label: "Theme & Appearance", icon: "🎨" },
-    { id: "location", label: "Location & Language", icon: "🌍" },
-    { id: "grid", label: "Grid Layout", icon: "📐" },
-    { id: "modules", label: "Module Settings", icon: "🔧" },
-    { id: "presets", label: "Presets", icon: "⭐" },
-];
+import { SETTINGS_TABS } from "../../../constants/settingsOption";
+import { useLanguage } from "../../../hooks/useLanguage";
 
-/**
- * SettingsSidebar Component
- * Navigation tabs for different settings pages
- */
 export default function SettingsSidebar({ activeTab, onTabChange }) {
+    const T = useLanguage();
+
     return (
         <aside className="settings-sidebar">
             <nav className="settings-sidebar__nav">
-                {SETTINGS_TABS.map((tab) => (
-                    <button
-                        key={tab.id}
-                        className={`settings-sidebar__tab ${
-                            activeTab === tab.id ? "settings-sidebar__tab--active" : ""
-                        }`}
-                        onClick={() => onTabChange(tab.id)}
-                        aria-selected={activeTab === tab.id}
-                    >
-                        <span className="settings-sidebar__icon">{tab.icon}</span>
-                        <span className="settings-sidebar__label">{tab.label}</span>
-                    </button>
-                ))}
+                {SETTINGS_TABS.map((tab) => {
+                    const Icon = tab.icon;
+
+                    return (
+                        <button
+                            key={tab.id}
+                            className={`settings-sidebar__tab ${
+                                activeTab === tab.id ? "settings-sidebar__tab--active" : ""
+                            }`}
+                            onClick={() => onTabChange(tab.id)}
+                            aria-selected={activeTab === tab.id}
+                        >
+                            <span className="settings-sidebar__icon">
+                                <Icon size={16} />
+                            </span>
+
+                            <span className="settings-sidebar__label">
+                                {T.settings.sidebar[tab.labelKey]}
+                            </span>
+                        </button>
+                    );
+                })}
             </nav>
         </aside>
     );

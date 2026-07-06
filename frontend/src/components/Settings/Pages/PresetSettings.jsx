@@ -1,3 +1,5 @@
+// PresetSettings.jsx
+
 import { useState } from "react";
 import "./preset-settings.css";
 
@@ -5,7 +7,7 @@ import "./preset-settings.css";
  * PresetsSettings Component
  * Manage theme presets and custom configurations
  */
-import { DEFAULT_PRESETS } from "../../../contants/settingsOption";
+import { DEFAULT_PRESETS } from "../../../constants/settingsOption";
 
 export default function PresetsSettings({
     settings,

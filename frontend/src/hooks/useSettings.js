@@ -1,48 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
-
-const DEFAULT_SETTINGS = {
-    // Global/Theme Settings
-    theme: "dark-default", // dark-default, dark-minimal, dark-accent, light-default, light-minimal, light-accent
-    language: "en", // en, ja, etc.
-    location: { name: "Tokyo", lat: 35.6762, lng: 139.6503 },
-
-    // Grid Layout Settings
-    gridColumns: 3,
-    moduleGaps: "1rem",
-
-    // Module-specific Settings (Local Variables)
-    modules: {
-        weather: {
-            enabled: true,
-            forecastDays: 7,
-            showAlerts: true,
-        },
-        schedule: {
-            enabled: true,
-            viewMode: "relative", // absolute or relative
-            daysBeforeToday: 0,
-        },
-        announcements: {
-            enabled: true,
-            maxDisplay: 5,
-        },
-        sound: {
-            enabled: true,
-            volume: 50, // 0-100
-            alertSound: "default",
-        },
-    },
-
-    // Preset info
-    currentPreset: "dark-default",
-    customPresets: [],
-};
-
+import { useSettingsContext } from "../context/SettingsContext";
+import { DEFAULT_SETTINGS } from "../constants/settingsOption";
 /**
  * useSettings Hook
  * Manages global dashboard settings with localStorage persistence
  */
-export function useSettings() {
+export function useSettingsState() {
     const [settings, setSettings] = useState(() => {
         // Load from localStorage or use defaults
         try {
@@ -134,4 +97,8 @@ export function useSettings() {
         deleteCustomPreset,
         resetToDefaults,
     };
+}
+
+export function useSettings() {
+    return useSettingsContext();
 }

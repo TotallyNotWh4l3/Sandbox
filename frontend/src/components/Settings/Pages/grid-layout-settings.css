@@ -5,33 +5,6 @@
 .grid-layout-settings {
     display: flex;
     flex-direction: column;
-    gap: 2.5rem;
-}
-
-.grid-layout-settings__title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--color-text-primary);
-    margin: 0 0 0.5rem 0;
-}
-
-.grid-layout-settings__section {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.grid-layout-settings__subtitle {
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: var(--color-text-primary);
-    margin: 0;
-}
-
-.grid-layout-settings__description {
-    color: var(--color-text-secondary);
-    font-size: 0.95rem;
-    margin: 0;
 }
 
 /* ============================================================================

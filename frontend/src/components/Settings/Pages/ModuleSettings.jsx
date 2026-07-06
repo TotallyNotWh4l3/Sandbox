@@ -1,12 +1,15 @@
 import "./module-settings.css";
 
-import { MODULE_CONFIG } from "../../../contants/moduleSettings";
+import { MODULE_CONFIG } from "../../../constants/moduleSettings";
+import { useLanguage } from "../../../hooks/useLanguage";
 
 /**
  * ModuleSettings Component
  * Enable/disable modules and configure module-specific settings
  */
 export default function ModuleSettings({ settings, updateModuleSetting }) {
+    const T = useLanguage();
+
     const handleToggle = (moduleName, key) => {
         const currentValue = settings.modules[moduleName][key];
         updateModuleSetting(moduleName, key, !currentValue);
@@ -35,7 +38,7 @@ export default function ModuleSettings({ settings, updateModuleSetting }) {
                         />
                         <span className="module-settings__toggle-slider"></span>
                         <span className="module-settings__toggle-text">
-                            {currentValue ? "On" : "Off"}
+                            {currentValue ? T.settings.modules.on : T.settings.modules.off}
                         </span>
                     </label>
                 );
@@ -68,7 +71,7 @@ export default function ModuleSettings({ settings, updateModuleSetting }) {
                     >
                         {setting.options.map((option) => (
                             <option key={option.value} value={option.value}>
-                                {option.label}
+                                {T.settings.modules.options[option.labelKey]}
                             </option>
                         ))}
                     </select>
@@ -81,19 +84,27 @@ export default function ModuleSettings({ settings, updateModuleSetting }) {
 
     return (
         <div className="module-settings">
-            <h2 className="module-settings__title">Module Settings</h2>
+            <h2 className="module-settings__title">{T.settings.modules.title}</h2>
 
             {MODULE_CONFIG.map((module) => (
                 <section key={module.id} className="module-settings__module">
                     <div className="module-settings__header">
-                        <h3 className="module-settings__module-name">{module.name}</h3>
-                        <p className="module-settings__module-description">{module.description}</p>
+                        <h3 className="module-settings__module-name">
+                            {T.settings.modules.names[module.nameKey]}
+                        </h3>
+
+                        <p className="module-settings__module-description">
+                            {T.settings.modules.descriptions[module.descriptionKey]}
+                        </p>
                     </div>
 
                     <div className="module-settings__controls">
                         {module.settings.map((setting) => (
                             <div key={setting.key} className="module-settings__control-group">
-                                <label className="module-settings__label">{setting.label}</label>
+                                <label className="module-settings__label">
+                                    {T.settings.modules.labels[setting.labelKey]}
+                                </label>
+
                                 {renderSettingControl(module.id, setting)}
                             </div>
                         ))}

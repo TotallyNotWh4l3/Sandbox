@@ -1,40 +1,36 @@
+// DashboardHeader.jsx
+
 import React, { useState } from "react";
 import { Layers } from "lucide-react";
 import { LinearGradient } from "react-text-gradients";
 
 // Components
-import SettingsButton from "./Buttons/SettingsButton";
-import UserButton from "./Buttons/UserButton";
+import SettingsButton from "./SettingsButton";
+import UserButton from "./UserButton";
 
 // JS
-import { T } from "../../contants/i18n";
+import { useLanguage } from "../../hooks/useLanguage";
 
 // CSS
 import "./dashboard-header.css";
 import Settings from "../Settings/Settings";
 
 function Workmark() {
-    const LANG = T.en;
+    const T = useLanguage();
     const titleGradient = ["to right", "#4c00ff, #9c31ff"];
 
     return (
         <div className="dashboard-header__wordmark">
-            <div className="dashboard-header__logo">
-                <LinearGradient gradient={titleGradient}>
-                    <Layers size={32} />
-                </LinearGradient>
-            </div>
-
+            <Layers />
             <div className="dashboard-header__titles">
                 <span className="dashboard-header__title">
                     <LinearGradient gradient={titleGradient}>
-                        {LANG.dashboard.header.title.toUpperCase()}
+                        {T.dashboard.header.title.toUpperCase()}
                     </LinearGradient>
                 </span>
-
                 <span className="dashboard-header__subtitle">
                     <LinearGradient gradient={titleGradient}>
-                        {LANG.dashboard.header.subTitle.toUpperCase()}
+                        {T.dashboard.header.subTitle.toUpperCase()}
                     </LinearGradient>
                 </span>
             </div>
