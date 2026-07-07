@@ -1,35 +1,42 @@
-import { useState } from "react";
-import Select from "react-select";
+import { useState, useEffect } from "react";
+
 import "./location-language-settings.css";
 
 import { LANGUAGE_OPTIONS } from "../../../constants/settingsOption";
+
 import { useLanguage } from "../../../hooks/useLanguage";
+import { useSettings } from "../../../hooks/useSettings";
 
 import * as SettingsUI from "../Shared/SettingsComponents";
 import SettingsSelect from "../Shared/SettingsSelect";
 
 /**
  * LocationLanguageSettings Component
- * Location and language configuration
+ * Configure language and default location.
  */
-export default function LocationLanguageSettings({ settings, updateGlobalSetting }) {
+export default function LocationLanguageSettings() {
     const T = useLanguage();
 
-    const [locationInput, setLocationInput] = useState(settings.location.name);
-    const currentLanguage = settings.language;
+    const { settings, updatePreference } = useSettings();
 
-    const handleLanguageChange = (langId) => {
-        updateGlobalSetting("language", langId);
+    const [locationInput, setLocationInput] = useState(settings.preferences.location.name);
+
+    useEffect(() => {
+        setLocationInput(settings.preferences.location.name);
+    }, [settings.preferences.location.name]);
+
+    const handleLanguageChange = (language) => {
+        updatePreference("language", language);
     };
 
     const handleLocationChange = (e) => {
-        const newLocation = e.target.value;
-        setLocationInput(newLocation);
+        const value = e.target.value;
 
-        updateGlobalSetting("location", {
-            name: newLocation,
-            lat: 35.6762,
-            lng: 139.6503,
+        setLocationInput(value);
+
+        updatePreference("location", {
+            ...settings.preferences.location,
+            name: value,
         });
     };
 
@@ -58,14 +65,13 @@ export default function LocationLanguageSettings({ settings, updateGlobalSetting
                 <SettingsUI.Header>{T.settings.location.language}</SettingsUI.Header>
 
                 <SettingsSelect
-                    value={currentLanguage}
+                    value={settings.preferences.language}
                     options={LANGUAGE_OPTIONS}
                     valueKey="id"
                     labelKey="label"
                     onChange={handleLanguageChange}
                 />
             </SettingsUI.Section>
-
         </div>
     );
 }

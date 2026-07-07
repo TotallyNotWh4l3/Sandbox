@@ -1,42 +1,43 @@
 import { useState } from "react";
 import "./preset-settings.css";
 
-import { DEFAULT_PRESETS } from "../../../constants/settingsOption";
-
-import * as SettingsUI from "../Shared/SettingsComponents"
+import * as SettingsUI from "../Shared/SettingsComponents";
 
 /**
  * PresetSettings Component
- * Manage theme presets and custom configurations.
+ * Manage style presets and custom configurations.
  */
 export default function PresetSettings({
     settings,
-    applyPreset,
-    saveCustomPreset,
-    deleteCustomPreset,
+    applyStyle,
+    saveCustomStyle,
+    deleteCustomStyle,
     resetToDefaults,
 }) {
-    const [customPresetName, setCustomPresetName] = useState("");
+    const [customStyleName, setCustomStyleName] = useState("");
     const [showSavePrompt, setShowSavePrompt] = useState(false);
 
-    const currentPreset = settings.currentPreset;
-    const customPresets = settings.customPresets;
+    const currentStyle = settings.preferences.appearance.currentStyle;
 
-    const handleApplyPreset = (presetId) => {
-        applyPreset(presetId);
+    const builtInStyles = settings.styles.filter((style) => style.builtIn);
+    const customStyles = settings.styles.filter((style) => !style.builtIn);
+
+    const handleApplyStyle = (styleId) => {
+        applyStyle(styleId);
     };
 
-    const handleSaveCustomPreset = () => {
-        if (!customPresetName.trim()) return;
+    const handleSaveCustomStyle = () => {
+        if (!customStyleName.trim()) return;
 
-        saveCustomPreset(customPresetName.trim());
-        setCustomPresetName("");
+        saveCustomStyle(customStyleName.trim());
+
+        setCustomStyleName("");
         setShowSavePrompt(false);
     };
 
-    const handleDeletePreset = (presetName) => {
-        if (window.confirm(`Delete preset "${presetName}"?`)) {
-            deleteCustomPreset(presetName);
+    const handleDeleteStyle = (styleId) => {
+        if (window.confirm(`Delete style "${styleId}"?`)) {
+            deleteCustomStyle(styleId);
         }
     };
 
@@ -48,31 +49,30 @@ export default function PresetSettings({
 
     return (
         <div className="presets-settings">
-            <SettingsUI.PageTitle>Presets & Configuration</SettingsUI.PageTitle>
+            <SettingsUI.PageTitle>Styles & Configuration</SettingsUI.PageTitle>
 
-            {/* Built-in Presets */}
             <SettingsUI.Section>
-                <SettingsUI.Header>Built-in Presets</SettingsUI.Header>
+                <SettingsUI.Header>Built-in Styles</SettingsUI.Header>
 
                 <SettingsUI.Instructions>
-                    Quickly switch between predefined dashboard configurations.
+                    Switch between predefined appearance styles.
                 </SettingsUI.Instructions>
 
                 <div className="presets-settings__grid">
-                    {DEFAULT_PRESETS.map((preset) => (
+                    {builtInStyles.map((style) => (
                         <button
-                            key={preset.id}
+                            key={style.id}
                             className={`presets-settings__preset-card ${
-                                currentPreset === preset.id
+                                currentStyle === style.id
                                     ? "presets-settings__preset-card--active"
                                     : ""
                             }`}
-                            onClick={() => handleApplyPreset(preset.id)}
-                            aria-pressed={currentPreset === preset.id}
+                            onClick={() => handleApplyStyle(style.id)}
+                            aria-pressed={currentStyle === style.id}
                         >
-                            <span className="presets-settings__preset-label">{preset.name}</span>
+                            <span className="presets-settings__preset-label">{style.name}</span>
 
-                            {currentPreset === preset.id && (
+                            {currentStyle === style.id && (
                                 <span className="presets-settings__checkmark">✓</span>
                             )}
                         </button>
@@ -80,37 +80,36 @@ export default function PresetSettings({
                 </div>
             </SettingsUI.Section>
 
-            {/* Custom Presets */}
-            {customPresets.length > 0 && (
+            {customStyles.length > 0 && (
                 <SettingsUI.Section>
-                    <SettingsUI.Header>Custom Presets</SettingsUI.Header>
+                    <SettingsUI.Header>Custom Styles</SettingsUI.Header>
 
                     <SettingsUI.Instructions>
-                        Your saved dashboard configurations.
+                        Your saved appearance configurations.
                     </SettingsUI.Instructions>
 
                     <div className="presets-settings__custom-presets">
-                        {customPresets.map((preset) => (
-                            <div key={preset.name} className="presets-settings__custom-item">
+                        {customStyles.map((style) => (
+                            <div key={style.id} className="presets-settings__custom-item">
                                 <button
                                     className={`presets-settings__custom-button ${
-                                        currentPreset === preset.name
+                                        currentStyle === style.id
                                             ? "presets-settings__custom-button--active"
                                             : ""
                                     }`}
-                                    onClick={() => handleApplyPreset(preset.name)}
+                                    onClick={() => handleApplyStyle(style.id)}
                                 >
-                                    <span>{preset.name}</span>
+                                    <span>{style.name}</span>
 
-                                    {currentPreset === preset.name && (
+                                    {currentStyle === style.id && (
                                         <span className="presets-settings__checkmark">✓</span>
                                     )}
                                 </button>
 
                                 <button
                                     className="presets-settings__delete-btn"
-                                    title="Delete preset"
-                                    onClick={() => handleDeletePreset(preset.name)}
+                                    title="Delete style"
+                                    onClick={() => handleDeleteStyle(style.id)}
                                 >
                                     ✕
                                 </button>
@@ -120,12 +119,11 @@ export default function PresetSettings({
                 </SettingsUI.Section>
             )}
 
-            {/* Save Preset */}
             <SettingsUI.Section>
-                <SettingsUI.Header>Save Current Settings</SettingsUI.Header>
+                <SettingsUI.Header>Save Current Style</SettingsUI.Header>
 
                 <SettingsUI.Instructions>
-                    Store your current configuration as a reusable preset.
+                    Store your current appearance as a reusable style.
                 </SettingsUI.Instructions>
 
                 {!showSavePrompt ? (
@@ -133,19 +131,19 @@ export default function PresetSettings({
                         className="presets-settings__save-btn"
                         onClick={() => setShowSavePrompt(true)}
                     >
-                        Save as Custom Preset
+                        Save as Custom Style
                     </button>
                 ) : (
                     <div className="presets-settings__save-prompt">
                         <input
                             type="text"
                             className="presets-settings__input"
-                            placeholder="Enter preset name..."
-                            value={customPresetName}
-                            onChange={(e) => setCustomPresetName(e.target.value)}
+                            placeholder="Enter style name..."
+                            value={customStyleName}
+                            onChange={(e) => setCustomStyleName(e.target.value)}
                             onKeyDown={(e) => {
                                 if (e.key === "Enter") {
-                                    handleSaveCustomPreset();
+                                    handleSaveCustomStyle();
                                 }
                             }}
                         />
@@ -153,8 +151,8 @@ export default function PresetSettings({
                         <div className="presets-settings__prompt-buttons">
                             <button
                                 className="presets-settings__confirm-btn"
-                                disabled={!customPresetName.trim()}
-                                onClick={handleSaveCustomPreset}
+                                disabled={!customStyleName.trim()}
+                                onClick={handleSaveCustomStyle}
                             >
                                 Save
                             </button>
@@ -163,7 +161,7 @@ export default function PresetSettings({
                                 className="presets-settings__cancel-btn"
                                 onClick={() => {
                                     setShowSavePrompt(false);
-                                    setCustomPresetName("");
+                                    setCustomStyleName("");
                                 }}
                             >
                                 Cancel
@@ -173,7 +171,6 @@ export default function PresetSettings({
                 )}
             </SettingsUI.Section>
 
-            {/* Reset */}
             <SettingsUI.Section>
                 <SettingsUI.Header>Reset Settings</SettingsUI.Header>
 

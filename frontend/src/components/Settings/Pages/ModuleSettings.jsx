@@ -3,31 +3,31 @@ import "./module-settings.css";
 import { MODULE_CONFIG } from "../../../constants/moduleSettings";
 import { useLanguage } from "../../../hooks/useLanguage";
 
-import * as SettingsUI from "../Shared/SettingsComponents"
+import * as SettingsUI from "../Shared/SettingsComponents";
 import SettingsSelect from "../Shared/SettingsSelect";
 
 /**
  * ModuleSettings Component
- * Enable/disable modules and configure module-specific settings.
+ * Configure default values for modules.
  */
-export default function ModuleSettings({ settings, updateModuleSetting }) {
+export default function ModuleSettings({ settings, updateModuleDefault }) {
     const T = useLanguage();
 
     const handleToggle = (moduleName, key) => {
-        const currentValue = settings.modules[moduleName][key];
-        updateModuleSetting(moduleName, key, !currentValue);
+        const currentValue = settings.moduleDefaults[moduleName][key];
+        updateModuleDefault(moduleName, key, !currentValue);
     };
 
     const handleRangeChange = (moduleName, key, value) => {
-        updateModuleSetting(moduleName, key, parseInt(value, 10));
+        updateModuleDefault(moduleName, key, parseInt(value, 10));
     };
 
     const handleSelectChange = (moduleName, key, value) => {
-        updateModuleSetting(moduleName, key, value);
+        updateModuleDefault(moduleName, key, value);
     };
 
     const renderSettingControl = (moduleName, setting) => {
-        const currentValue = settings.modules[moduleName][setting.key];
+        const currentValue = settings.moduleDefaults[moduleName][setting.key];
 
         switch (setting.type) {
             case "toggle":

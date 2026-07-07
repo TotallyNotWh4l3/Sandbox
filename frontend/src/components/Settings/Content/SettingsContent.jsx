@@ -21,16 +21,16 @@ export default function SettingsContent({
 }) {
     const renderContent = () => {
         switch (activeTab) {
-            case "theme":
-                return (
-                    <ThemeSettings settings={settings} updateGlobalSetting={updateGlobalSetting} />
-                );
             case "location":
                 return (
                     <LocationLanguageSettings
                         settings={settings}
                         updateGlobalSetting={updateGlobalSetting}
                     />
+                );
+            case "theme":
+                return (
+                    <ThemeSettings settings={settings} updateGlobalSetting={updateGlobalSetting} />
                 );
             case "grid":
                 return (

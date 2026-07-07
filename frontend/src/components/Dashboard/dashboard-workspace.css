@@ -2,4 +2,10 @@
     display: grid;
 
     grid-template-columns: repeat(var(--workspace-columns), 1fr);
+
+    gap: var(--workspace-gap);
+
+    padding: var(--workspace-padding);
+
+    flex: 1;
 }

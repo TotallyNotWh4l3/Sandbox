@@ -1,28 +1,46 @@
 import { useState, useEffect, useCallback } from "react";
 import { useSettingsContext } from "../context/SettingsContext";
-import { DEFAULT_SETTINGS } from "../constants/settingsOption";
+import { DEFAULT_SETTINGS } from "../constants/defaultSettings";
 
 /**
  * useSettings Hook
- * Manages global dashboard settings with localStorage persistence
+ * Manages application settings with localStorage persistence.
  */
 export function useSettingsState() {
     const [settings, setSettings] = useState(() => {
         try {
             const stored = localStorage.getItem("co-efficient-settings");
-            return stored ? JSON.parse(stored) : DEFAULT_SETTINGS;
+
+            if (!stored) {
+                return structuredClone(DEFAULT_SETTINGS);
+            }
+
+            const parsed = JSON.parse(stored);
+
+            return {
+                ...structuredClone(DEFAULT_SETTINGS),
+                ...parsed,
+
+                preferences: {
+                    ...DEFAULT_SETTINGS.preferences,
+                    ...parsed.preferences,
+                },
+
+                styles: parsed.styles ?? DEFAULT_SETTINGS.styles,
+
+                moduleDefaults: parsed.moduleDefaults ?? DEFAULT_SETTINGS.moduleDefaults,
+            };
         } catch (e) {
-            console.error("Failed to load settings from localStorage:", e);
-            return DEFAULT_SETTINGS;
+            console.error("Failed to load settings:", e);
+            return structuredClone(DEFAULT_SETTINGS);
         }
     });
 
-    // Persist to localStorage whenever settings change
     useEffect(() => {
         try {
             localStorage.setItem("co-efficient-settings", JSON.stringify(settings));
         } catch (e) {
-            console.error("Failed to save settings to localStorage:", e);
+            console.error("Failed to save settings:", e);
         }
     }, [settings]);
 
@@ -30,31 +48,21 @@ export function useSettingsState() {
     // Preferences
     // =====================================================
 
-    const updatePreference = useCallback((key, value) => {
-        setSettings((prev) => ({
-            ...prev,
-            preferences: {
-                ...prev.preferences,
-                [key]: value,
-            },
-        }));
-    }, []);
+    const updatePreference = useCallback((path, value) => {
+        setSettings((prev) => {
+            const updated = structuredClone(prev);
 
-    // =====================================================
-    // Dashboard Layout
-    // =====================================================
+            const keys = path.split(".");
+            let current = updated.preferences;
 
-    const updateLayoutSetting = useCallback((key, value) => {
-        setSettings((prev) => ({
-            ...prev,
-            dashboard: {
-                ...prev.dashboard,
-                layout: {
-                    ...prev.dashboard.layout,
-                    [key]: value,
-                },
-            },
-        }));
+            for (let i = 0; i < keys.length - 1; i++) {
+                current = current[keys[i]];
+            }
+
+            current[keys[keys.length - 1]] = value;
+
+            return updated;
+        });
     }, []);
 
     // =====================================================
@@ -75,92 +83,42 @@ export function useSettingsState() {
     }, []);
 
     // =====================================================
-    // Dashboard Modules
+    // Styles
     // =====================================================
 
-    const addDashboardModule = useCallback((module) => {
+    const applyStyle = useCallback((styleId) => {
         setSettings((prev) => ({
             ...prev,
-            dashboard: {
-                ...prev.dashboard,
-                modules: [...prev.dashboard.modules, module],
-            },
-        }));
-    }, []);
-
-    const updateDashboardModule = useCallback((id, updates) => {
-        setSettings((prev) => ({
-            ...prev,
-            dashboard: {
-                ...prev.dashboard,
-                modules: prev.dashboard.modules.map((module) =>
-                    module.id === id
-                        ? {
-                              ...module,
-                              ...updates,
-                          }
-                        : module,
-                ),
-            },
-        }));
-    }, []);
-
-    const removeDashboardModule = useCallback((id) => {
-        setSettings((prev) => ({
-            ...prev,
-            dashboard: {
-                ...prev.dashboard,
-                modules: prev.dashboard.modules.filter((module) => module.id !== id),
-            },
-        }));
-    }, []);
-
-    // =====================================================
-    // Presets
-    // =====================================================
-
-    const applyPreset = useCallback((presetName) => {
-        setSettings((prev) => ({
-            ...prev,
-
             preferences: {
                 ...prev.preferences,
-                theme: presetName,
-            },
-
-            presets: {
-                ...prev.presets,
-                current: presetName,
+                appearance: {
+                    ...prev.preferences.appearance,
+                    currentStyle: styleId,
+                },
             },
         }));
     }, []);
 
-    const saveCustomPreset = useCallback(
-        (presetName) => {
-            const newPreset = {
-                name: presetName,
-                timestamp: Date.now(),
-                data: structuredClone(settings),
-            };
-
-            setSettings((prev) => ({
-                ...prev,
-                presets: {
-                    ...prev.presets,
-                    custom: [...prev.presets.custom, newPreset],
-                },
-            }));
-        },
-        [settings],
-    );
-
-    const deleteCustomPreset = useCallback((presetName) => {
+    const saveStyle = useCallback((style) => {
         setSettings((prev) => ({
             ...prev,
-            presets: {
-                ...prev.presets,
-                custom: prev.presets.custom.filter((preset) => preset.name !== presetName),
-            },
+            styles: [...prev.styles, style],
+        }));
+    }, []);
+
+    const updateStyle = useCallback((id, updates) => {
+        setSettings((prev) => ({
+            ...prev,
+            styles: prev.styles.map((style) =>
+                style.id === id ? { ...style, ...updates } : style,
+            ),
+        }));
+    }, []);
+
+    const deleteStyle = useCallback((id) => {
+        setSettings((prev) => ({
+            ...prev,
+            styles: prev.styles.filter((style) => style.id !== id),
         }));
     }, []);
 
@@ -169,30 +127,22 @@ export function useSettingsState() {
     // =====================================================
 
     const resetToDefaults = useCallback(() => {
-        setSettings(DEFAULT_SETTINGS);
+        setSettings(structuredClone(DEFAULT_SETTINGS));
     }, []);
 
     return {
         settings,
 
-        // Preferences
         updatePreference,
 
-        // Dashboard
-        updateLayoutSetting,
-        addDashboardModule,
-        updateDashboardModule,
-        removeDashboardModule,
-
-        // Module Defaults
         updateModuleDefault,
 
-        // Presets
-        applyPreset,
-        saveCustomPreset,
-        deleteCustomPreset,
+        applyStyle,
 
-        // Reset
+        saveStyle,
+        updateStyle,
+        deleteStyle,
+
         resetToDefaults,
     };
 }

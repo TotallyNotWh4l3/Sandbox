@@ -1,21 +1,22 @@
 import "./theme-settings.css";
 
-import { THEME_OPTIONS } from "../../../constants/settingsOption";
 import { useLanguage } from "../../../hooks/useLanguage";
 
 import * as SettingsUI from "../Shared/SettingsComponents";
 
 /**
  * ThemeSettings Component
- * Configure dashboard theme and appearance
+ * Configure dashboard appearance style.
  */
-export default function ThemeSettings({ settings, updateGlobalSetting }) {
+export default function ThemeSettings({ settings, applyStyle }) {
     const T = useLanguage();
 
-    const currentTheme = settings.theme;
+    const currentStyle = settings.preferences.appearance.currentStyle;
 
-    const handleThemeChange = (themeId) => {
-        updateGlobalSetting("theme", themeId);
+    const styles = settings.styles;
+
+    const handleStyleChange = (styleId) => {
+        applyStyle(styleId);
     };
 
     return (
@@ -26,19 +27,17 @@ export default function ThemeSettings({ settings, updateGlobalSetting }) {
                 <SettingsUI.Header>{T.settings.theme.presets}</SettingsUI.Header>
 
                 <div className="theme-settings__grid">
-                    {THEME_OPTIONS.map((theme) => (
+                    {styles.map((style) => (
                         <button
-                            key={theme.id}
+                            key={style.id}
                             className={`theme-settings__card ${
-                                currentTheme === theme.id ? "theme-settings__card--active" : ""
+                                currentStyle === style.id ? "theme-settings__card--active" : ""
                             }`}
-                            onClick={() => handleThemeChange(theme.id)}
+                            onClick={() => handleStyleChange(style.id)}
                         >
-                            <span className="theme-settings__preview">{theme.preview}</span>
+                            <span className="theme-settings__preview">{style.name}</span>
 
-                            <span className="theme-settings__label">
-                                {T.settings.theme.options[theme.labelKey]}
-                            </span>
+                            <span className="theme-settings__label">{style.name}</span>
                         </button>
                     ))}
                 </div>

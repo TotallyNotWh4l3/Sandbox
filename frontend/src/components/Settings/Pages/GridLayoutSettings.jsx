@@ -1,32 +1,37 @@
 import "./grid-layout-settings.css";
 
-import { COLUMN_OPTIONS, GAP_OPTIONS } from "../../../constants/settingsOption";
+import { COLUMN_OPTIONS, GAP_OPTIONS } from "../../../constants/dashboardOptions";
+
+import { useDashboard } from "../../../hooks/useDashboard";
 import { useLanguage } from "../../../hooks/useLanguage";
 
 import * as SettingsUI from "../Shared/SettingsComponents";
 
 /**
  * GridLayoutSettings Component
- * Configure dashboard grid layout (columns, gaps)
+ * Configure dashboard grid layout.
  */
-export default function GridLayoutSettings({ settings, updateGlobalSetting }) {
+export default function GridLayoutSettings() {
     const T = useLanguage();
 
-    const currentColumns = settings.gridColumns;
-    const currentGap = settings.moduleGaps;
+    const { dashboard, updateLayout } = useDashboard();
+
+    const currentColumns = dashboard.layout.columns;
+    const currentGap = dashboard.layout.gap;
 
     const handleColumnsChange = (columns) => {
-        updateGlobalSetting("gridColumns", columns);
+        updateLayout("columns", columns);
     };
 
     const handleGapChange = (gap) => {
-        updateGlobalSetting("moduleGaps", gap);
+        updateLayout("gap", gap);
     };
 
     return (
         <div className="grid-layout-settings">
             <SettingsUI.PageTitle>{T.settings.grid.title}</SettingsUI.PageTitle>
 
+            {/* Columns */}
             <SettingsUI.Section>
                 <SettingsUI.Header>{T.settings.grid.columns}</SettingsUI.Header>
 
@@ -53,6 +58,7 @@ export default function GridLayoutSettings({ settings, updateGlobalSetting }) {
                 </div>
             </SettingsUI.Section>
 
+            {/* Gap */}
             <SettingsUI.Section>
                 <SettingsUI.Header>{T.settings.grid.spacing}</SettingsUI.Header>
 
@@ -78,6 +84,7 @@ export default function GridLayoutSettings({ settings, updateGlobalSetting }) {
                 </div>
             </SettingsUI.Section>
 
+            {/* Preview */}
             <SettingsUI.Section>
                 <SettingsUI.Header>{T.settings.grid.preview}</SettingsUI.Header>
 
@@ -86,7 +93,7 @@ export default function GridLayoutSettings({ settings, updateGlobalSetting }) {
                     style={{
                         display: "grid",
                         gridTemplateColumns: `repeat(${currentColumns}, 1fr)`,
-                        gap: currentGap,
+                        gap: `${currentGap}px`,
                     }}
                 >
                     {Array.from({ length: 6 }).map((_, i) => (

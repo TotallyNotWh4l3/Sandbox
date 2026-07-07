@@ -8,11 +8,6 @@ export const MODULE_CONFIG = [
 
         settings: [
             {
-                key: "enabled",
-                labelKey: "enabled",
-                type: "toggle",
-            },
-            {
                 key: "forecastDays",
                 labelKey: "forecastDays",
                 type: "range",
@@ -33,11 +28,6 @@ export const MODULE_CONFIG = [
         descriptionKey: "schedule",
 
         settings: [
-            {
-                key: "enabled",
-                labelKey: "enabled",
-                type: "toggle",
-            },
             {
                 key: "viewMode",
                 labelKey: "viewMode",
@@ -64,66 +54,17 @@ export const MODULE_CONFIG = [
     },
 
     {
-        id: "announcements",
+        id: "announcement",
         nameKey: "announcements",
         descriptionKey: "announcements",
 
         settings: [
-            {
-                key: "enabled",
-                labelKey: "enabled",
-                type: "toggle",
-            },
             {
                 key: "maxDisplay",
                 labelKey: "maxDisplay",
                 type: "range",
                 min: 1,
                 max: 10,
-            },
-        ],
-    },
-
-    {
-        id: "sound",
-        nameKey: "sound",
-        descriptionKey: "sound",
-
-        settings: [
-            {
-                key: "enabled",
-                labelKey: "enabled",
-                type: "toggle",
-            },
-            {
-                key: "volume",
-                labelKey: "volume",
-                type: "range",
-                min: 0,
-                max: 100,
-            },
-            {
-                key: "alertSound",
-                labelKey: "alertSound",
-                type: "select",
-                options: [
-                    {
-                        value: "default",
-                        labelKey: "default",
-                    },
-                    {
-                        value: "chime",
-                        labelKey: "chime",
-                    },
-                    {
-                        value: "bell",
-                        labelKey: "bell",
-                    },
-                    {
-                        value: "none",
-                        labelKey: "none",
-                    },
-                ],
             },
         ],
     },
