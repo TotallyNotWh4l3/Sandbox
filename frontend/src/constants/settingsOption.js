@@ -56,44 +56,6 @@ export const LANGUAGE_OPTIONS = [
     { id: "ja", label: "日本語" },
 ];
 
-export const DEFAULT_SETTINGS = {
-    // Global/Theme Settings
-    theme: "dark-default", // dark-default, dark-minimal, dark-accent, light-default, light-minimal, light-accent
-    language: "ja", // en, ja, etc.
-    location: { name: "Tokyo", lat: 35.6762, lng: 139.6503 },
-
-    // Grid Layout Settings
-    gridColumns: 3,
-    moduleGaps: "1rem",
-
-    // Module-specific Settings (Local Variables)
-    modules: {
-        weather: {
-            enabled: true,
-            forecastDays: 7,
-            showAlerts: true,
-        },
-        schedule: {
-            enabled: true,
-            viewMode: "relative", // absolute or relative
-            daysBeforeToday: 0,
-        },
-        announcements: {
-            enabled: true,
-            maxDisplay: 5,
-        },
-        sound: {
-            enabled: true,
-            volume: 50, // 0-100
-            alertSound: "default",
-        },
-    },
-
-    // Preset info
-    currentPreset: "dark-default",
-    customPresets: [],
-};
-
 import { Palette, Globe, LayoutGrid, Blocks, Star } from "lucide-react";
 
 export const SETTINGS_TABS = [
@@ -123,3 +85,93 @@ export const SETTINGS_TABS = [
         icon: Star,
     },
 ];
+
+export const DEFAULT_SETTINGS = {
+    // =====================================================
+    // Dashboard
+    // =====================================================
+    dashboard: {
+        layout: {
+            columns: 3,
+            gap: 16,
+            padding: 16,
+        },
+
+        modules: [],
+    },
+
+    // =====================================================
+    // Preferences
+    // =====================================================
+    preferences: {
+        language: "en",
+
+        location: {
+            name: "Tokyo",
+            latitude: 35.6762,
+            longitude: 139.6503,
+        },
+
+        appearance: {
+            currentStyle: "dark-default",
+        },
+    },
+
+    // =====================================================
+    // Styles
+    // =====================================================
+    styles: [
+        {
+            id: "dark-default",
+            name: "Dark Default",
+
+            builtIn: true,
+
+            basedOn: null,
+
+            appearance: {
+                colors: {},
+                typography: {},
+                borders: {},
+                effects: {},
+            },
+        },
+
+        {
+            id: "light-default",
+            name: "Light Default",
+
+            builtIn: true,
+
+            basedOn: null,
+
+            appearance: {
+                colors: {},
+                typography: {},
+                borders: {},
+                effects: {},
+            },
+        },
+
+        // Custom styles created by Admin / Manager
+    ],
+
+    // =====================================================
+    // Module Defaults
+    // =====================================================
+    moduleDefaults: {
+        weather: {
+            title: "Weather",
+            city: "Tokyo",
+            view: "conditions",
+        },
+
+        schedule: {
+            title: "Schedule",
+        },
+
+        announcement: {
+            title: "Announcements",
+        },
+    },
+};

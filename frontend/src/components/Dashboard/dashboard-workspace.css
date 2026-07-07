@@ -1,0 +1,5 @@
+.dashboard__workspace {
+    display: grid;
+
+    grid-template-columns: repeat(var(--workspace-columns), 1fr);
+}

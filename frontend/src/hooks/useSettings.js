@@ -1,13 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
 import { useSettingsContext } from "../context/SettingsContext";
 import { DEFAULT_SETTINGS } from "../constants/settingsOption";
+
 /**
  * useSettings Hook
  * Manages global dashboard settings with localStorage persistence
  */
 export function useSettingsState() {
     const [settings, setSettings] = useState(() => {
-        // Load from localStorage or use defaults
         try {
             const stored = localStorage.getItem("co-efficient-settings");
             return stored ? JSON.parse(stored) : DEFAULT_SETTINGS;
@@ -26,75 +26,173 @@ export function useSettingsState() {
         }
     }, [settings]);
 
-    // Update global setting
-    const updateGlobalSetting = useCallback((key, value) => {
+    // =====================================================
+    // Preferences
+    // =====================================================
+
+    const updatePreference = useCallback((key, value) => {
         setSettings((prev) => ({
             ...prev,
-            [key]: value,
+            preferences: {
+                ...prev.preferences,
+                [key]: value,
+            },
         }));
     }, []);
 
-    // Update module-specific setting
-    const updateModuleSetting = useCallback((moduleName, key, value) => {
+    // =====================================================
+    // Dashboard Layout
+    // =====================================================
+
+    const updateLayoutSetting = useCallback((key, value) => {
         setSettings((prev) => ({
             ...prev,
-            modules: {
-                ...prev.modules,
-                [moduleName]: {
-                    ...prev.modules[moduleName],
+            dashboard: {
+                ...prev.dashboard,
+                layout: {
+                    ...prev.dashboard.layout,
                     [key]: value,
                 },
             },
         }));
     }, []);
 
-    // Apply a preset theme
-    const applyPreset = useCallback((presetName) => {
-        // This would normally load preset data from a backend/config
+    // =====================================================
+    // Module Defaults
+    // =====================================================
+
+    const updateModuleDefault = useCallback((moduleType, key, value) => {
         setSettings((prev) => ({
             ...prev,
-            theme: presetName,
-            currentPreset: presetName,
+            moduleDefaults: {
+                ...prev.moduleDefaults,
+                [moduleType]: {
+                    ...prev.moduleDefaults[moduleType],
+                    [key]: value,
+                },
+            },
         }));
     }, []);
 
-    // Save current settings as a custom preset
+    // =====================================================
+    // Dashboard Modules
+    // =====================================================
+
+    const addDashboardModule = useCallback((module) => {
+        setSettings((prev) => ({
+            ...prev,
+            dashboard: {
+                ...prev.dashboard,
+                modules: [...prev.dashboard.modules, module],
+            },
+        }));
+    }, []);
+
+    const updateDashboardModule = useCallback((id, updates) => {
+        setSettings((prev) => ({
+            ...prev,
+            dashboard: {
+                ...prev.dashboard,
+                modules: prev.dashboard.modules.map((module) =>
+                    module.id === id
+                        ? {
+                              ...module,
+                              ...updates,
+                          }
+                        : module,
+                ),
+            },
+        }));
+    }, []);
+
+    const removeDashboardModule = useCallback((id) => {
+        setSettings((prev) => ({
+            ...prev,
+            dashboard: {
+                ...prev.dashboard,
+                modules: prev.dashboard.modules.filter((module) => module.id !== id),
+            },
+        }));
+    }, []);
+
+    // =====================================================
+    // Presets
+    // =====================================================
+
+    const applyPreset = useCallback((presetName) => {
+        setSettings((prev) => ({
+            ...prev,
+
+            preferences: {
+                ...prev.preferences,
+                theme: presetName,
+            },
+
+            presets: {
+                ...prev.presets,
+                current: presetName,
+            },
+        }));
+    }, []);
+
     const saveCustomPreset = useCallback(
         (presetName) => {
             const newPreset = {
                 name: presetName,
                 timestamp: Date.now(),
-                data: { ...settings },
+                data: structuredClone(settings),
             };
 
             setSettings((prev) => ({
                 ...prev,
-                customPresets: [...prev.customPresets, newPreset],
+                presets: {
+                    ...prev.presets,
+                    custom: [...prev.presets.custom, newPreset],
+                },
             }));
         },
         [settings],
     );
 
-    // Delete a custom preset
     const deleteCustomPreset = useCallback((presetName) => {
         setSettings((prev) => ({
             ...prev,
-            customPresets: prev.customPresets.filter((p) => p.name !== presetName),
+            presets: {
+                ...prev.presets,
+                custom: prev.presets.custom.filter((preset) => preset.name !== presetName),
+            },
         }));
     }, []);
 
-    // Reset to defaults
+    // =====================================================
+    // Reset
+    // =====================================================
+
     const resetToDefaults = useCallback(() => {
         setSettings(DEFAULT_SETTINGS);
     }, []);
 
     return {
         settings,
-        updateGlobalSetting,
-        updateModuleSetting,
+
+        // Preferences
+        updatePreference,
+
+        // Dashboard
+        updateLayoutSetting,
+        addDashboardModule,
+        updateDashboardModule,
+        removeDashboardModule,
+
+        // Module Defaults
+        updateModuleDefault,
+
+        // Presets
         applyPreset,
         saveCustomPreset,
         deleteCustomPreset,
+
+        // Reset
         resetToDefaults,
     };
 }

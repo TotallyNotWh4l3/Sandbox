@@ -8,6 +8,11 @@ export default {
     },
 
     settings: {
+        mainTitle: "Settings",
+        close: "Close settings",
+        logout: "Logout",
+        autoSave: "Changes are saved automatically",
+        readOnly: "Settings are read-only without authentication",
         sidebar: {
             theme: "Theme & Appearance",
             location: "Location & Language",
@@ -114,6 +119,14 @@ export default {
             warning: "This will reset all settings to their default values.",
             deleteConfirm: 'Delete preset "{name}"?',
             resetConfirm: "Reset all settings to defaults? This cannot be undone.",
+        },
+        auth: {
+            title: "Authentication Required",
+            description: "Enter password to modify settings",
+            passwordPlaceholder: "Enter password",
+            unlockButton: "Unlock Settings",
+            incorrectPassword: "Incorrect password",
+            demoHint: '(Demo: use "admin" or "1234")',
         },
     },
 };

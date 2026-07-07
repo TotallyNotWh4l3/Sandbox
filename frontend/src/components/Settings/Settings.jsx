@@ -2,9 +2,12 @@
 
 import { useState } from "react";
 import { useSettings } from "../../hooks/useSettings";
+import { useLanguage } from "../../hooks/useLanguage";
+
 import SettingsSidebar from "./Sidebar/SettingsSidebar";
 import SettingsContent from "./Content/SettingsContent";
-import * as SettingsUI from "./Shared/SettingsComponents"
+import * as SettingsUI from "./Shared/SettingsComponents";
+
 import "./settings.css";
 
 /**
@@ -17,6 +20,8 @@ export default function Settings({ onClose }) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [password, setPassword] = useState("");
     const [authError, setAuthError] = useState("");
+
+    const T = useLanguage();
 
     // Load settings from hook
     const {
@@ -32,12 +37,13 @@ export default function Settings({ onClose }) {
     // Simple password authentication (in real app, would validate against backend)
     const handleAuthenticate = (e) => {
         e.preventDefault();
+
         // TODO: Replace with actual backend authentication
         if (password === "admin" || password === "1234") {
             setIsAuthenticated(true);
             setAuthError("");
         } else {
-            setAuthError("Incorrect password");
+            setAuthError(T.settings.auth.incorrectPassword);
         }
     };
 
@@ -52,13 +58,12 @@ export default function Settings({ onClose }) {
             <div className="settings" onClick={(e) => e.stopPropagation()}>
                 {/* Header */}
                 <header className="settings__header">
-                    <SettingsUI.Header >
-                        Settings
-                    </SettingsUI.Header>
+                    <SettingsUI.Header>{T.settings.mainTitle}</SettingsUI.Header>
+
                     <button
                         className="settings__close-btn"
                         onClick={onClose}
-                        aria-label="Close settings"
+                        aria-label={T.settings.close}
                     >
                         ✕
                     </button>
@@ -67,12 +72,12 @@ export default function Settings({ onClose }) {
                 {/* Body */}
                 <div className="settings__body">
                     {!isAuthenticated ? (
-                        // Authentication Form
                         <div className="settings__auth">
                             <form onSubmit={handleAuthenticate} className="settings__auth-form">
-                                <h2 className="settings__auth-title">Authentication Required</h2>
+                                <h2 className="settings__auth-title">{T.settings.auth.title}</h2>
+
                                 <p className="settings__auth-description">
-                                    Enter password to modify settings
+                                    {T.settings.auth.description}
                                 </p>
 
                                 <div className="settings__auth-group">
@@ -80,10 +85,11 @@ export default function Settings({ onClose }) {
                                         type="password"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
-                                        placeholder="Enter password"
+                                        placeholder={T.settings.auth.passwordPlaceholder}
                                         className="settings__auth-input"
                                         autoFocus
                                     />
+
                                     {authError && (
                                         <p className="settings__auth-error">{authError}</p>
                                     )}
@@ -94,16 +100,16 @@ export default function Settings({ onClose }) {
                                     className="settings__auth-button"
                                     disabled={!password}
                                 >
-                                    Unlock Settings
+                                    {T.settings.auth.unlockButton}
                                 </button>
 
-                                <p className="settings__auth-hint">(Demo: use "admin" or "1234")</p>
+                                <p className="settings__auth-hint">{T.settings.auth.demoHint}</p>
                             </form>
                         </div>
                     ) : (
-                        // Settings Interface
                         <>
                             <SettingsSidebar activeTab={activeTab} onTabChange={setActiveTab} />
+
                             <SettingsContent
                                 activeTab={activeTab}
                                 settings={settings}
@@ -123,16 +129,13 @@ export default function Settings({ onClose }) {
                     {isAuthenticated ? (
                         <>
                             <button onClick={handleLogout} className="settings__logout-btn">
-                                Logout
+                                {T.settings.logout}
                             </button>
-                            <span className="settings__footer-info">
-                                Changes are saved automatically
-                            </span>
+
+                            <span className="settings__footer-info">{T.settings.autoSave}</span>
                         </>
                     ) : (
-                        <span className="settings__footer-info">
-                            Settings are read-only without authentication
-                        </span>
+                        <span className="settings__footer-info">{T.settings.readOnly}</span>
                     )}
                 </footer>
             </div>

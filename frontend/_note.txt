@@ -3,6 +3,8 @@ import "./grid-layout-settings.css";
 import { COLUMN_OPTIONS, GAP_OPTIONS } from "../../../constants/settingsOption";
 import { useLanguage } from "../../../hooks/useLanguage";
 
+import * as SettingsUI from "../Shared/SettingsComponents";
+
 /**
  * GridLayoutSettings Component
  * Configure dashboard grid layout (columns, gaps)
@@ -23,14 +25,14 @@ export default function GridLayoutSettings({ settings, updateGlobalSetting }) {
 
     return (
         <div className="grid-layout-settings">
-            <h2 className="grid-layout-settings__title">{T.settings.grid.title}</h2>
+            <SettingsUI.PageTitle>{T.settings.grid.title}</SettingsUI.PageTitle>
 
-            <section className="grid-layout-settings__section">
-                <h3 className="grid-layout-settings__subtitle">{T.settings.grid.columns}</h3>
+            <SettingsUI.Section>
+                <SettingsUI.Header>{T.settings.grid.columns}</SettingsUI.Header>
 
-                <p className="grid-layout-settings__description">
+                <SettingsUI.Instructions>
                     {T.settings.grid.columnsDescription}
-                </p>
+                </SettingsUI.Instructions>
 
                 <div className="grid-layout-settings__options">
                     {COLUMN_OPTIONS.map((cols) => (
@@ -49,14 +51,14 @@ export default function GridLayoutSettings({ settings, updateGlobalSetting }) {
                         </button>
                     ))}
                 </div>
-            </section>
+            </SettingsUI.Section>
 
-            <section className="grid-layout-settings__section">
-                <h3 className="grid-layout-settings__subtitle">{T.settings.grid.spacing}</h3>
+            <SettingsUI.Section>
+                <SettingsUI.Header>{T.settings.grid.spacing}</SettingsUI.Header>
 
-                <p className="grid-layout-settings__description">
+                <SettingsUI.Instructions>
                     {T.settings.grid.spacingDescription}
-                </p>
+                </SettingsUI.Instructions>
 
                 <div className="grid-layout-settings__gap-options">
                     {GAP_OPTIONS.map((option) => (
@@ -74,10 +76,10 @@ export default function GridLayoutSettings({ settings, updateGlobalSetting }) {
                         </button>
                     ))}
                 </div>
-            </section>
+            </SettingsUI.Section>
 
-            <section className="grid-layout-settings__section">
-                <h3 className="grid-layout-settings__subtitle">{T.settings.grid.preview}</h3>
+            <SettingsUI.Section>
+                <SettingsUI.Header>{T.settings.grid.preview}</SettingsUI.Header>
 
                 <div
                     className="grid-layout-settings__preview"
@@ -93,17 +95,21 @@ export default function GridLayoutSettings({ settings, updateGlobalSetting }) {
                         </div>
                     ))}
                 </div>
-            </section>
+            </SettingsUI.Section>
         </div>
     );
 }
 
 
 import { useState } from "react";
+import Select from "react-select";
 import "./location-language-settings.css";
 
 import { LANGUAGE_OPTIONS } from "../../../constants/settingsOption";
 import { useLanguage } from "../../../hooks/useLanguage";
+
+import * as SettingsUI from "../Shared/SettingsComponents";
+import SettingsSelect from "../Shared/SettingsSelect";
 
 /**
  * LocationLanguageSettings Component
@@ -132,63 +138,52 @@ export default function LocationLanguageSettings({ settings, updateGlobalSetting
 
     return (
         <div className="location-language-settings">
-            <h2 className="location-language-settings__title">{T.settings.location.title}</h2>
+            <SettingsUI.PageTitle>{T.settings.location.title}</SettingsUI.PageTitle>
 
-            <section className="location-language-settings__section">
-                <h3 className="location-language-settings__subtitle">
-                    {T.settings.location.location}
-                </h3>
+            <SettingsUI.Section>
+                <SettingsUI.Header>{T.settings.location.location}</SettingsUI.Header>
 
-                <div className="location-language-settings__input-group">
-                    <label htmlFor="location-input">{T.settings.location.dashboardLocation}</label>
+                <SettingsUI.Instructions>{T.settings.location.hint}</SettingsUI.Instructions>
 
-                    <input
-                        id="location-input"
-                        type="text"
-                        className="location-language-settings__input"
-                        value={locationInput}
-                        onChange={handleLocationChange}
-                        placeholder={T.settings.location.placeholder}
-                    />
+                <label htmlFor="location-input">{T.settings.location.dashboardLocation}</label>
 
-                    <p className="location-language-settings__hint">{T.settings.location.hint}</p>
-                </div>
-            </section>
+                <input
+                    id="location-input"
+                    type="text"
+                    className="location-language-settings__input"
+                    value={locationInput}
+                    onChange={handleLocationChange}
+                    placeholder={T.settings.location.placeholder}
+                />
+            </SettingsUI.Section>
 
-            <section className="location-language-settings__section">
-                <h3 className="location-language-settings__subtitle">
-                    {T.settings.location.language}
-                </h3>
+            <SettingsUI.Section>
+                <SettingsUI.Header>{T.settings.location.language}</SettingsUI.Header>
 
-                <div className="location-language-settings__language-group">
-                    {LANGUAGE_OPTIONS.map((lang) => (
-                        <label key={lang.id} className="location-language-settings__radio-label">
-                            <input
-                                type="radio"
-                                name="language"
-                                value={lang.id}
-                                checked={currentLanguage === lang.id}
-                                onChange={() => handleLanguageChange(lang.id)}
-                            />
+                <SettingsSelect
+                    value={currentLanguage}
+                    options={LANGUAGE_OPTIONS}
+                    valueKey="id"
+                    labelKey="label"
+                    onChange={handleLanguageChange}
+                />
+            </SettingsUI.Section>
 
-                            <span>{lang.label}</span>
-                        </label>
-                    ))}
-                </div>
-            </section>
         </div>
     );
 }
-
 
 import "./module-settings.css";
 
 import { MODULE_CONFIG } from "../../../constants/moduleSettings";
 import { useLanguage } from "../../../hooks/useLanguage";
 
+import * as SettingsUI from "../Shared/SettingsComponents"
+import SettingsSelect from "../Shared/SettingsSelect";
+
 /**
  * ModuleSettings Component
- * Enable/disable modules and configure module-specific settings
+ * Enable/disable modules and configure module-specific settings.
  */
 export default function ModuleSettings({ settings, updateModuleSetting }) {
     const T = useLanguage();
@@ -199,7 +194,7 @@ export default function ModuleSettings({ settings, updateModuleSetting }) {
     };
 
     const handleRangeChange = (moduleName, key, value) => {
-        updateModuleSetting(moduleName, key, parseInt(value));
+        updateModuleSetting(moduleName, key, parseInt(value, 10));
     };
 
     const handleSelectChange = (moduleName, key, value) => {
@@ -219,7 +214,9 @@ export default function ModuleSettings({ settings, updateModuleSetting }) {
                             onChange={() => handleToggle(moduleName, setting.key)}
                             className="module-settings__toggle-input"
                         />
-                        <span className="module-settings__toggle-slider"></span>
+
+                        <span className="module-settings__toggle-slider" />
+
                         <span className="module-settings__toggle-text">
                             {currentValue ? T.settings.modules.on : T.settings.modules.off}
                         </span>
@@ -239,25 +236,20 @@ export default function ModuleSettings({ settings, updateModuleSetting }) {
                             }
                             className="module-settings__range"
                         />
+
                         <span className="module-settings__range-value">{currentValue}</span>
                     </div>
                 );
 
             case "select":
                 return (
-                    <select
+                    <SettingsSelect
                         value={currentValue}
-                        onChange={(e) =>
-                            handleSelectChange(moduleName, setting.key, e.target.value)
-                        }
-                        className="module-settings__select"
-                    >
-                        {setting.options.map((option) => (
-                            <option key={option.value} value={option.value}>
-                                {T.settings.modules.options[option.labelKey]}
-                            </option>
-                        ))}
-                    </select>
+                        options={setting.options}
+                        valueKey="value"
+                        labelTransform={(option) => T.settings.modules.options[option.labelKey]}
+                        onChange={(value) => handleSelectChange(moduleName, setting.key, value)}
+                    />
                 );
 
             default:
@@ -267,19 +259,17 @@ export default function ModuleSettings({ settings, updateModuleSetting }) {
 
     return (
         <div className="module-settings">
-            <h2 className="module-settings__title">{T.settings.modules.title}</h2>
+            <SettingsUI.PageTitle>{T.settings.modules.title}</SettingsUI.PageTitle>
 
             {MODULE_CONFIG.map((module) => (
-                <section key={module.id} className="module-settings__module">
-                    <div className="module-settings__header">
-                        <h3 className="module-settings__module-name">
-                            {T.settings.modules.names[module.nameKey]}
-                        </h3>
+                <SettingsUI.Section key={module.id} className="module-settings__module">
+                    <SettingsUI.Header>
+                        {T.settings.modules.names[module.nameKey]}
+                    </SettingsUI.Header>
 
-                        <p className="module-settings__module-description">
-                            {T.settings.modules.descriptions[module.descriptionKey]}
-                        </p>
-                    </div>
+                    <SettingsUI.Instructions>
+                        {T.settings.modules.descriptions[module.descriptionKey]}
+                    </SettingsUI.Instructions>
 
                     <div className="module-settings__controls">
                         {module.settings.map((setting) => (
@@ -292,25 +282,24 @@ export default function ModuleSettings({ settings, updateModuleSetting }) {
                             </div>
                         ))}
                     </div>
-                </section>
+                </SettingsUI.Section>
             ))}
         </div>
     );
 }
 
-
-// PresetSettings.jsx
-
 import { useState } from "react";
 import "./preset-settings.css";
 
-/**
- * PresetsSettings Component
- * Manage theme presets and custom configurations
- */
 import { DEFAULT_PRESETS } from "../../../constants/settingsOption";
 
-export default function PresetsSettings({
+import * as SettingsUI from "../Shared/SettingsComponents"
+
+/**
+ * PresetSettings Component
+ * Manage theme presets and custom configurations.
+ */
+export default function PresetSettings({
     settings,
     applyPreset,
     saveCustomPreset,
@@ -328,11 +317,11 @@ export default function PresetsSettings({
     };
 
     const handleSaveCustomPreset = () => {
-        if (customPresetName.trim()) {
-            saveCustomPreset(customPresetName);
-            setCustomPresetName("");
-            setShowSavePrompt(false);
-        }
+        if (!customPresetName.trim()) return;
+
+        saveCustomPreset(customPresetName.trim());
+        setCustomPresetName("");
+        setShowSavePrompt(false);
     };
 
     const handleDeletePreset = (presetName) => {
@@ -349,11 +338,16 @@ export default function PresetsSettings({
 
     return (
         <div className="presets-settings">
-            <h2 className="presets-settings__title">Presets & Configuration</h2>
+            <SettingsUI.PageTitle>Presets & Configuration</SettingsUI.PageTitle>
 
-            {/* Default Presets */}
-            <section className="presets-settings__section">
-                <h3 className="presets-settings__subtitle">Built-in Presets</h3>
+            {/* Built-in Presets */}
+            <SettingsUI.Section>
+                <SettingsUI.Header>Built-in Presets</SettingsUI.Header>
+
+                <SettingsUI.Instructions>
+                    Quickly switch between predefined dashboard configurations.
+                </SettingsUI.Instructions>
+
                 <div className="presets-settings__grid">
                     {DEFAULT_PRESETS.map((preset) => (
                         <button
@@ -367,18 +361,24 @@ export default function PresetsSettings({
                             aria-pressed={currentPreset === preset.id}
                         >
                             <span className="presets-settings__preset-label">{preset.name}</span>
+
                             {currentPreset === preset.id && (
                                 <span className="presets-settings__checkmark">✓</span>
                             )}
                         </button>
                     ))}
                 </div>
-            </section>
+            </SettingsUI.Section>
 
             {/* Custom Presets */}
             {customPresets.length > 0 && (
-                <section className="presets-settings__section">
-                    <h3 className="presets-settings__subtitle">Your Custom Presets</h3>
+                <SettingsUI.Section>
+                    <SettingsUI.Header>Custom Presets</SettingsUI.Header>
+
+                    <SettingsUI.Instructions>
+                        Your saved dashboard configurations.
+                    </SettingsUI.Instructions>
+
                     <div className="presets-settings__custom-presets">
                         {customPresets.map((preset) => (
                             <div key={preset.name} className="presets-settings__custom-item">
@@ -391,26 +391,33 @@ export default function PresetsSettings({
                                     onClick={() => handleApplyPreset(preset.name)}
                                 >
                                     <span>{preset.name}</span>
+
                                     {currentPreset === preset.name && (
                                         <span className="presets-settings__checkmark">✓</span>
                                     )}
                                 </button>
+
                                 <button
                                     className="presets-settings__delete-btn"
-                                    onClick={() => handleDeletePreset(preset.name)}
                                     title="Delete preset"
+                                    onClick={() => handleDeletePreset(preset.name)}
                                 >
                                     ✕
                                 </button>
                             </div>
                         ))}
                     </div>
-                </section>
+                </SettingsUI.Section>
             )}
 
-            {/* Save Current as Preset */}
-            <section className="presets-settings__section">
-                <h3 className="presets-settings__subtitle">Save Current Settings</h3>
+            {/* Save Preset */}
+            <SettingsUI.Section>
+                <SettingsUI.Header>Save Current Settings</SettingsUI.Header>
+
+                <SettingsUI.Instructions>
+                    Store your current configuration as a reusable preset.
+                </SettingsUI.Instructions>
+
                 {!showSavePrompt ? (
                     <button
                         className="presets-settings__save-btn"
@@ -422,53 +429,64 @@ export default function PresetsSettings({
                     <div className="presets-settings__save-prompt">
                         <input
                             type="text"
+                            className="presets-settings__input"
                             placeholder="Enter preset name..."
                             value={customPresetName}
                             onChange={(e) => setCustomPresetName(e.target.value)}
-                            className="presets-settings__input"
-                            onKeyPress={(e) => e.key === "Enter" && handleSaveCustomPreset()}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    handleSaveCustomPreset();
+                                }
+                            }}
                         />
+
                         <div className="presets-settings__prompt-buttons">
                             <button
-                                onClick={handleSaveCustomPreset}
                                 className="presets-settings__confirm-btn"
                                 disabled={!customPresetName.trim()}
+                                onClick={handleSaveCustomPreset}
                             >
                                 Save
                             </button>
+
                             <button
+                                className="presets-settings__cancel-btn"
                                 onClick={() => {
                                     setShowSavePrompt(false);
                                     setCustomPresetName("");
                                 }}
-                                className="presets-settings__cancel-btn"
                             >
                                 Cancel
                             </button>
                         </div>
                     </div>
                 )}
-            </section>
+            </SettingsUI.Section>
 
-            {/* Reset to Defaults */}
-            <section className="presets-settings__section">
-                <h3 className="presets-settings__subtitle">Reset</h3>
-                <button onClick={handleResetAll} className="presets-settings__reset-btn">
-                    Reset All Settings to Defaults
+            {/* Reset */}
+            <SettingsUI.Section>
+                <SettingsUI.Header>Reset Settings</SettingsUI.Header>
+
+                <SettingsUI.Instructions>
+                    Restore every setting back to its default value.
+                </SettingsUI.Instructions>
+
+                <button className="presets-settings__reset-btn" onClick={handleResetAll}>
+                    Reset All Settings
                 </button>
-                <p className="presets-settings__warning">
-                    This will reset all settings to their default values.
-                </p>
-            </section>
+
+                <p className="presets-settings__warning">This action cannot be undone.</p>
+            </SettingsUI.Section>
         </div>
     );
 }
-
 
 import "./theme-settings.css";
 
 import { THEME_OPTIONS } from "../../../constants/settingsOption";
 import { useLanguage } from "../../../hooks/useLanguage";
+
+import * as SettingsUI from "../Shared/SettingsComponents";
 
 /**
  * ThemeSettings Component
@@ -485,10 +503,10 @@ export default function ThemeSettings({ settings, updateGlobalSetting }) {
 
     return (
         <div className="theme-settings">
-            <h2 className="theme-settings__title">{T.settings.theme.title}</h2>
+            <SettingsUI.PageTitle>{T.settings.theme.title}</SettingsUI.PageTitle>
 
-            <section className="theme-settings__section">
-                <h3 className="theme-settings__subtitle">{T.settings.theme.presets}</h3>
+            <SettingsUI.Section>
+                <SettingsUI.Header>{T.settings.theme.presets}</SettingsUI.Header>
 
                 <div className="theme-settings__grid">
                     {THEME_OPTIONS.map((theme) => (
@@ -507,17 +525,15 @@ export default function ThemeSettings({ settings, updateGlobalSetting }) {
                         </button>
                     ))}
                 </div>
-            </section>
+            </SettingsUI.Section>
 
-            <section className="theme-settings__section">
-                <h3 className="theme-settings__subtitle">{T.settings.theme.customization}</h3>
+            <SettingsUI.Section>
+                <SettingsUI.Header>{T.settings.theme.customization}</SettingsUI.Header>
 
-                <p className="theme-settings__description">
+                <SettingsUI.Instructions>
                     {T.settings.theme.customizationDescription}
-                </p>
-            </section>
+                </SettingsUI.Instructions>
+            </SettingsUI.Section>
         </div>
     );
 }
-
-

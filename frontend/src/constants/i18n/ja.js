@@ -8,6 +8,12 @@ export default {
     },
 
     settings: {
+        mainTitle: "設定",
+        close: "設定を閉じる",
+
+        logout: "ログアウト",
+        autoSave: "変更は自動的に保存されます",
+        readOnly: "認証されていないため、設定は読み取り専用です",
         sidebar: {
             theme: "テーマと外観",
             location: "場所と言語",
@@ -115,6 +121,15 @@ export default {
             warning: "すべての設定がデフォルト値に戻ります。",
             deleteConfirm: "プリセット「{name}」を削除しますか？",
             resetConfirm: "設定をすべて初期化しますか？この操作は取り消せません。",
+        },
+
+        auth: {
+            title: "認証が必要です",
+            description: "設定を変更するにはパスワードを入力してください",
+            passwordPlaceholder: "パスワードを入力",
+            unlockButton: "設定を解除",
+            incorrectPassword: "パスワードが正しくありません",
+            demoHint: "（デモ: 「admin」または「1234」を使用してください）",
         },
     },
 };
