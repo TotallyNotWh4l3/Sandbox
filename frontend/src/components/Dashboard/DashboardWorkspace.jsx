@@ -2,6 +2,7 @@ import "./dashboard-workspace.css";
 
 import { useDashboard } from "../../hooks/useDashboard";
 import Module from "../Modules/Module";
+import ModuleRenderer from "./ModuleRenderer";
 
 export default function DashboardWorkspace() {
     const { dashboard } = useDashboard();
@@ -16,7 +17,7 @@ export default function DashboardWorkspace() {
             }}
         >
             {dashboard.modules.map((module) => (
-                <Module key={module.id} module={module} />
+                <ModuleRenderer key={module.id} module={module} />
             ))}
         </main>
     );

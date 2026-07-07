@@ -29,15 +29,12 @@ export const DEFAULT_DASHBOARD = {
     modules: [
         {
             id: "weather-default",
-
             type: "weather",
-
             settings: {
                 title: "Weather",
                 city: "Tokyo",
                 view: "conditions",
             },
-
             layout: {
                 w: 2,
                 h: 2,

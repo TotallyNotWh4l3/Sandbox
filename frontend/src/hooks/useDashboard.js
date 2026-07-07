@@ -33,7 +33,7 @@ export function useDashboardState() {
             return structuredClone(DEFAULT_DASHBOARD);
         }
     });
-
+    const [selectedModuleId, setSelectedModuleId] = useState(null);
     useEffect(() => {
         try {
             localStorage.setItem("co-efficient-dashboard", JSON.stringify(dashboard));
@@ -64,13 +64,66 @@ export function useDashboardState() {
         setDashboard((prev) => (typeof updater === "function" ? updater(prev) : updater));
     }, []);
 
+    const addModule = useCallback((type, settings = {}) => {
+        setDashboard((prev) => ({
+            ...prev,
+            modules: [
+                ...prev.modules,
+                {
+                    id: crypto.randomUUID(),
+                    type,
+                    settings,
+                    layout: {
+                        w: 1,
+                        h: 1,
+                    },
+                },
+            ],
+        }));
+    }, []);
+
+    const removeModule = useCallback((moduleId) => {
+        setDashboard((prev) => ({
+            ...prev,
+            modules: prev.modules.filter((module) => module.id !== moduleId),
+        }));
+    }, []);
+
+    const updateModuleSettings = useCallback((moduleId, key, value) => {
+        setDashboard((prev) => ({
+            ...prev,
+            modules: prev.modules.map((module) =>
+                module.id === moduleId
+                    ? {
+                          ...module,
+                          settings: {
+                              ...module.settings,
+                              [key]: value,
+                          },
+                      }
+                    : module,
+            ),
+        }));
+    }, []);
+
+    const selectModule = useCallback((moduleId) => {
+        setSelectedModuleId(moduleId);
+    }, []);
+
     return {
         dashboard,
 
         updateLayout,
         updateDashboard,
 
-        setDashboard, // Temporary for development
+        addModule,
+        removeModule,
+        updateModuleSettings,
+
+        selectedModuleId,
+        selectModule,
+
+        setDashboard,
     };
 }
 
