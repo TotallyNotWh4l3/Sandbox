@@ -13,9 +13,9 @@ import AboutSettings from "./Pages/AboutSettings";
 
 const PAGE_COMPONENTS = {
     interface: InterfaceSettings,
-    modules: ModuleSettings,
-    dashboard: DashboardSettings,
-    about: AboutSettings,
+    // modules: ModuleSettings,
+    // dashboard: DashboardSettings,
+    // about: AboutSettings,
 };
 
 export default function Settings() {
