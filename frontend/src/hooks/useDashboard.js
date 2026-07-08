@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useDashboardContext } from "../context/DashboardContext";
-import { DEFAULT_DASHBOARD } from "../constants/dashboardOptions";
+import { DEFAULT_DASHBOARD } from "../constants/defaults/defaultDashboard";
 
 /**
  * useDashboard Hook

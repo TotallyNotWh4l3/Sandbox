@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useSettingsContext } from "../context/SettingsContext";
-import { DEFAULT_SETTINGS } from "../constants/defaultSettings";
+import { DEFAULT_SETTINGS } from "../constants/defaults/defaultSettings";
 
 /**
  * useSettings Hook
@@ -44,16 +44,12 @@ export function useSettingsState() {
         }
     }, [settings]);
 
-    // =====================================================
-    // Preferences
-    // =====================================================
-
-    const updatePreference = useCallback((path, value) => {
+    const updateSetting = useCallback((path, value) => {
         setSettings((prev) => {
             const updated = structuredClone(prev);
 
             const keys = path.split(".");
-            let current = updated.preferences;
+            let current = updated;
 
             for (let i = 0; i < keys.length - 1; i++) {
                 current = current[keys[i]];
@@ -66,39 +62,37 @@ export function useSettingsState() {
     }, []);
 
     // =====================================================
+    // Preferences
+    // =====================================================
+
+    const updatePreference = useCallback(
+        (path, value) => {
+            updateSetting(`preferences.${path}`, value);
+        },
+        [updateSetting],
+    );
+
+    // =====================================================
     // Module Defaults
     // =====================================================
 
-    const updateModuleDefault = useCallback((moduleType, key, value) => {
-        setSettings((prev) => ({
-            ...prev,
-            moduleDefaults: {
-                ...prev.moduleDefaults,
-                [moduleType]: {
-                    ...prev.moduleDefaults[moduleType],
-                    [key]: value,
-                },
-            },
-        }));
-    }, []);
+    const updateModuleDefault = useCallback(
+        (moduleType, key, value) => {
+            updateSetting(`moduleDefaults.${moduleType}.${key}`, value);
+        },
+        [updateSetting],
+    );
 
     // =====================================================
     // Styles
     // =====================================================
 
-    const applyStyle = useCallback((styleId) => {
-        setSettings((prev) => ({
-            ...prev,
-            preferences: {
-                ...prev.preferences,
-                appearance: {
-                    ...prev.preferences.appearance,
-                    currentStyle: styleId,
-                },
-            },
-        }));
-    }, []);
-
+    const applyStyle = useCallback(
+        (styleId) => {
+            updateSetting("preferences.appearance.currentStyle", styleId);
+        },
+        [updateSetting],
+    );
     const saveStyle = useCallback((style) => {
         setSettings((prev) => ({
             ...prev,
@@ -130,11 +124,21 @@ export function useSettingsState() {
         setSettings(structuredClone(DEFAULT_SETTINGS));
     }, []);
 
+    //
+
+    const getSetting = useCallback(
+        (path) => {
+            return path.split(".").reduce((obj, key) => obj?.[key], settings);
+        },
+        [settings],
+    );
+
     return {
         settings,
 
-        updatePreference,
+        updateSetting,
 
+        updatePreference,
         updateModuleDefault,
 
         applyStyle,
@@ -144,6 +148,8 @@ export function useSettingsState() {
         deleteStyle,
 
         resetToDefaults,
+
+        getSetting
     };
 }
 

@@ -1,33 +1,27 @@
 import "./settings-sidebar.css";
 
-import { SETTINGS_TABS } from "../../../constants/settingsOption";
-import { useLanguage } from "../../../hooks/useLanguage";
+import { SETTINGS_PAGES } from "../../../constants/interface";
 
-export default function SettingsSidebar({ activeTab, onTabChange }) {
-    const T = useLanguage();
-
+export default function SettingsSidebar({ currentPage, onPageChange }) {
     return (
         <aside className="settings-sidebar">
-            <nav className="settings-sidebar__nav">
-                {SETTINGS_TABS.map((tab) => {
-                    const Icon = tab.icon;
+            <nav className="settings-sidebar__navigation">
+                {SETTINGS_PAGES.map((page) => {
+                    const Icon = page.icon;
 
                     return (
                         <button
-                            key={tab.id}
-                            className={`settings-sidebar__tab ${
-                                activeTab === tab.id ? "settings-sidebar__tab--active" : ""
-                            }`}
-                            onClick={() => onTabChange(tab.id)}
-                            aria-selected={activeTab === tab.id}
+                            key={page.id}
+                            type="button"
+                            className={
+                                currentPage === page.id
+                                    ? "settings-sidebar__button settings-sidebar__button--active"
+                                    : "settings-sidebar__button"
+                            }
+                            title={page.title}
+                            onClick={() => onPageChange(page.id)}
                         >
-                            <span className="settings-sidebar__icon">
-                                <Icon size={16} />
-                            </span>
-
-                            <span className="settings-sidebar__label">
-                                {T.settings.sidebar[tab.labelKey]}
-                            </span>
+                            <Icon className="settings-sidebar__icon" size={22} />
                         </button>
                     );
                 })}

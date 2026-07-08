@@ -1,0 +1,30 @@
+.interface-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.interface-settings__section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.interface-settings__section-title {
+    margin: 0;
+}
+
+.interface-settings__select {
+    width: 18rem;
+}
+
+.interface-settings__preset-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.interface-settings__create-button {
+    align-self: flex-start;
+}
+    

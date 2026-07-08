@@ -1,539 +1,274 @@
-import "./grid-layout-settings.css";
-
-import { COLUMN_OPTIONS, GAP_OPTIONS } from "../../../constants/settingsOption";
-import { useLanguage } from "../../../hooks/useLanguage";
-
-import * as SettingsUI from "../Shared/SettingsComponents";
-
-/**
- * GridLayoutSettings Component
- * Configure dashboard grid layout (columns, gaps)
- */
-export default function GridLayoutSettings({ settings, updateGlobalSetting }) {
-    const T = useLanguage();
-
-    const currentColumns = settings.gridColumns;
-    const currentGap = settings.moduleGaps;
-
-    const handleColumnsChange = (columns) => {
-        updateGlobalSetting("gridColumns", columns);
-    };
-
-    const handleGapChange = (gap) => {
-        updateGlobalSetting("moduleGaps", gap);
-    };
-
-    return (
-        <div className="grid-layout-settings">
-            <SettingsUI.PageTitle>{T.settings.grid.title}</SettingsUI.PageTitle>
-
-            <SettingsUI.Section>
-                <SettingsUI.Header>{T.settings.grid.columns}</SettingsUI.Header>
-
-                <SettingsUI.Instructions>
-                    {T.settings.grid.columnsDescription}
-                </SettingsUI.Instructions>
-
-                <div className="grid-layout-settings__options">
-                    {COLUMN_OPTIONS.map((cols) => (
-                        <button
-                            key={cols}
-                            className={`grid-layout-settings__button ${
-                                currentColumns === cols
-                                    ? "grid-layout-settings__button--active"
-                                    : ""
-                            }`}
-                            onClick={() => handleColumnsChange(cols)}
-                            aria-pressed={currentColumns === cols}
-                        >
-                            {cols}{" "}
-                            {cols === 1 ? T.settings.grid.column : T.settings.grid.columnsPlural}
-                        </button>
-                    ))}
-                </div>
-            </SettingsUI.Section>
-
-            <SettingsUI.Section>
-                <SettingsUI.Header>{T.settings.grid.spacing}</SettingsUI.Header>
-
-                <SettingsUI.Instructions>
-                    {T.settings.grid.spacingDescription}
-                </SettingsUI.Instructions>
-
-                <div className="grid-layout-settings__gap-options">
-                    {GAP_OPTIONS.map((option) => (
-                        <button
-                            key={option.value}
-                            className={`grid-layout-settings__gap-button ${
-                                currentGap === option.value
-                                    ? "grid-layout-settings__gap-button--active"
-                                    : ""
-                            }`}
-                            onClick={() => handleGapChange(option.value)}
-                            aria-pressed={currentGap === option.value}
-                        >
-                            <span>{T.settings.grid.gapOptions[option.labelKey]}</span>
-                        </button>
-                    ))}
-                </div>
-            </SettingsUI.Section>
-
-            <SettingsUI.Section>
-                <SettingsUI.Header>{T.settings.grid.preview}</SettingsUI.Header>
-
-                <div
-                    className="grid-layout-settings__preview"
-                    style={{
-                        display: "grid",
-                        gridTemplateColumns: `repeat(${currentColumns}, 1fr)`,
-                        gap: currentGap,
-                    }}
-                >
-                    {Array.from({ length: 6 }).map((_, i) => (
-                        <div key={i} className="grid-layout-settings__preview-item">
-                            {i + 1}
-                        </div>
-                    ))}
-                </div>
-            </SettingsUI.Section>
-        </div>
-    );
-}
-
-
-import { useState } from "react";
-import Select from "react-select";
-import "./location-language-settings.css";
-
-import { LANGUAGE_OPTIONS } from "../../../constants/settingsOption";
-import { useLanguage } from "../../../hooks/useLanguage";
-
-import * as SettingsUI from "../Shared/SettingsComponents";
-import SettingsSelect from "../Shared/SettingsSelect";
-
-/**
- * LocationLanguageSettings Component
- * Location and language configuration
- */
-export default function LocationLanguageSettings({ settings, updateGlobalSetting }) {
-    const T = useLanguage();
-
-    const [locationInput, setLocationInput] = useState(settings.location.name);
-    const currentLanguage = settings.language;
-
-    const handleLanguageChange = (langId) => {
-        updateGlobalSetting("language", langId);
-    };
-
-    const handleLocationChange = (e) => {
-        const newLocation = e.target.value;
-        setLocationInput(newLocation);
-
-        updateGlobalSetting("location", {
-            name: newLocation,
-            lat: 35.6762,
-            lng: 139.6503,
-        });
-    };
-
-    return (
-        <div className="location-language-settings">
-            <SettingsUI.PageTitle>{T.settings.location.title}</SettingsUI.PageTitle>
-
-            <SettingsUI.Section>
-                <SettingsUI.Header>{T.settings.location.location}</SettingsUI.Header>
-
-                <SettingsUI.Instructions>{T.settings.location.hint}</SettingsUI.Instructions>
-
-                <label htmlFor="location-input">{T.settings.location.dashboardLocation}</label>
-
-                <input
-                    id="location-input"
-                    type="text"
-                    className="location-language-settings__input"
-                    value={locationInput}
-                    onChange={handleLocationChange}
-                    placeholder={T.settings.location.placeholder}
-                />
-            </SettingsUI.Section>
-
-            <SettingsUI.Section>
-                <SettingsUI.Header>{T.settings.location.language}</SettingsUI.Header>
-
-                <SettingsSelect
-                    value={currentLanguage}
-                    options={LANGUAGE_OPTIONS}
-                    valueKey="id"
-                    labelKey="label"
-                    onChange={handleLanguageChange}
-                />
-            </SettingsUI.Section>
-
-        </div>
-    );
-}
-
-import "./module-settings.css";
-
-import { MODULE_CONFIG } from "../../../constants/moduleSettings";
-import { useLanguage } from "../../../hooks/useLanguage";
-
-import * as SettingsUI from "../Shared/SettingsComponents"
-import SettingsSelect from "../Shared/SettingsSelect";
-
-/**
- * ModuleSettings Component
- * Enable/disable modules and configure module-specific settings.
- */
-export default function ModuleSettings({ settings, updateModuleSetting }) {
-    const T = useLanguage();
-
-    const handleToggle = (moduleName, key) => {
-        const currentValue = settings.modules[moduleName][key];
-        updateModuleSetting(moduleName, key, !currentValue);
-    };
-
-    const handleRangeChange = (moduleName, key, value) => {
-        updateModuleSetting(moduleName, key, parseInt(value, 10));
-    };
-
-    const handleSelectChange = (moduleName, key, value) => {
-        updateModuleSetting(moduleName, key, value);
-    };
-
-    const renderSettingControl = (moduleName, setting) => {
-        const currentValue = settings.modules[moduleName][setting.key];
-
-        switch (setting.type) {
-            case "toggle":
-                return (
-                    <label className="module-settings__toggle-label">
-                        <input
-                            type="checkbox"
-                            checked={currentValue}
-                            onChange={() => handleToggle(moduleName, setting.key)}
-                            className="module-settings__toggle-input"
-                        />
-
-                        <span className="module-settings__toggle-slider" />
-
-                        <span className="module-settings__toggle-text">
-                            {currentValue ? T.settings.modules.on : T.settings.modules.off}
-                        </span>
-                    </label>
-                );
-
-            case "range":
-                return (
-                    <div className="module-settings__range-group">
-                        <input
-                            type="range"
-                            min={setting.min}
-                            max={setting.max}
-                            value={currentValue}
-                            onChange={(e) =>
-                                handleRangeChange(moduleName, setting.key, e.target.value)
-                            }
-                            className="module-settings__range"
-                        />
-
-                        <span className="module-settings__range-value">{currentValue}</span>
-                    </div>
-                );
-
-            case "select":
-                return (
-                    <SettingsSelect
-                        value={currentValue}
-                        options={setting.options}
-                        valueKey="value"
-                        labelTransform={(option) => T.settings.modules.options[option.labelKey]}
-                        onChange={(value) => handleSelectChange(moduleName, setting.key, value)}
-                    />
-                );
-
-            default:
-                return null;
-        }
-    };
-
-    return (
-        <div className="module-settings">
-            <SettingsUI.PageTitle>{T.settings.modules.title}</SettingsUI.PageTitle>
-
-            {MODULE_CONFIG.map((module) => (
-                <SettingsUI.Section key={module.id} className="module-settings__module">
-                    <SettingsUI.Header>
-                        {T.settings.modules.names[module.nameKey]}
-                    </SettingsUI.Header>
-
-                    <SettingsUI.Instructions>
-                        {T.settings.modules.descriptions[module.descriptionKey]}
-                    </SettingsUI.Instructions>
-
-                    <div className="module-settings__controls">
-                        {module.settings.map((setting) => (
-                            <div key={setting.key} className="module-settings__control-group">
-                                <label className="module-settings__label">
-                                    {T.settings.modules.labels[setting.labelKey]}
-                                </label>
-
-                                {renderSettingControl(module.id, setting)}
-                            </div>
-                        ))}
-                    </div>
-                </SettingsUI.Section>
-            ))}
-        </div>
-    );
-}
-
-import { useState } from "react";
-import "./preset-settings.css";
-
-import { DEFAULT_PRESETS } from "../../../constants/settingsOption";
-
-import * as SettingsUI from "../Shared/SettingsComponents"
-
-/**
- * PresetSettings Component
- * Manage theme presets and custom configurations.
- */
-export default function PresetSettings({
-    settings,
-    applyPreset,
-    saveCustomPreset,
-    deleteCustomPreset,
-    resetToDefaults,
-}) {
-    const [customPresetName, setCustomPresetName] = useState("");
-    const [showSavePrompt, setShowSavePrompt] = useState(false);
-
-    const currentPreset = settings.currentPreset;
-    const customPresets = settings.customPresets;
-
-    const handleApplyPreset = (presetId) => {
-        applyPreset(presetId);
-    };
-
-    const handleSaveCustomPreset = () => {
-        if (!customPresetName.trim()) return;
-
-        saveCustomPreset(customPresetName.trim());
-        setCustomPresetName("");
-        setShowSavePrompt(false);
-    };
-
-    const handleDeletePreset = (presetName) => {
-        if (window.confirm(`Delete preset "${presetName}"?`)) {
-            deleteCustomPreset(presetName);
-        }
-    };
-
-    const handleResetAll = () => {
-        if (window.confirm("Reset all settings to defaults? This cannot be undone.")) {
-            resetToDefaults();
-        }
-    };
-
-    return (
-        <div className="presets-settings">
-            <SettingsUI.PageTitle>Presets & Configuration</SettingsUI.PageTitle>
-
-            {/* Built-in Presets */}
-            <SettingsUI.Section>
-                <SettingsUI.Header>Built-in Presets</SettingsUI.Header>
-
-                <SettingsUI.Instructions>
-                    Quickly switch between predefined dashboard configurations.
-                </SettingsUI.Instructions>
-
-                <div className="presets-settings__grid">
-                    {DEFAULT_PRESETS.map((preset) => (
-                        <button
-                            key={preset.id}
-                            className={`presets-settings__preset-card ${
-                                currentPreset === preset.id
-                                    ? "presets-settings__preset-card--active"
-                                    : ""
-                            }`}
-                            onClick={() => handleApplyPreset(preset.id)}
-                            aria-pressed={currentPreset === preset.id}
-                        >
-                            <span className="presets-settings__preset-label">{preset.name}</span>
-
-                            {currentPreset === preset.id && (
-                                <span className="presets-settings__checkmark">✓</span>
-                            )}
-                        </button>
-                    ))}
-                </div>
-            </SettingsUI.Section>
-
-            {/* Custom Presets */}
-            {customPresets.length > 0 && (
-                <SettingsUI.Section>
-                    <SettingsUI.Header>Custom Presets</SettingsUI.Header>
-
-                    <SettingsUI.Instructions>
-                        Your saved dashboard configurations.
-                    </SettingsUI.Instructions>
-
-                    <div className="presets-settings__custom-presets">
-                        {customPresets.map((preset) => (
-                            <div key={preset.name} className="presets-settings__custom-item">
-                                <button
-                                    className={`presets-settings__custom-button ${
-                                        currentPreset === preset.name
-                                            ? "presets-settings__custom-button--active"
-                                            : ""
-                                    }`}
-                                    onClick={() => handleApplyPreset(preset.name)}
-                                >
-                                    <span>{preset.name}</span>
-
-                                    {currentPreset === preset.name && (
-                                        <span className="presets-settings__checkmark">✓</span>
-                                    )}
-                                </button>
-
-                                <button
-                                    className="presets-settings__delete-btn"
-                                    title="Delete preset"
-                                    onClick={() => handleDeletePreset(preset.name)}
-                                >
-                                    ✕
-                                </button>
-                            </div>
-                        ))}
-                    </div>
-                </SettingsUI.Section>
-            )}
-
-            {/* Save Preset */}
-            <SettingsUI.Section>
-                <SettingsUI.Header>Save Current Settings</SettingsUI.Header>
-
-                <SettingsUI.Instructions>
-                    Store your current configuration as a reusable preset.
-                </SettingsUI.Instructions>
-
-                {!showSavePrompt ? (
-                    <button
-                        className="presets-settings__save-btn"
-                        onClick={() => setShowSavePrompt(true)}
-                    >
-                        Save as Custom Preset
-                    </button>
-                ) : (
-                    <div className="presets-settings__save-prompt">
-                        <input
-                            type="text"
-                            className="presets-settings__input"
-                            placeholder="Enter preset name..."
-                            value={customPresetName}
-                            onChange={(e) => setCustomPresetName(e.target.value)}
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter") {
-                                    handleSaveCustomPreset();
-                                }
-                            }}
-                        />
-
-                        <div className="presets-settings__prompt-buttons">
-                            <button
-                                className="presets-settings__confirm-btn"
-                                disabled={!customPresetName.trim()}
-                                onClick={handleSaveCustomPreset}
-                            >
-                                Save
-                            </button>
-
-                            <button
-                                className="presets-settings__cancel-btn"
-                                onClick={() => {
-                                    setShowSavePrompt(false);
-                                    setCustomPresetName("");
-                                }}
-                            >
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
-                )}
-            </SettingsUI.Section>
-
-            {/* Reset */}
-            <SettingsUI.Section>
-                <SettingsUI.Header>Reset Settings</SettingsUI.Header>
-
-                <SettingsUI.Instructions>
-                    Restore every setting back to its default value.
-                </SettingsUI.Instructions>
-
-                <button className="presets-settings__reset-btn" onClick={handleResetAll}>
-                    Reset All Settings
-                </button>
-
-                <p className="presets-settings__warning">This action cannot be undone.</p>
-            </SettingsUI.Section>
-        </div>
-    );
-}
-
-import "./theme-settings.css";
-
-import { THEME_OPTIONS } from "../../../constants/settingsOption";
-import { useLanguage } from "../../../hooks/useLanguage";
-
-import * as SettingsUI from "../Shared/SettingsComponents";
-
-/**
- * ThemeSettings Component
- * Configure dashboard theme and appearance
- */
-export default function ThemeSettings({ settings, updateGlobalSetting }) {
-    const T = useLanguage();
-
-    const currentTheme = settings.theme;
-
-    const handleThemeChange = (themeId) => {
-        updateGlobalSetting("theme", themeId);
-    };
-
-    return (
-        <div className="theme-settings">
-            <SettingsUI.PageTitle>{T.settings.theme.title}</SettingsUI.PageTitle>
-
-            <SettingsUI.Section>
-                <SettingsUI.Header>{T.settings.theme.presets}</SettingsUI.Header>
-
-                <div className="theme-settings__grid">
-                    {THEME_OPTIONS.map((theme) => (
-                        <button
-                            key={theme.id}
-                            className={`theme-settings__card ${
-                                currentTheme === theme.id ? "theme-settings__card--active" : ""
-                            }`}
-                            onClick={() => handleThemeChange(theme.id)}
-                        >
-                            <span className="theme-settings__preview">{theme.preview}</span>
-
-                            <span className="theme-settings__label">
-                                {T.settings.theme.options[theme.labelKey]}
-                            </span>
-                        </button>
-                    ))}
-                </div>
-            </SettingsUI.Section>
-
-            <SettingsUI.Section>
-                <SettingsUI.Header>{T.settings.theme.customization}</SettingsUI.Header>
-
-                <SettingsUI.Instructions>
-                    {T.settings.theme.customizationDescription}
-                </SettingsUI.Instructions>
-            </SettingsUI.Section>
-        </div>
-    );
-}
+// =====================================================
+// Dashboard Options
+// =====================================================
+
+export const COLUMN_OPTIONS = [2, 3, 4, 6];
+
+export const GAP_OPTIONS = [
+    { value: 8, labelKey: "tight" },
+    { value: 16, labelKey: "normal" },
+    { value: 24, labelKey: "spacious" },
+    { value: 32, labelKey: "extraSpacious" },
+];
+
+// =====================================================
+// Default Dashboard
+// =====================================================
+
+export const DEFAULT_DASHBOARD = {
+    id: "default-dashboard",
+
+    name: "Main Dashboard",
+
+    layout: {
+        columns: 3,
+        gap: 16,
+        padding: 16,
+    },
+
+    modules: [
+        {
+            id: "weather-default",
+            type: "weather",
+            settings: {
+                title: "Weather",
+                city: "Tokyo",
+                view: "conditions",
+            },
+            layout: {
+                w: 2,
+                h: 2,
+            },
+        },
+    ],
+};
+
+export const DEFAULT_SETTINGS = {
+    // =====================================================
+    // Preferences
+    // =====================================================
+    preferences: {
+        language: "en",
+
+        location: {
+            name: "Tokyo",
+            latitude: 35.6762,
+            longitude: 139.6503,
+        },
+
+        appearance: {
+            currentStyle: "dark-default",
+        },
+    },
+
+    // =====================================================
+    // Styles
+    // =====================================================
+    styles: [
+        {
+            id: "dark-default",
+            name: "Dark Default",
+            builtIn: true,
+            basedOn: null,
+
+            appearance: {
+                colors: {},
+                typography: {},
+                borders: {},
+                effects: {},
+            },
+        },
+
+        {
+            id: "light-default",
+            name: "Light Default",
+            builtIn: true,
+            basedOn: null,
+
+            appearance: {
+                colors: {},
+                typography: {},
+                borders: {},
+                effects: {},
+            },
+        },
+    ],
+
+    // =====================================================
+    // Module Defaults
+    // =====================================================
+    moduleDefaults: {
+        weather: {
+            title: "Weather",
+            city: "Tokyo",
+            view: "conditions",
+        },
+
+        schedule: {
+            title: "Schedule",
+        },
+
+        announcement: {
+            title: "Announcements",
+        },
+    },
+};
+
+// constants/moduleSettings.js
+
+export const MODULE_CONFIG = [
+    {
+        id: "weather",
+        nameKey: "weather",
+        descriptionKey: "weather",
+
+        settings: [
+            {
+                key: "forecastDays",
+                labelKey: "forecastDays",
+                type: "range",
+                min: 1,
+                max: 14,
+            },
+            {
+                key: "showAlerts",
+                labelKey: "showAlerts",
+                type: "toggle",
+            },
+        ],
+    },
+
+    {
+        id: "schedule",
+        nameKey: "schedule",
+        descriptionKey: "schedule",
+
+        settings: [
+            {
+                key: "viewMode",
+                labelKey: "viewMode",
+                type: "select",
+                options: [
+                    {
+                        value: "relative",
+                        labelKey: "relative",
+                    },
+                    {
+                        value: "absolute",
+                        labelKey: "absolute",
+                    },
+                ],
+            },
+            {
+                key: "daysBeforeToday",
+                labelKey: "daysBeforeToday",
+                type: "range",
+                min: 0,
+                max: 7,
+            },
+        ],
+    },
+
+    {
+        id: "announcement",
+        nameKey: "announcements",
+        descriptionKey: "announcements",
+
+        settings: [
+            {
+                key: "maxDisplay",
+                labelKey: "maxDisplay",
+                type: "range",
+                min: 1,
+                max: 10,
+            },
+        ],
+    },
+];
+
+
+// =====================================================
+// Settings UI Options
+// =====================================================
+
+import { Palette, Globe, LayoutGrid, Blocks, Star } from "lucide-react";
+
+export const LANGUAGE_OPTIONS = [
+    { id: "en", label: "English" },
+    { id: "ja", label: "日本語" },
+];
+
+export const SETTINGS_TABS = [
+    {
+        id: "theme",
+        labelKey: "theme",
+        icon: Palette,
+    },
+    {
+        id: "location",
+        labelKey: "location",
+        icon: Globe,
+    },
+    {
+        id: "grid",
+        labelKey: "grid",
+        icon: LayoutGrid,
+    },
+    {
+        id: "modules",
+        labelKey: "modules",
+        icon: Blocks,
+    },
+    {
+        id: "presets",
+        labelKey: "presets",
+        icon: Star,
+    },
+];
+
+// =====================================================
+// Built-in Styles
+// =====================================================
+
+export const DEFAULT_PRESETS = [
+    { id: "dark-default", name: "Dark (Default)", type: "default" },
+    { id: "dark-minimal", name: "Dark (Minimal)", type: "default" },
+    { id: "dark-accent", name: "Dark (Accent)", type: "default" },
+    { id: "light-default", name: "Light (Default)", type: "default" },
+    { id: "light-minimal", name: "Light (Minimal)", type: "default" },
+    { id: "light-accent", name: "Light (Accent)", type: "default" },
+];
+
+export const THEME_OPTIONS = [
+    {
+        id: "dark-default",
+        labelKey: "darkDefault",
+        preview: "🌙",
+    },
+    {
+        id: "dark-minimal",
+        labelKey: "darkMinimal",
+        preview: "⚫",
+    },
+    {
+        id: "dark-accent",
+        labelKey: "darkAccent",
+        preview: "💜",
+    },
+    {
+        id: "light-default",
+        labelKey: "lightDefault",
+        preview: "☀️",
+    },
+    {
+        id: "light-minimal",
+        labelKey: "lightMinimal",
+        preview: "⚪",
+    },
+    {
+        id: "light-accent",
+        labelKey: "lightAccent",
+        preview: "💛",
+    },
+];
+

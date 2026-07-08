@@ -13,7 +13,6 @@ import { useLanguage } from "../../hooks/useLanguage";
 
 // CSS
 import "./dashboard-header.css";
-import Settings from "../Settings/Settings";
 
 function Workmark() {
     const T = useLanguage();

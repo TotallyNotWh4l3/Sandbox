@@ -1,5 +1,6 @@
 import { useDashboard } from "../../hooks/useDashboard";
 import ModuleRenderer from "../Modules/core/ModuleRenderer";
+import "./dashboard-workspace.css"
 
 export default function DashboardWorkspace() {
     const { dashboard, selectModule } = useDashboard();

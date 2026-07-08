@@ -1,42 +1,489 @@
 import { useState } from "react";
+import "./appearance-settings.css";
+
+import { useLanguage } from "../../../hooks/useLanguage";
+
+import * as SettingsUI from "../Shared/SettingsComponents";
+
+/**
+ * AppearanceSettings
+ *
+ * Manage dashboard appearance and Styles.
+ *
+ * Styles are complete appearance configurations.
+ * Built-in styles cannot be edited.
+ * Custom styles can be created, edited and deleted.
+ */
+export default function AppearanceSettings({
+    settings,
+
+    updatePreference,
+
+    createStyle,
+    duplicateStyle,
+    updateStyle,
+    deleteStyle,
+}) {
+    const T = useLanguage();
+
+    const [editingStyle, setEditingStyle] = useState(null);
+
+    const currentStyle = settings.preferences.appearance.currentStyle;
+
+    const styles = settings.styles;
+
+    const builtInStyles = styles.filter((style) => style.builtIn);
+
+    const customStyles = styles.filter((style) => !style.builtIn);
+
+    const handleSelectStyle = (styleId) => {
+        updatePreference("appearance", {
+            ...settings.preferences.appearance,
+            currentStyle: styleId,
+        });
+    };
+
+    return (
+        <div className="appearance-settings">
+            <SettingsUI.PageTitle>Appearance</SettingsUI.PageTitle>
+
+            {/* ------------------------------------------------ */}
+            {/* Built-in Styles                                 */}
+            {/* ------------------------------------------------ */}
+
+            <SettingsUI.Section>
+                <SettingsUI.Header>Default Styles</SettingsUI.Header>
+
+                <SettingsUI.Instructions>
+                    Choose one of the built-in styles. Default styles cannot be modified.
+                </SettingsUI.Instructions>
+
+                <div className="appearance-settings__grid">
+                    {builtInStyles.map((style) => (
+                        <button
+                            key={style.id}
+                            className={`appearance-settings__card ${
+                                currentStyle === style.id ? "appearance-settings__card--active" : ""
+                            }`}
+                            onClick={() => handleSelectStyle(style.id)}
+                        >
+                            <span className="appearance-settings__preview">{style.preview}</span>
+
+                            <span>{style.name}</span>
+                        </button>
+                    ))}
+                </div>
+            </SettingsUI.Section>
+
+            {/* ------------------------------------------------ */}
+            {/* Custom Styles                                   */}
+            {/* ------------------------------------------------ */}
+
+            <SettingsUI.Section>
+                <SettingsUI.Header>Custom Styles</SettingsUI.Header>
+
+                <SettingsUI.Instructions>
+                    Create your own dashboard appearance by customizing an existing style.
+                </SettingsUI.Instructions>
+
+                <button className="appearance-settings__create-btn" onClick={createStyle}>
+                    Create New Style
+                </button>
+
+                {customStyles.length > 0 && (
+                    <div className="appearance-settings__custom-list">
+                        {customStyles.map((style) => (
+                            <div key={style.id} className="appearance-settings__custom-item">
+                                <button
+                                    className={`appearance-settings__custom-button ${
+                                        currentStyle === style.id
+                                            ? "appearance-settings__custom-button--active"
+                                            : ""
+                                    }`}
+                                    onClick={() => handleSelectStyle(style.id)}
+                                >
+                                    {style.name}
+                                </button>
+
+                                <div className="appearance-settings__actions">
+                                    <button onClick={() => duplicateStyle(style.id)}>
+                                        Duplicate
+                                    </button>
+
+                                    <button onClick={() => setEditingStyle(style)}>Edit</button>
+
+                                    <button onClick={() => deleteStyle(style.id)}>Delete</button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </SettingsUI.Section>
+
+            {/* ------------------------------------------------ */}
+            {/* Appearance Editor                               */}
+            {/* ------------------------------------------------ */}
+
+            {editingStyle && (
+                <SettingsUI.Section>
+                    <SettingsUI.Header>Edit "{editingStyle.name}"</SettingsUI.Header>
+
+                    <SettingsUI.Instructions>
+                        This is where all appearance customization (colors, typography, borders,
+                        effects, spacing, etc.) will live.
+                    </SettingsUI.Instructions>
+                </SettingsUI.Section>
+            )}
+        </div>
+    );
+}
+
+
+import "./grid-layout-settings.css";
+
+import { COLUMN_OPTIONS, GAP_OPTIONS } from "../../../constants/dashboardOptions";
+
+import { useDashboard } from "../../../hooks/useDashboard";
+import { useLanguage } from "../../../hooks/useLanguage";
+
+import * as SettingsUI from "../Shared/SettingsComponents";
+
+/**
+ * GridLayoutSettings Component
+ * Configure dashboard grid layout.
+ */
+export default function GridLayoutSettings() {
+    const T = useLanguage();
+
+    const { dashboard, updateLayout } = useDashboard();
+
+    const currentColumns = dashboard.layout.columns;
+    const currentGap = dashboard.layout.gap;
+
+    const handleColumnsChange = (columns) => {
+        updateLayout("columns", columns);
+    };
+
+    const handleGapChange = (gap) => {
+        updateLayout("gap", gap);
+    };
+
+    return (
+        <div className="grid-layout-settings">
+            <SettingsUI.PageTitle>{T.settings.grid.title}</SettingsUI.PageTitle>
+
+            {/* Columns */}
+            <SettingsUI.Section>
+                <SettingsUI.Header>{T.settings.grid.columns}</SettingsUI.Header>
+
+                <SettingsUI.Instructions>
+                    {T.settings.grid.columnsDescription}
+                </SettingsUI.Instructions>
+
+                <div className="grid-layout-settings__options">
+                    {COLUMN_OPTIONS.map((cols) => (
+                        <button
+                            key={cols}
+                            className={`grid-layout-settings__button ${
+                                currentColumns === cols
+                                    ? "grid-layout-settings__button--active"
+                                    : ""
+                            }`}
+                            onClick={() => handleColumnsChange(cols)}
+                            aria-pressed={currentColumns === cols}
+                        >
+                            {cols}{" "}
+                            {cols === 1 ? T.settings.grid.column : T.settings.grid.columnsPlural}
+                        </button>
+                    ))}
+                </div>
+            </SettingsUI.Section>
+
+            {/* Gap */}
+            <SettingsUI.Section>
+                <SettingsUI.Header>{T.settings.grid.spacing}</SettingsUI.Header>
+
+                <SettingsUI.Instructions>
+                    {T.settings.grid.spacingDescription}
+                </SettingsUI.Instructions>
+
+                <div className="grid-layout-settings__gap-options">
+                    {GAP_OPTIONS.map((option) => (
+                        <button
+                            key={option.value}
+                            className={`grid-layout-settings__gap-button ${
+                                currentGap === option.value
+                                    ? "grid-layout-settings__gap-button--active"
+                                    : ""
+                            }`}
+                            onClick={() => handleGapChange(option.value)}
+                            aria-pressed={currentGap === option.value}
+                        >
+                            <span>{T.settings.grid.gapOptions[option.labelKey]}</span>
+                        </button>
+                    ))}
+                </div>
+            </SettingsUI.Section>
+
+            {/* Preview */}
+            <SettingsUI.Section>
+                <SettingsUI.Header>{T.settings.grid.preview}</SettingsUI.Header>
+
+                <div
+                    className="grid-layout-settings__preview"
+                    style={{
+                        display: "grid",
+                        gridTemplateColumns: `repeat(${currentColumns}, 1fr)`,
+                        gap: `${currentGap}px`,
+                    }}
+                >
+                    {Array.from({ length: 6 }).map((_, i) => (
+                        <div key={i} className="grid-layout-settings__preview-item">
+                            {i + 1}
+                        </div>
+                    ))}
+                </div>
+            </SettingsUI.Section>
+        </div>
+    );
+}
+
+
+import { useState, useEffect } from "react";
+
+import "./location-language-settings.css";
+
+import { LANGUAGE_OPTIONS } from "../../../constants/settingsOption";
+
+import { useLanguage } from "../../../hooks/useLanguage";
+import { useSettings } from "../../../hooks/useSettings";
+
+import * as SettingsUI from "../Shared/SettingsComponents";
+import SettingsSelect from "../Shared/SettingsSelect";
+
+/**
+ * LocationLanguageSettings Component
+ * Configure language and default location.
+ */
+export default function LocationLanguageSettings() {
+    const T = useLanguage();
+
+    const { settings, updatePreference } = useSettings();
+
+    const [locationInput, setLocationInput] = useState(settings.preferences.location.name);
+
+    useEffect(() => {
+        setLocationInput(settings.preferences.location.name);
+    }, [settings.preferences.location.name]);
+
+    const handleLanguageChange = (language) => {
+        updatePreference("language", language);
+    };
+
+    const handleLocationChange = (e) => {
+        const value = e.target.value;
+
+        setLocationInput(value);
+
+        updatePreference("location", {
+            ...settings.preferences.location,
+            name: value,
+        });
+    };
+
+    return (
+        <div className="location-language-settings">
+            <SettingsUI.PageTitle>{T.settings.location.title}</SettingsUI.PageTitle>
+
+            <SettingsUI.Section>
+                <SettingsUI.Header>{T.settings.location.location}</SettingsUI.Header>
+
+                <SettingsUI.Instructions>{T.settings.location.hint}</SettingsUI.Instructions>
+
+                <label htmlFor="location-input">{T.settings.location.dashboardLocation}</label>
+
+                <input
+                    id="location-input"
+                    type="text"
+                    className="location-language-settings__input"
+                    value={locationInput}
+                    onChange={handleLocationChange}
+                    placeholder={T.settings.location.placeholder}
+                />
+            </SettingsUI.Section>
+
+            <SettingsUI.Section>
+                <SettingsUI.Header>{T.settings.location.language}</SettingsUI.Header>
+
+                <SettingsSelect
+                    value={settings.preferences.language}
+                    options={LANGUAGE_OPTIONS}
+                    valueKey="id"
+                    labelKey="label"
+                    onChange={handleLanguageChange}
+                />
+            </SettingsUI.Section>
+        </div>
+    );
+}
+
+
+import "./module-settings.css";
+
+import { MODULE_CONFIG } from "../../../constants/moduleSettings";
+import { useLanguage } from "../../../hooks/useLanguage";
+
+import * as SettingsUI from "../Shared/SettingsComponents";
+import SettingsSelect from "../Shared/SettingsSelect";
+
+/**
+ * ModuleSettings Component
+ * Configure default values for modules.
+ */
+export default function ModuleSettings({ settings, updateModuleDefault }) {
+    const T = useLanguage();
+
+    const handleToggle = (moduleName, key) => {
+        const currentValue = settings.moduleDefaults[moduleName][key];
+        updateModuleDefault(moduleName, key, !currentValue);
+    };
+
+    const handleRangeChange = (moduleName, key, value) => {
+        updateModuleDefault(moduleName, key, parseInt(value, 10));
+    };
+
+    const handleSelectChange = (moduleName, key, value) => {
+        updateModuleDefault(moduleName, key, value);
+    };
+
+    const renderSettingControl = (moduleName, setting) => {
+        const currentValue = settings.moduleDefaults[moduleName][setting.key];
+
+        switch (setting.type) {
+            case "toggle":
+                return (
+                    <label className="module-settings__toggle-label">
+                        <input
+                            type="checkbox"
+                            checked={currentValue}
+                            onChange={() => handleToggle(moduleName, setting.key)}
+                            className="module-settings__toggle-input"
+                        />
+
+                        <span className="module-settings__toggle-slider" />
+
+                        <span className="module-settings__toggle-text">
+                            {currentValue ? T.settings.modules.on : T.settings.modules.off}
+                        </span>
+                    </label>
+                );
+
+            case "range":
+                return (
+                    <div className="module-settings__range-group">
+                        <input
+                            type="range"
+                            min={setting.min}
+                            max={setting.max}
+                            value={currentValue}
+                            onChange={(e) =>
+                                handleRangeChange(moduleName, setting.key, e.target.value)
+                            }
+                            className="module-settings__range"
+                        />
+
+                        <span className="module-settings__range-value">{currentValue}</span>
+                    </div>
+                );
+
+            case "select":
+                return (
+                    <SettingsSelect
+                        value={currentValue}
+                        options={setting.options}
+                        valueKey="value"
+                        labelTransform={(option) => T.settings.modules.options[option.labelKey]}
+                        onChange={(value) => handleSelectChange(moduleName, setting.key, value)}
+                    />
+                );
+
+            default:
+                return null;
+        }
+    };
+
+    return (
+        <div className="module-settings">
+            <SettingsUI.PageTitle>{T.settings.modules.title}</SettingsUI.PageTitle>
+
+            {MODULE_CONFIG.map((module) => (
+                <SettingsUI.Section key={module.id} className="module-settings__module">
+                    <SettingsUI.Header>
+                        {T.settings.modules.names[module.nameKey]}
+                    </SettingsUI.Header>
+
+                    <SettingsUI.Instructions>
+                        {T.settings.modules.descriptions[module.descriptionKey]}
+                    </SettingsUI.Instructions>
+
+                    <div className="module-settings__controls">
+                        {module.settings.map((setting) => (
+                            <div key={setting.key} className="module-settings__control-group">
+                                <label className="module-settings__label">
+                                    {T.settings.modules.labels[setting.labelKey]}
+                                </label>
+
+                                {renderSettingControl(module.id, setting)}
+                            </div>
+                        ))}
+                    </div>
+                </SettingsUI.Section>
+            ))}
+        </div>
+    );
+}
+
+
+import { useState } from "react";
 import "./preset-settings.css";
 
-import { DEFAULT_PRESETS } from "../../../constants/settingsOption";
-
-import * as SettingsUI from "../Shared/SettingsComponents"
+import * as SettingsUI from "../Shared/SettingsComponents";
 
 /**
  * PresetSettings Component
- * Manage theme presets and custom configurations.
+ * Manage style presets and custom configurations.
  */
 export default function PresetSettings({
     settings,
-    applyPreset,
-    saveCustomPreset,
-    deleteCustomPreset,
+    applyStyle,
+    saveCustomStyle,
+    deleteCustomStyle,
     resetToDefaults,
 }) {
-    const [customPresetName, setCustomPresetName] = useState("");
+    const [customStyleName, setCustomStyleName] = useState("");
     const [showSavePrompt, setShowSavePrompt] = useState(false);
 
-    const currentPreset = settings.currentPreset;
-    const customPresets = settings.customPresets;
+    const currentStyle = settings.preferences.appearance.currentStyle;
 
-    const handleApplyPreset = (presetId) => {
-        applyPreset(presetId);
+    const builtInStyles = settings.styles.filter((style) => style.builtIn);
+    const customStyles = settings.styles.filter((style) => !style.builtIn);
+
+    const handleApplyStyle = (styleId) => {
+        applyStyle(styleId);
     };
 
-    const handleSaveCustomPreset = () => {
-        if (!customPresetName.trim()) return;
+    const handleSaveCustomStyle = () => {
+        if (!customStyleName.trim()) return;
 
-        saveCustomPreset(customPresetName.trim());
-        setCustomPresetName("");
+        saveCustomStyle(customStyleName.trim());
+
+        setCustomStyleName("");
         setShowSavePrompt(false);
     };
 
-    const handleDeletePreset = (presetName) => {
-        if (window.confirm(`Delete preset "${presetName}"?`)) {
-            deleteCustomPreset(presetName);
+    const handleDeleteStyle = (styleId) => {
+        if (window.confirm(`Delete style "${styleId}"?`)) {
+            deleteCustomStyle(styleId);
         }
     };
 
@@ -48,31 +495,30 @@ export default function PresetSettings({
 
     return (
         <div className="presets-settings">
-            <SettingsUI.PageTitle>Presets & Configuration</SettingsUI.PageTitle>
+            <SettingsUI.PageTitle>Styles & Configuration</SettingsUI.PageTitle>
 
-            {/* Built-in Presets */}
             <SettingsUI.Section>
-                <SettingsUI.Header>Built-in Presets</SettingsUI.Header>
+                <SettingsUI.Header>Built-in Styles</SettingsUI.Header>
 
                 <SettingsUI.Instructions>
-                    Quickly switch between predefined dashboard configurations.
+                    Switch between predefined appearance styles.
                 </SettingsUI.Instructions>
 
                 <div className="presets-settings__grid">
-                    {DEFAULT_PRESETS.map((preset) => (
+                    {builtInStyles.map((style) => (
                         <button
-                            key={preset.id}
+                            key={style.id}
                             className={`presets-settings__preset-card ${
-                                currentPreset === preset.id
+                                currentStyle === style.id
                                     ? "presets-settings__preset-card--active"
                                     : ""
                             }`}
-                            onClick={() => handleApplyPreset(preset.id)}
-                            aria-pressed={currentPreset === preset.id}
+                            onClick={() => handleApplyStyle(style.id)}
+                            aria-pressed={currentStyle === style.id}
                         >
-                            <span className="presets-settings__preset-label">{preset.name}</span>
+                            <span className="presets-settings__preset-label">{style.name}</span>
 
-                            {currentPreset === preset.id && (
+                            {currentStyle === style.id && (
                                 <span className="presets-settings__checkmark">✓</span>
                             )}
                         </button>
@@ -80,37 +526,36 @@ export default function PresetSettings({
                 </div>
             </SettingsUI.Section>
 
-            {/* Custom Presets */}
-            {customPresets.length > 0 && (
+            {customStyles.length > 0 && (
                 <SettingsUI.Section>
-                    <SettingsUI.Header>Custom Presets</SettingsUI.Header>
+                    <SettingsUI.Header>Custom Styles</SettingsUI.Header>
 
                     <SettingsUI.Instructions>
-                        Your saved dashboard configurations.
+                        Your saved appearance configurations.
                     </SettingsUI.Instructions>
 
                     <div className="presets-settings__custom-presets">
-                        {customPresets.map((preset) => (
-                            <div key={preset.name} className="presets-settings__custom-item">
+                        {customStyles.map((style) => (
+                            <div key={style.id} className="presets-settings__custom-item">
                                 <button
                                     className={`presets-settings__custom-button ${
-                                        currentPreset === preset.name
+                                        currentStyle === style.id
                                             ? "presets-settings__custom-button--active"
                                             : ""
                                     }`}
-                                    onClick={() => handleApplyPreset(preset.name)}
+                                    onClick={() => handleApplyStyle(style.id)}
                                 >
-                                    <span>{preset.name}</span>
+                                    <span>{style.name}</span>
 
-                                    {currentPreset === preset.name && (
+                                    {currentStyle === style.id && (
                                         <span className="presets-settings__checkmark">✓</span>
                                     )}
                                 </button>
 
                                 <button
                                     className="presets-settings__delete-btn"
-                                    title="Delete preset"
-                                    onClick={() => handleDeletePreset(preset.name)}
+                                    title="Delete style"
+                                    onClick={() => handleDeleteStyle(style.id)}
                                 >
                                     ✕
                                 </button>
@@ -120,12 +565,11 @@ export default function PresetSettings({
                 </SettingsUI.Section>
             )}
 
-            {/* Save Preset */}
             <SettingsUI.Section>
-                <SettingsUI.Header>Save Current Settings</SettingsUI.Header>
+                <SettingsUI.Header>Save Current Style</SettingsUI.Header>
 
                 <SettingsUI.Instructions>
-                    Store your current configuration as a reusable preset.
+                    Store your current appearance as a reusable style.
                 </SettingsUI.Instructions>
 
                 {!showSavePrompt ? (
@@ -133,19 +577,19 @@ export default function PresetSettings({
                         className="presets-settings__save-btn"
                         onClick={() => setShowSavePrompt(true)}
                     >
-                        Save as Custom Preset
+                        Save as Custom Style
                     </button>
                 ) : (
                     <div className="presets-settings__save-prompt">
                         <input
                             type="text"
                             className="presets-settings__input"
-                            placeholder="Enter preset name..."
-                            value={customPresetName}
-                            onChange={(e) => setCustomPresetName(e.target.value)}
+                            placeholder="Enter style name..."
+                            value={customStyleName}
+                            onChange={(e) => setCustomStyleName(e.target.value)}
                             onKeyDown={(e) => {
                                 if (e.key === "Enter") {
-                                    handleSaveCustomPreset();
+                                    handleSaveCustomStyle();
                                 }
                             }}
                         />
@@ -153,8 +597,8 @@ export default function PresetSettings({
                         <div className="presets-settings__prompt-buttons">
                             <button
                                 className="presets-settings__confirm-btn"
-                                disabled={!customPresetName.trim()}
-                                onClick={handleSaveCustomPreset}
+                                disabled={!customStyleName.trim()}
+                                onClick={handleSaveCustomStyle}
                             >
                                 Save
                             </button>
@@ -163,7 +607,7 @@ export default function PresetSettings({
                                 className="presets-settings__cancel-btn"
                                 onClick={() => {
                                     setShowSavePrompt(false);
-                                    setCustomPresetName("");
+                                    setCustomStyleName("");
                                 }}
                             >
                                 Cancel
@@ -173,7 +617,6 @@ export default function PresetSettings({
                 )}
             </SettingsUI.Section>
 
-            {/* Reset */}
             <SettingsUI.Section>
                 <SettingsUI.Header>Reset Settings</SettingsUI.Header>
 
@@ -194,22 +637,23 @@ export default function PresetSettings({
 
 import "./theme-settings.css";
 
-import { THEME_OPTIONS } from "../../../constants/settingsOption";
 import { useLanguage } from "../../../hooks/useLanguage";
 
 import * as SettingsUI from "../Shared/SettingsComponents";
 
 /**
  * ThemeSettings Component
- * Configure dashboard theme and appearance
+ * Configure dashboard appearance style.
  */
-export default function ThemeSettings({ settings, updateGlobalSetting }) {
+export default function ThemeSettings({ settings, applyStyle }) {
     const T = useLanguage();
 
-    const currentTheme = settings.theme;
+    const currentStyle = settings.preferences.appearance.currentStyle;
 
-    const handleThemeChange = (themeId) => {
-        updateGlobalSetting("theme", themeId);
+    const styles = settings.styles;
+
+    const handleStyleChange = (styleId) => {
+        applyStyle(styleId);
     };
 
     return (
@@ -220,19 +664,17 @@ export default function ThemeSettings({ settings, updateGlobalSetting }) {
                 <SettingsUI.Header>{T.settings.theme.presets}</SettingsUI.Header>
 
                 <div className="theme-settings__grid">
-                    {THEME_OPTIONS.map((theme) => (
+                    {styles.map((style) => (
                         <button
-                            key={theme.id}
+                            key={style.id}
                             className={`theme-settings__card ${
-                                currentTheme === theme.id ? "theme-settings__card--active" : ""
+                                currentStyle === style.id ? "theme-settings__card--active" : ""
                             }`}
-                            onClick={() => handleThemeChange(theme.id)}
+                            onClick={() => handleStyleChange(style.id)}
                         >
-                            <span className="theme-settings__preview">{theme.preview}</span>
+                            <span className="theme-settings__preview">{style.name}</span>
 
-                            <span className="theme-settings__label">
-                                {T.settings.theme.options[theme.labelKey]}
-                            </span>
+                            <span className="theme-settings__label">{style.name}</span>
                         </button>
                     ))}
                 </div>
@@ -248,76 +690,3 @@ export default function ThemeSettings({ settings, updateGlobalSetting }) {
         </div>
     );
 }
-
-
-export const DEFAULT_PRESETS = [
-    { id: "dark-default", name: "Dark (Default)", type: "default" },
-    { id: "dark-minimal", name: "Dark (Minimal)", type: "default" },
-    { id: "dark-accent", name: "Dark (Accent)", type: "default" },
-    { id: "light-default", name: "Light (Default)", type: "default" },
-    { id: "light-minimal", name: "Light (Minimal)", type: "default" },
-    { id: "light-accent", name: "Light (Accent)", type: "default" },
-];
-
-export const THEME_OPTIONS = [
-    {
-        id: "dark-default",
-        labelKey: "darkDefault",
-        preview: "🌙",
-    },
-    {
-        id: "dark-minimal",
-        labelKey: "darkMinimal",
-        preview: "⚫",
-    },
-    {
-        id: "dark-accent",
-        labelKey: "darkAccent",
-        preview: "💜",
-    },
-    {
-        id: "light-default",
-        labelKey: "lightDefault",
-        preview: "☀️",
-    },
-    {
-        id: "light-minimal",
-        labelKey: "lightMinimal",
-        preview: "⚪",
-    },
-    {
-        id: "light-accent",
-        labelKey: "lightAccent",
-        preview: "💛",
-    },
-];
-
-import { Palette, Globe, LayoutGrid, Blocks, Star } from "lucide-react";
-
-export const SETTINGS_TABS = [
-    {
-        id: "theme",
-        labelKey: "theme",
-        icon: Palette,
-    },
-    {
-        id: "location",
-        labelKey: "location",
-        icon: Globe,
-    },
-    {
-        id: "grid",
-        labelKey: "grid",
-        icon: LayoutGrid,
-    },
-    {
-        id: "modules",
-        labelKey: "modules",
-        icon: Blocks,
-    },
-    {
-        id: "presets",
-        labelKey: "presets",
-        icon: Star,
-    },
-];

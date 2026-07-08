@@ -8,125 +8,92 @@ export default {
     },
 
     settings: {
-        mainTitle: "Settings",
-        close: "Close settings",
-        logout: "Logout",
-        autoSave: "Changes are saved automatically",
-        readOnly: "Settings are read-only without authentication",
+        // =====================================================
+        // General
+        // =====================================================
+
+        title: "Settings",
+        autoSave: "Changes are saved automatically.",
+
+        // =====================================================
+        // Sidebar
+        // =====================================================
+
         sidebar: {
-            theme: "Theme & Appearance",
-            location: "Location & Language",
-            grid: "Grid Layout",
-            modules: "Module Settings",
-            presets: "Presets",
+            interface: "Interface",
+            dashboard: "Dashboard",
+            modules: "Modules",
+            about: "About",
         },
 
-        theme: {
-            title: "Theme & Appearance",
-            presets: "Preset Themes",
-            customization: "Customization",
-            customizationDescription:
-                "Fine-tuning of colors, fonts, and opacity will be available in a future update.",
+        // =====================================================
+        // Interface
+        // =====================================================
 
-            options: {
-                darkDefault: "Dark (Default)",
-                darkMinimal: "Dark (Minimal)",
-                darkAccent: "Dark (Accent)",
-                lightDefault: "Light (Default)",
-                lightMinimal: "Light (Minimal)",
-                lightAccent: "Light (Accent)",
+        interface: {
+            title: "Interface",
+            description: "Customize the appearance and language of the application.",
+
+            language: {
+                title: "Language",
+                description: "Choose the language used throughout the application.",
+            },
+
+            presets: {
+                title: "Presets",
+                description: "Choose one of the built-in presets or create your own.",
+
+                create: "Create Preset",
+                advanced: "Advanced Customization",
             },
         },
 
-        grid: {
-            title: "Grid Layout",
-            columns: "Number of Columns",
-            columnsDescription: "How many modules should fit horizontally on the dashboard?",
-            spacing: "Module Spacing",
-            spacingDescription: "Adjust the gap between dashboard modules.",
-            preview: "Preview",
-            module: "Module",
-            column: "Column",
-            columnsPlural: "Columns",
+        // =====================================================
+        // Dashboard
+        // =====================================================
 
-            gapOptions: {
-                tight: "Tight",
-                normal: "Normal",
-                spacious: "Spacious",
-                extraSpacious: "Extra Spacious",
+        dashboard: {
+            title: "Dashboard",
+            description: "Configure the default layout for newly created dashboards.",
+
+            layout: {
+                title: "Layout",
+                description: "Adjust the spacing and number of columns.",
+
+                columns: "Columns",
+                gap: "Spacing",
+                padding: "Padding",
             },
         },
 
-        location: {
-            title: "Location & Language",
-            location: "Location",
-            language: "Language",
-            dashboardLocation: "Dashboard Location (for weather)",
-            placeholder: "e.g., Tokyo, New York",
-            hint: "Enter a city name to update weather location",
-        },
+        // =====================================================
+        // Modules
+        // =====================================================
 
         modules: {
-            title: "Module Settings",
-            on: "On",
-            off: "Off",
+            title: "Modules",
+            description: "Configure the default behavior of each module.",
 
-            names: {
-                weather: "Weather",
-                schedule: "Schedule",
-                announcements: "Announcements",
-                sound: "Sound",
+            weather: {
+                title: "Weather",
             },
 
-            descriptions: {
-                weather: "Current weather and forecast settings.",
-                schedule: "Upcoming events and timetable settings.",
-                announcements: "Configure dashboard announcements.",
-                sound: "Notification and alert settings.",
+            schedule: {
+                title: "Schedule",
             },
 
-            labels: {
-                enabled: "Enabled",
-                forecastDays: "Forecast Days",
-                showAlerts: "Show Weather Alerts",
-                viewMode: "View Mode",
-                daysBeforeToday: "Days Before Today",
-                maxDisplay: "Maximum Display",
-                volume: "Volume",
-                alertSound: "Alert Sound",
-            },
-            options: {
-                relative: "Relative",
-                absolute: "Absolute",
-                default: "Default",
-                chime: "Chime",
-                bell: "Bell",
-                none: "None",
+            announcements: {
+                title: "Announcements",
             },
         },
 
-        presets: {
-            title: "Presets & Configuration",
-            builtIn: "Built-in Presets",
-            custom: "Your Custom Presets",
-            saveCurrent: "Save Current Settings",
-            saveAsCustom: "Save as Custom Preset",
-            enterName: "Enter preset name...",
-            save: "Save",
-            cancel: "Cancel",
-            reset: "Reset",
-            resetButton: "Reset All Settings to Defaults",
-            warning: "This will reset all settings to their default values.",
-            deleteConfirm: 'Delete preset "{name}"?',
-            resetConfirm: "Reset all settings to defaults? This cannot be undone.",
-        },
-        auth: {
-            title: "Authentication Required",
-            description: "Enter password to modify settings",
-            passwordPlaceholder: "Enter password",
-            unlockButton: "Unlock Settings",
-            incorrectPassword: "Incorrect password",
-            demoHint: '(Demo: use "admin" or "1234")',
+        // =====================================================
+        // About
+        // =====================================================
+
+        about: {
+            title: "About",
+            description: "Application information and credits.",
         },
     },
 };

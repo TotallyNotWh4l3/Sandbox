@@ -4,11 +4,10 @@
 import { useState } from "react";
 import DashboardHeader from "./DashboardHeader";
 import DashboardWorkspace from "./DashboardWorkspace";
-import Settings from "../Settings/Settings";
 
 // CSS
 import "./dashboard.css";
-import ModuleManager from "../Modules/core/ModuleManager";
+
 
 export default function Dashboard() {
     // States
@@ -18,10 +17,7 @@ export default function Dashboard() {
         <div className="dashboard">
             <DashboardHeader setIsSettingsOpen={setIsSettingsOpen} />
             <DashboardWorkspace />
-            <ModuleManager />
 
-            {/* Modals */}
-            {isSettingsOpen && <Settings onClose={() => setIsSettingsOpen(false)} />}
         </div>
     );
 }
