@@ -1,11 +1,8 @@
-import "./dashboard-workspace.css";
-
 import { useDashboard } from "../../hooks/useDashboard";
-import Module from "../Modules/Module";
-import ModuleRenderer from "./ModuleRenderer";
+import ModuleRenderer from "../Modules/core/ModuleRenderer";
 
 export default function DashboardWorkspace() {
-    const { dashboard } = useDashboard();
+    const { dashboard, selectModule } = useDashboard();
 
     return (
         <main
@@ -17,7 +14,7 @@ export default function DashboardWorkspace() {
             }}
         >
             {dashboard.modules.map((module) => (
-                <ModuleRenderer key={module.id} module={module} />
+                <ModuleRenderer key={module.id} module={module} onSelect={selectModule} />
             ))}
         </main>
     );

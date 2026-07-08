@@ -1,5 +1,5 @@
-import ModuleFrame from "./ModuleFrame";
-import ModuleEditor from "../Dashboard/ModuleEditor";
+import ModuleFrame from "../core/ModuleFrame";
+import ModuleEditor from "../core/ModuleEditor";
 
 export default function WeatherModule({ module }) {
     return (

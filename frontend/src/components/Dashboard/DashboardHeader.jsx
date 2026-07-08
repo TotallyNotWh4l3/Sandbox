@@ -5,8 +5,8 @@ import { Layers } from "lucide-react";
 import { LinearGradient } from "react-text-gradients";
 
 // Components
-import SettingsButton from "./SettingsButton";
-import UserButton from "./UserButton";
+import SettingsButton from "./Buttons/SettingsButton";
+import UserButton from "./Buttons/UserButton";
 
 // JS
 import { useLanguage } from "../../hooks/useLanguage";

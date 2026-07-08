@@ -1,4 +1,4 @@
-import { useDashboard } from "../../hooks/useDashboard";
+import { useDashboard } from "../../../hooks/useDashboard";
 
 const AVAILABLE_MODULES = [
     {
