@@ -26,7 +26,12 @@ export function useSettingsState() {
                     ...parsed.preferences,
                 },
 
-                styles: parsed.styles ?? DEFAULT_SETTINGS.styles,
+                styles: [
+                    ...DEFAULT_SETTINGS.styles,
+                    ...(parsed.styles ?? []).filter(
+                        (saved) => !DEFAULT_SETTINGS.styles.some((def) => def.id === saved.id),
+                    ),
+                ],
 
                 moduleDefaults: parsed.moduleDefaults ?? DEFAULT_SETTINGS.moduleDefaults,
             };
@@ -149,7 +154,7 @@ export function useSettingsState() {
 
         resetToDefaults,
 
-        getSetting
+        getSetting,
     };
 }
 

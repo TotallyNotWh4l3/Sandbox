@@ -3,53 +3,60 @@ import "./interface-settings.css";
 import { useSettings } from "../../../hooks/useSettings";
 import { useLanguage } from "../../../hooks/useLanguage";
 
-import { LANGUAGE_OPTIONS } from "../../../constants/interface";
-
 import Settings from "../Components/SettingsComponents";
 
+import { LANGUAGE_OPTIONS } from "../../../constants/interface";
+import { Computer } from "lucide-react";
+
 export default function InterfaceSettings() {
-    const { settings } = useSettings();
-    const { t } = useLanguage();
+    const { settings, updatePreference, applyStyle } = useSettings();
+    const T = useLanguage();
+
+    const styleOptions = settings.styles.map((style) => ({
+        id: style.id,
+        label: style.name,
+    }));
 
     return (
         <div className="interface-settings">
-            <Settings.PageTitle>{t("settings.interface.title")}</Settings.PageTitle>
+            <Settings.Title Icon={Computer}>{T.settings.interface.title}</Settings.Title>
 
-            <Settings.Description>{t("settings.interface.description")}</Settings.Description>
+            <Settings.Description>{T.settings.interface.description}</Settings.Description>
 
+            <Settings.Divider mod="thick" />
+
+            {/* LANGUAGE */}
             <Settings.Section>
-                <Settings.SectionTitle>
-                    {t("settings.interface.language.title")}
-                </Settings.SectionTitle>
+                <Settings.SectionTitle>{T.settings.interface.language.title}</Settings.SectionTitle>
 
-                <select
-                    className="interface-settings__language-select"
+                <Settings.Description>
+                    {T.settings.interface.language.description}
+                </Settings.Description>
+
+                <Settings.Select
                     value={settings.preferences.language}
-                >
-                    {LANGUAGE_OPTIONS.map((language) => (
-                        <option key={language.id} value={language.id}>
-                            {language.label}
-                        </option>
-                    ))}
-                </select>
+                    options={LANGUAGE_OPTIONS}
+                    onChange={(event) => updatePreference("language", event.target.value)}
+                />
             </Settings.Section>
 
             <Settings.Divider />
 
+            {/* APPEARANCE */}
             <Settings.Section>
                 <Settings.SectionTitle>
-                    {t("settings.interface.presets.title")}
+                    {T.settings.interface.appearance.title}
                 </Settings.SectionTitle>
 
                 <Settings.Description>
-                    {t("settings.interface.presets.description")}
+                    {T.settings.interface.appearance.description}
                 </Settings.Description>
 
-                <div className="interface-settings__preset-list">{/* Preset cards */}</div>
-
-                <button className="interface-settings__create-button" type="button">
-                    {t("settings.interface.presets.create")}
-                </button>
+                <Settings.Select
+                    value={settings.preferences.appearance.currentStyle}
+                    options={styleOptions}
+                    onChange={(event) => applyStyle(event.target.value)}
+                />
             </Settings.Section>
         </div>
     );

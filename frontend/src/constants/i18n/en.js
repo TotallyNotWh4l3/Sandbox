@@ -1,9 +1,8 @@
-// en.js
 export default {
     dashboard: {
         header: {
             title: "Co:Efficient",
-            subTitle: "Stay Updated",
+            subTitle: "Updates",
         },
     },
 
@@ -13,7 +12,7 @@ export default {
         // =====================================================
 
         title: "Settings",
-        autoSave: "Changes are saved automatically.",
+        autoSave: "Auto-saved",
 
         // =====================================================
         // Sidebar
@@ -32,19 +31,41 @@ export default {
 
         interface: {
             title: "Interface",
-            description: "Customize the appearance and language of the application.",
+            description: "Application appearance and language settings",
 
             language: {
                 title: "Language",
-                description: "Choose the language used throughout the application.",
+                description: "Application language selection",
             },
 
-            presets: {
-                title: "Presets",
-                description: "Choose one of the built-in presets or create your own.",
+            appearance: {
+                title: "Appearance",
+                description: "Visual options and UI styling",
 
-                create: "Create Preset",
-                advanced: "Advanced Customization",
+                current: "Current Style",
+
+                styles: {
+                    title: "Styles",
+                    description: "Built-in or custom styles",
+
+                    builtIn: "Built-in",
+                    custom: "Custom",
+
+                    apply: "Apply",
+                    create: "Create",
+                    edit: "Edit",
+                    delete: "Delete",
+                },
+
+                customization: {
+                    title: "Customization",
+                    description: "Colors, typography, borders, and effects",
+
+                    colors: "Colors",
+                    typography: "Typography",
+                    borders: "Borders",
+                    effects: "Effects",
+                },
             },
         },
 
@@ -54,11 +75,11 @@ export default {
 
         dashboard: {
             title: "Dashboard",
-            description: "Configure the default layout for newly created dashboards.",
+            description: "Default layout for new dashboards",
 
             layout: {
                 title: "Layout",
-                description: "Adjust the spacing and number of columns.",
+                description: "Spacing and column configurations",
 
                 columns: "Columns",
                 gap: "Spacing",
@@ -72,7 +93,7 @@ export default {
 
         modules: {
             title: "Modules",
-            description: "Configure the default behavior of each module.",
+            description: "Default behavior configs for modules",
 
             weather: {
                 title: "Weather",
@@ -93,7 +114,7 @@ export default {
 
         about: {
             title: "About",
-            description: "Application information and credits.",
+            description: "App information and credits",
         },
     },
 };
