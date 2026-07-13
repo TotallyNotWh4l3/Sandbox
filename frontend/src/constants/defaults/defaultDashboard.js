@@ -26,21 +26,5 @@ export const DEFAULT_DASHBOARD = {
                 h: 2,
             },
         },
-        {
-            id: "weather-default",
-
-            type: "weather",
-
-            settings: {
-                title: "Weather",
-                location: "default-location",
-                view: "conditions",
-            },
-
-            layout: {
-                w: 2,
-                h: 2,
-            },
-        },
     ],
 };
