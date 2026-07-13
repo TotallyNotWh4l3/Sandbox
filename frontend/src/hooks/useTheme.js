@@ -9,11 +9,14 @@ export function useTheme() {
     const { settings } = useSettings();
 
     useEffect(() => {
-        const styleId = settings.preferences.appearance.currentStyle;
+        const themeId = settings.preferences.appearance.currentTheme;
 
-        const style = settings.styles.find((style) => style.id === styleId);
+        const theme = settings.themes.find((theme) => theme.id === themeId);
 
-        if (!style) return;
+        if (!theme) {
+            console.warn("[Theme] Theme not found:", themeId);
+            return;
+        }
 
         const root = document.documentElement;
 
@@ -25,10 +28,10 @@ export function useTheme() {
             });
         };
 
-        applyGroup("color", style.appearance.colors);
+        applyGroup("color", theme.appearance.colors);
+        applyGroup("color", theme.appearance.interactive);
+        applyGroup("shadow", theme.appearance.shadows);
 
-        applyGroup("color", style.appearance.interactive);
-
-        applyGroup("shadow", style.appearance.shadows);
+        console.log("[Theme] Applied:", theme.name);
     }, [settings]);
 }

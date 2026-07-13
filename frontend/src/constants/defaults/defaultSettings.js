@@ -7,14 +7,12 @@ export const DEFAULT_SETTINGS = {
     preferences: {
         language: "en",
 
-        location: {
-            name: "Tokyo",
-            latitude: 35.6762,
-            longitude: 139.6503,
+        preferences: {
+            locationId: "default-location",
         },
 
         appearance: {
-            currentStyle: "dark-default",
+            currentTheme: "dark-default",
         },
     },
 
@@ -32,9 +30,9 @@ export const DEFAULT_SETTINGS = {
     ],
 
     // =====================================================
-    // Styles
+    // THEMES
     // =====================================================
-    styles: DEFAULT_THEMES,
+    themes: DEFAULT_THEMES,
 
     // =====================================================
     // Module Defaults

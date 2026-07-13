@@ -1,4 +1,4 @@
-export const STYLE_OPTIONS = [
+export const THEME_OPTIONS = [
     {
         id: "dark-default",
         label: "Dark Default",

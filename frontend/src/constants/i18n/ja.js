@@ -44,7 +44,7 @@ export default {
 
                 current: "現在のスタイル",
 
-                styles: {
+                themes: {
                     title: "スタイル",
                     description: "プリセットまたはカスタムスタイルの選択",
 
@@ -66,6 +66,28 @@ export default {
                     borders: "枠線",
                     effects: "エフェクト",
                 },
+            },
+        },
+
+        // =====================================================
+        // Location
+        // =====================================================
+
+        location: {
+            title: "場所",
+            description: "アプリケーションで使用する場所を管理します。",
+
+            current: {
+                title: "デフォルト場所",
+                description: "標準で使用する場所を選択します。",
+            },
+
+            locations: {
+                title: "保存された場所",
+                description: "保存された場所を管理します。",
+
+                add: "場所を追加",
+                empty: "保存された場所はありません。",
             },
         },
 

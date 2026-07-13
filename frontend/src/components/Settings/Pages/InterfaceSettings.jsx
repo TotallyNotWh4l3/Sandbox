@@ -9,12 +9,12 @@ import { LANGUAGE_OPTIONS } from "../../../constants/interface";
 import { Computer } from "lucide-react";
 
 export default function InterfaceSettings() {
-    const { settings, updatePreference, applyStyle } = useSettings();
+    const { settings, updatePreference, applyTheme } = useSettings();
     const T = useLanguage();
 
-    const styleOptions = settings.styles.map((style) => ({
-        id: style.id,
-        label: style.name,
+    const themeOptions = settings.themes.map((theme) => ({
+        id: theme.id,
+        label: theme.name,
     }));
 
     return (
@@ -53,9 +53,9 @@ export default function InterfaceSettings() {
                 </Settings.Description>
 
                 <Settings.Select
-                    value={settings.preferences.appearance.currentStyle}
-                    options={styleOptions}
-                    onChange={(event) => applyStyle(event.target.value)}
+                    value={settings.preferences.appearance.currentTheme}
+                    options={themeOptions}
+                    onChange={(event) => applyTheme(event.target.value)}
                 />
             </Settings.Section>
         </div>

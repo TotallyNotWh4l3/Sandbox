@@ -8,19 +8,18 @@ import SettingsSidebar from "./Sidebar/SettingsSidebar";
 import SettingsContent from "./Content/SettingsContent";
 import { X } from "lucide-react";
 
-
-export default function Settings({ onClose }) {
+export default function Settings({ onClose, closing }) {
     const [currentPage, setCurrentPage] = useState(SETTINGS_PAGES[0].id);
 
     return (
-        <div className="settings">
+        <div className={`settings ${closing ? "settings--closing" : ""}`}>
             <button
                 className="settings__close-button"
                 type="button"
                 aria-label="Close Settings"
                 onClick={onClose}
             >
-                <X/>
+                <X />
             </button>
 
             <SettingsSidebar currentPage={currentPage} onPageChange={setCurrentPage} />

@@ -6,10 +6,22 @@
 
 .dashboard__overlay {
     position: fixed;
+
     inset: 0;
 
-    background: rgba(0, 0, 0, 0.45);
-    backdrop-filter: blur(6px);
+    background: var(--color-overlay);
 
-    z-index: 900;
+    z-index: 999;
+
+    animation: dashboard-overlay-in 180ms ease-out;
+}
+
+@keyframes dashboard-overlay-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }

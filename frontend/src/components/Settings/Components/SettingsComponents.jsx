@@ -1,9 +1,10 @@
+import { ChevronDown } from "lucide-react";
 import "./settings-components.css";
 
 function Title({ children, Icon = null }) {
     return (
         <header className="settings__header">
-            {Icon != null && <Icon size={36}/>}
+            {Icon != null && <Icon size={20} />}
             <h1 className="settings__title">{children}</h1>
         </header>
     );
@@ -55,16 +56,19 @@ function Button({ children, variant = "primary", ...props }) {
 
 function Select({ options = [], value, ...props }) {
     return (
-        <select className="settings__select" value={value} {...props}>
-            {options.map((option) => (
-                <option key={option.id} value={option.id}>
-                    {option.label}
-                </option>
-            ))}
-        </select>
+        <div className="settings__select-wrapper">
+            <select className="settings__select" value={value} {...props}>
+                {options.map((option) => (
+                    <option key={option.id} value={option.id}>
+                        {option.label}
+                    </option>
+                ))}
+            </select>
+
+            <ChevronDown className="settings__select-icon" size={16} />
+        </div>
     );
 }
-
 function Switch({ checked, ...props }) {
     return (
         <label className="settings__switch">

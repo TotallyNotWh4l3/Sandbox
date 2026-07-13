@@ -42,11 +42,11 @@ export default {
                 title: "Appearance",
                 description: "Visual options and UI styling",
 
-                current: "Current Style",
+                current: "Current theme",
 
-                styles: {
-                    title: "Styles",
-                    description: "Built-in or custom styles",
+                themes: {
+                    title: "Themes",
+                    description: "Built-in or custom themes",
 
                     builtIn: "Built-in",
                     custom: "Custom",
@@ -66,6 +66,28 @@ export default {
                     borders: "Borders",
                     effects: "Effects",
                 },
+            },
+        },
+
+        // =====================================================
+        // Location
+        // =====================================================
+        
+        location: {
+            title: "Location",
+            description: "Manage locations used by the application.",
+
+            current: {
+                title: "Default Location",
+                description: "Choose the location used as the default.",
+            },
+
+            locations: {
+                title: "Saved Locations",
+                description: "Manage your saved locations.",
+
+                add: "Add Location",
+                empty: "No saved locations.",
             },
         },
 
