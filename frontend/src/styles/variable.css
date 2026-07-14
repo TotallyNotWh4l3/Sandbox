@@ -68,4 +68,22 @@
     /* Scrollbar */
     --color-scrollbar: rgba(255, 255, 255, 0.12);
     --color-scrollbar-hover: rgba(255, 255, 255, 0.22);
+
+    /* Dashboard */
+    --z-dashboard: 0;
+
+    /* Hover UIs */
+    --z-popover: 100;
+
+    /* Settings */
+    --z-settings: 1000;
+
+    /* Dialogs opened from Settings */
+    --z-dialog: 1100;
+
+    /* Notifications */
+    --z-toast: 1200;
+
+    /* Critical confirmation */
+    --z-alert: 1300;
 }

@@ -2,14 +2,22 @@ import "./interface-settings.css";
 
 import { useSettings } from "../../../hooks/useSettings";
 import { useLanguage } from "../../../hooks/useLanguage";
+import { useLocation } from "../../../hooks/useLocation";
+import { useDialog } from "../../../hooks/useDialog";
 
 import Settings from "../Components/SettingsComponents";
+import LocationList from "../Components/LocationList";
 
 import { LANGUAGE_OPTIONS } from "../../../constants/interface";
+
 import { Computer } from "lucide-react";
 
 export default function InterfaceSettings() {
-    const { settings, updatePreference, applyTheme } = useSettings();
+    const { settings, updatePreference, applyTheme, applyLocation } = useSettings();
+
+    const { locationOptions } = useLocation();
+    const { openDialog } = useDialog();
+
     const T = useLanguage();
 
     const themeOptions = settings.themes.map((theme) => ({
@@ -25,7 +33,10 @@ export default function InterfaceSettings() {
 
             <Settings.Divider mod="thick" />
 
-            {/* LANGUAGE */}
+            {/* =======================
+                LANGUAGE
+            ======================== */}
+
             <Settings.Section>
                 <Settings.SectionTitle>{T.settings.interface.language.title}</Settings.SectionTitle>
 
@@ -42,7 +53,10 @@ export default function InterfaceSettings() {
 
             <Settings.Divider />
 
-            {/* APPEARANCE */}
+            {/* =======================
+                APPEARANCE
+            ======================== */}
+
             <Settings.Section>
                 <Settings.SectionTitle>
                     {T.settings.interface.appearance.title}
@@ -57,6 +71,62 @@ export default function InterfaceSettings() {
                     options={themeOptions}
                     onChange={(event) => applyTheme(event.target.value)}
                 />
+            </Settings.Section>
+
+            <Settings.Divider />
+
+            {/* =======================
+                LOCATION
+            ======================== */}
+
+            <Settings.Section>
+                <Settings.SectionTitle>{T.settings.interface.location.title}</Settings.SectionTitle>
+
+                <Settings.Description>
+                    {T.settings.interface.location.description}
+                </Settings.Description>
+
+                <Settings.Select
+                    value={settings.preferences.locationId}
+                    options={locationOptions}
+                    onChange={(event) => applyLocation(event.target.value)}
+                />
+
+                {/* <LocationList
+                    locations={settings.locations}
+                    defaultLocationId={settings.preferences.locationId}
+                    onEdit={(location) =>
+                        openDialog({
+                            type: "location",
+                            props: {
+                                mode: "edit",
+                                location,
+                            },
+                        })
+                    }
+                    onDelete={(location) =>
+                        openDialog({
+                            type: "confirm-delete-location",
+                            props: {
+                                location,
+                            },
+                        })
+                    }
+                /> */}
+
+                <Settings.Button
+                    variant="secondary"
+                    onClick={() =>
+                        openDialog({
+                            type: "location",
+                            props: {
+                                mode: "create",
+                            },
+                        })
+                    }
+                >
+                    {T.settings.interface.location.add}
+                </Settings.Button>
             </Settings.Section>
         </div>
     );

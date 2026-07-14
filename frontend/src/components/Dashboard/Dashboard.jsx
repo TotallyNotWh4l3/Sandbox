@@ -6,6 +6,7 @@ import DashboardWorkspace from "./DashboardWorkspace";
 import Settings from "../Settings/Settings";
 
 import "./dashboard.css";
+import { useLocation } from "../../hooks/useLocation";
 
 export default function Dashboard() {
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -19,6 +20,24 @@ export default function Dashboard() {
             setIsSettingsClosing(false);
         }, 180);
     };
+
+    const { requestCurrentLocation } = useLocation();
+
+    async function handleUseCurrentLocation() {
+        try {
+            const coords = await requestCurrentLocation();
+
+            console.log(coords.latitude);
+            console.log(coords.longitude);
+
+            // Later:
+            // reverse geocode
+            // save location
+            // select as default
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     return (
         <div className="dashboard">

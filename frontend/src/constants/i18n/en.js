@@ -36,6 +36,8 @@ export default {
             language: {
                 title: "Language",
                 description: "Application language selection",
+
+                add: "Add Location",
             },
 
             appearance: {
@@ -67,24 +69,15 @@ export default {
                     effects: "Effects",
                 },
             },
-        },
 
-        // =====================================================
-        // Location
-        // =====================================================
-        
-        location: {
-            title: "Location",
-            description: "Manage locations used by the application.",
+            location: {
+                title: "Location",
+                description: "Manage locations used by the application.",
 
-            current: {
-                title: "Default Location",
-                description: "Choose the location used as the default.",
-            },
-
-            locations: {
-                title: "Saved Locations",
-                description: "Manage your saved locations.",
+                current: {
+                    title: "Default Location",
+                    description: "Choose the location used as the default.",
+                },
 
                 add: "Add Location",
                 empty: "No saved locations.",
