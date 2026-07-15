@@ -1,3 +1,5 @@
+import { DEFAULT_THEMES } from "../themes";
+
 export const DEFAULT_SETTINGS = {
     // =====================================================
     // Preferences
@@ -5,14 +7,12 @@ export const DEFAULT_SETTINGS = {
     preferences: {
         language: "en",
 
-        location: {
-            name: "Tokyo",
-            latitude: 35.6762,
-            longitude: 139.6503,
+        preferences: {
+            locationId: "default-location",
         },
 
         appearance: {
-            currentStyle: "dark-default",
+            currentTheme: "dark-default",
         },
     },
 
@@ -30,37 +30,9 @@ export const DEFAULT_SETTINGS = {
     ],
 
     // =====================================================
-    // Styles
+    // THEMES
     // =====================================================
-    styles: [
-        {
-            id: "dark-default",
-            name: "Dark Default",
-            builtIn: true,
-            basedOn: null,
-
-            appearance: {
-                colors: {},
-                typography: {},
-                borders: {},
-                effects: {},
-            },
-        },
-
-        {
-            id: "light-default",
-            name: "Light Default",
-            builtIn: true,
-            basedOn: null,
-
-            appearance: {
-                colors: {},
-                typography: {},
-                borders: {},
-                effects: {},
-            },
-        },
-    ],
+    themes: DEFAULT_THEMES,
 
     // =====================================================
     // Module Defaults
