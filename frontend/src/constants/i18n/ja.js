@@ -2,7 +2,7 @@ export default {
     dashboard: {
         header: {
             title: "Co:Efficient",
-            subTitle: "最新情報",
+            subTitle: "アップデート",
         },
     },
 
@@ -12,7 +12,7 @@ export default {
         // =====================================================
 
         title: "設定",
-        autoSave: "自動保存",
+        autoSave: "自動保存済み",
 
         // =====================================================
         // Sidebar
@@ -22,7 +22,7 @@ export default {
             interface: "インターフェース",
             dashboard: "ダッシュボード",
             modules: "モジュール",
-            about: "情報",
+            about: "このアプリについて",
         },
 
         // =====================================================
@@ -31,22 +31,24 @@ export default {
 
         interface: {
             title: "インターフェース",
-            description: "外観と言語の設定",
+            description: "アプリケーションの外観と言語の設定",
 
             language: {
                 title: "言語",
-                description: "使用言語の選択",
+                description: "表示言語の選択",
+
+                add: "地域を追加",
             },
 
             appearance: {
                 title: "外観",
-                description: "見た目と操作感のカスタマイズ",
+                description: "ビジュアルオプションとUIスタイルの設定",
 
-                current: "現在のスタイル",
+                current: "現在のテーマ",
 
                 themes: {
-                    title: "スタイル",
-                    description: "プリセットまたはカスタムスタイルの選択",
+                    title: "テーマ",
+                    description: "プリセットまたはカスタムテーマ",
 
                     builtIn: "プリセット",
                     custom: "カスタム",
@@ -59,35 +61,26 @@ export default {
 
                 customization: {
                     title: "カスタマイズ",
-                    description: "色、フォント、枠線、エフェクトの調整",
+                    description: "カラー、タイポグラフィ、枠線、エフェクトの設定",
 
-                    colors: "色",
+                    colors: "カラー",
                     typography: "タイポグラフィ",
                     borders: "枠線",
                     effects: "エフェクト",
                 },
             },
-        },
 
-        // =====================================================
-        // Location
-        // =====================================================
+            location: {
+                title: "地域",
+                description: "アプリケーションで使用する地域を管理します。",
 
-        location: {
-            title: "場所",
-            description: "アプリケーションで使用する場所を管理します。",
+                current: {
+                    title: "デフォルトの地域",
+                    description: "デフォルトとして使用する地域を選択してください。",
+                },
 
-            current: {
-                title: "デフォルト場所",
-                description: "標準で使用する場所を選択します。",
-            },
-
-            locations: {
-                title: "保存された場所",
-                description: "保存された場所を管理します。",
-
-                add: "場所を追加",
-                empty: "保存された場所はありません。",
+                add: "地域を追加",
+                empty: "保存された地域はありません。",
             },
         },
 
@@ -97,11 +90,11 @@ export default {
 
         dashboard: {
             title: "ダッシュボード",
-            description: "新規ダッシュボードのデフォルトレイアウト設定",
+            description: "新規ダッシュボードのデフォルトレイアウト",
 
             layout: {
                 title: "レイアウト",
-                description: "間隔と列数の調整",
+                description: "余白とグリッド列数の設定",
 
                 columns: "列数",
                 gap: "間隔",
@@ -115,7 +108,7 @@ export default {
 
         modules: {
             title: "モジュール",
-            description: "各モジュールのデフォルト動作設定",
+            description: "モジュールのデフォルト動作設定",
 
             weather: {
                 title: "天気",
@@ -135,8 +128,8 @@ export default {
         // =====================================================
 
         about: {
-            title: "情報",
-            description: "アプリ情報とクレジット",
+            title: "このアプリについて",
+            description: "アプリ情報およびクレジット",
         },
     },
 };
