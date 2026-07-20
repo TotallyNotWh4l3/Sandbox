@@ -1,692 +1,186 @@
-import { useState } from "react";
-import "./appearance-settings.css";
-
-import { useLanguage } from "../../../hooks/useLanguage";
-
-import * as SettingsUI from "../Shared/SettingsComponents";
-
-/**
- * AppearanceSettings
- *
- * Manage dashboard appearance and Styles.
- *
- * Styles are complete appearance configurations.
- * Built-in styles cannot be edited.
- * Custom styles can be created, edited and deleted.
- */
-export default function AppearanceSettings({
-    settings,
-
-    updatePreference,
-
-    createStyle,
-    duplicateStyle,
-    updateStyle,
-    deleteStyle,
-}) {
-    const T = useLanguage();
-
-    const [editingStyle, setEditingStyle] = useState(null);
-
-    const currentStyle = settings.preferences.appearance.currentStyle;
-
-    const styles = settings.styles;
-
-    const builtInStyles = styles.filter((style) => style.builtIn);
-
-    const customStyles = styles.filter((style) => !style.builtIn);
-
-    const handleSelectStyle = (styleId) => {
-        updatePreference("appearance", {
-            ...settings.preferences.appearance,
-            currentStyle: styleId,
-        });
-    };
-
-    return (
-        <div className="appearance-settings">
-            <SettingsUI.PageTitle>Appearance</SettingsUI.PageTitle>
-
-            {/* ------------------------------------------------ */}
-            {/* Built-in Styles                                 */}
-            {/* ------------------------------------------------ */}
-
-            <SettingsUI.Section>
-                <SettingsUI.Header>Default Styles</SettingsUI.Header>
-
-                <SettingsUI.Instructions>
-                    Choose one of the built-in styles. Default styles cannot be modified.
-                </SettingsUI.Instructions>
-
-                <div className="appearance-settings__grid">
-                    {builtInStyles.map((style) => (
-                        <button
-                            key={style.id}
-                            className={`appearance-settings__card ${
-                                currentStyle === style.id ? "appearance-settings__card--active" : ""
-                            }`}
-                            onClick={() => handleSelectStyle(style.id)}
-                        >
-                            <span className="appearance-settings__preview">{style.preview}</span>
-
-                            <span>{style.name}</span>
-                        </button>
-                    ))}
-                </div>
-            </SettingsUI.Section>
-
-            {/* ------------------------------------------------ */}
-            {/* Custom Styles                                   */}
-            {/* ------------------------------------------------ */}
-
-            <SettingsUI.Section>
-                <SettingsUI.Header>Custom Styles</SettingsUI.Header>
-
-                <SettingsUI.Instructions>
-                    Create your own dashboard appearance by customizing an existing style.
-                </SettingsUI.Instructions>
-
-                <button className="appearance-settings__create-btn" onClick={createStyle}>
-                    Create New Style
-                </button>
-
-                {customStyles.length > 0 && (
-                    <div className="appearance-settings__custom-list">
-                        {customStyles.map((style) => (
-                            <div key={style.id} className="appearance-settings__custom-item">
-                                <button
-                                    className={`appearance-settings__custom-button ${
-                                        currentStyle === style.id
-                                            ? "appearance-settings__custom-button--active"
-                                            : ""
-                                    }`}
-                                    onClick={() => handleSelectStyle(style.id)}
-                                >
-                                    {style.name}
-                                </button>
-
-                                <div className="appearance-settings__actions">
-                                    <button onClick={() => duplicateStyle(style.id)}>
-                                        Duplicate
-                                    </button>
-
-                                    <button onClick={() => setEditingStyle(style)}>Edit</button>
-
-                                    <button onClick={() => deleteStyle(style.id)}>Delete</button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </SettingsUI.Section>
-
-            {/* ------------------------------------------------ */}
-            {/* Appearance Editor                               */}
-            {/* ------------------------------------------------ */}
-
-            {editingStyle && (
-                <SettingsUI.Section>
-                    <SettingsUI.Header>Edit "{editingStyle.name}"</SettingsUI.Header>
-
-                    <SettingsUI.Instructions>
-                        This is where all appearance customization (colors, typography, borders,
-                        effects, spacing, etc.) will live.
-                    </SettingsUI.Instructions>
-                </SettingsUI.Section>
-            )}
-        </div>
-    );
-}
-
-
-import "./grid-layout-settings.css";
-
-import { COLUMN_OPTIONS, GAP_OPTIONS } from "../../../constants/dashboardOptions";
-
-import { useDashboard } from "../../../hooks/useDashboard";
-import { useLanguage } from "../../../hooks/useLanguage";
-
-import * as SettingsUI from "../Shared/SettingsComponents";
-
-/**
- * GridLayoutSettings Component
- * Configure dashboard grid layout.
- */
-export default function GridLayoutSettings() {
-    const T = useLanguage();
-
-    const { dashboard, updateLayout } = useDashboard();
-
-    const currentColumns = dashboard.layout.columns;
-    const currentGap = dashboard.layout.gap;
-
-    const handleColumnsChange = (columns) => {
-        updateLayout("columns", columns);
-    };
-
-    const handleGapChange = (gap) => {
-        updateLayout("gap", gap);
-    };
-
-    return (
-        <div className="grid-layout-settings">
-            <SettingsUI.PageTitle>{T.settings.grid.title}</SettingsUI.PageTitle>
-
-            {/* Columns */}
-            <SettingsUI.Section>
-                <SettingsUI.Header>{T.settings.grid.columns}</SettingsUI.Header>
-
-                <SettingsUI.Instructions>
-                    {T.settings.grid.columnsDescription}
-                </SettingsUI.Instructions>
-
-                <div className="grid-layout-settings__options">
-                    {COLUMN_OPTIONS.map((cols) => (
-                        <button
-                            key={cols}
-                            className={`grid-layout-settings__button ${
-                                currentColumns === cols
-                                    ? "grid-layout-settings__button--active"
-                                    : ""
-                            }`}
-                            onClick={() => handleColumnsChange(cols)}
-                            aria-pressed={currentColumns === cols}
-                        >
-                            {cols}{" "}
-                            {cols === 1 ? T.settings.grid.column : T.settings.grid.columnsPlural}
-                        </button>
-                    ))}
-                </div>
-            </SettingsUI.Section>
-
-            {/* Gap */}
-            <SettingsUI.Section>
-                <SettingsUI.Header>{T.settings.grid.spacing}</SettingsUI.Header>
-
-                <SettingsUI.Instructions>
-                    {T.settings.grid.spacingDescription}
-                </SettingsUI.Instructions>
-
-                <div className="grid-layout-settings__gap-options">
-                    {GAP_OPTIONS.map((option) => (
-                        <button
-                            key={option.value}
-                            className={`grid-layout-settings__gap-button ${
-                                currentGap === option.value
-                                    ? "grid-layout-settings__gap-button--active"
-                                    : ""
-                            }`}
-                            onClick={() => handleGapChange(option.value)}
-                            aria-pressed={currentGap === option.value}
-                        >
-                            <span>{T.settings.grid.gapOptions[option.labelKey]}</span>
-                        </button>
-                    ))}
-                </div>
-            </SettingsUI.Section>
-
-            {/* Preview */}
-            <SettingsUI.Section>
-                <SettingsUI.Header>{T.settings.grid.preview}</SettingsUI.Header>
-
-                <div
-                    className="grid-layout-settings__preview"
-                    style={{
-                        display: "grid",
-                        gridTemplateColumns: `repeat(${currentColumns}, 1fr)`,
-                        gap: `${currentGap}px`,
-                    }}
-                >
-                    {Array.from({ length: 6 }).map((_, i) => (
-                        <div key={i} className="grid-layout-settings__preview-item">
-                            {i + 1}
-                        </div>
-                    ))}
-                </div>
-            </SettingsUI.Section>
-        </div>
-    );
-}
-
-
-import { useState, useEffect } from "react";
-
-import "./location-language-settings.css";
-
-import { LANGUAGE_OPTIONS } from "../../../constants/settingsOption";
-
-import { useLanguage } from "../../../hooks/useLanguage";
-import { useSettings } from "../../../hooks/useSettings";
-
-import * as SettingsUI from "../Shared/SettingsComponents";
-import SettingsSelect from "../Shared/SettingsSelect";
-
-/**
- * LocationLanguageSettings Component
- * Configure language and default location.
- */
-export default function LocationLanguageSettings() {
-    const T = useLanguage();
-
-    const { settings, updatePreference } = useSettings();
-
-    const [locationInput, setLocationInput] = useState(settings.preferences.location.name);
-
-    useEffect(() => {
-        setLocationInput(settings.preferences.location.name);
-    }, [settings.preferences.location.name]);
-
-    const handleLanguageChange = (language) => {
-        updatePreference("language", language);
-    };
-
-    const handleLocationChange = (e) => {
-        const value = e.target.value;
-
-        setLocationInput(value);
-
-        updatePreference("location", {
-            ...settings.preferences.location,
-            name: value,
-        });
-    };
-
-    return (
-        <div className="location-language-settings">
-            <SettingsUI.PageTitle>{T.settings.location.title}</SettingsUI.PageTitle>
-
-            <SettingsUI.Section>
-                <SettingsUI.Header>{T.settings.location.location}</SettingsUI.Header>
-
-                <SettingsUI.Instructions>{T.settings.location.hint}</SettingsUI.Instructions>
-
-                <label htmlFor="location-input">{T.settings.location.dashboardLocation}</label>
-
-                <input
-                    id="location-input"
-                    type="text"
-                    className="location-language-settings__input"
-                    value={locationInput}
-                    onChange={handleLocationChange}
-                    placeholder={T.settings.location.placeholder}
-                />
-            </SettingsUI.Section>
-
-            <SettingsUI.Section>
-                <SettingsUI.Header>{T.settings.location.language}</SettingsUI.Header>
-
-                <SettingsSelect
-                    value={settings.preferences.language}
-                    options={LANGUAGE_OPTIONS}
-                    valueKey="id"
-                    labelKey="label"
-                    onChange={handleLanguageChange}
-                />
-            </SettingsUI.Section>
-        </div>
-    );
-}
-
-
-import "./module-settings.css";
-
-import { MODULE_CONFIG } from "../../../constants/moduleSettings";
-import { useLanguage } from "../../../hooks/useLanguage";
-
-import * as SettingsUI from "../Shared/SettingsComponents";
-import SettingsSelect from "../Shared/SettingsSelect";
-
-/**
- * ModuleSettings Component
- * Configure default values for modules.
- */
-export default function ModuleSettings({ settings, updateModuleDefault }) {
-    const T = useLanguage();
-
-    const handleToggle = (moduleName, key) => {
-        const currentValue = settings.moduleDefaults[moduleName][key];
-        updateModuleDefault(moduleName, key, !currentValue);
-    };
-
-    const handleRangeChange = (moduleName, key, value) => {
-        updateModuleDefault(moduleName, key, parseInt(value, 10));
-    };
-
-    const handleSelectChange = (moduleName, key, value) => {
-        updateModuleDefault(moduleName, key, value);
-    };
-
-    const renderSettingControl = (moduleName, setting) => {
-        const currentValue = settings.moduleDefaults[moduleName][setting.key];
-
-        switch (setting.type) {
-            case "toggle":
-                return (
-                    <label className="module-settings__toggle-label">
-                        <input
-                            type="checkbox"
-                            checked={currentValue}
-                            onChange={() => handleToggle(moduleName, setting.key)}
-                            className="module-settings__toggle-input"
-                        />
-
-                        <span className="module-settings__toggle-slider" />
-
-                        <span className="module-settings__toggle-text">
-                            {currentValue ? T.settings.modules.on : T.settings.modules.off}
-                        </span>
-                    </label>
-                );
-
-            case "range":
-                return (
-                    <div className="module-settings__range-group">
-                        <input
-                            type="range"
-                            min={setting.min}
-                            max={setting.max}
-                            value={currentValue}
-                            onChange={(e) =>
-                                handleRangeChange(moduleName, setting.key, e.target.value)
-                            }
-                            className="module-settings__range"
-                        />
-
-                        <span className="module-settings__range-value">{currentValue}</span>
-                    </div>
-                );
-
-            case "select":
-                return (
-                    <SettingsSelect
-                        value={currentValue}
-                        options={setting.options}
-                        valueKey="value"
-                        labelTransform={(option) => T.settings.modules.options[option.labelKey]}
-                        onChange={(value) => handleSelectChange(moduleName, setting.key, value)}
-                    />
-                );
-
-            default:
-                return null;
-        }
-    };
-
-    return (
-        <div className="module-settings">
-            <SettingsUI.PageTitle>{T.settings.modules.title}</SettingsUI.PageTitle>
-
-            {MODULE_CONFIG.map((module) => (
-                <SettingsUI.Section key={module.id} className="module-settings__module">
-                    <SettingsUI.Header>
-                        {T.settings.modules.names[module.nameKey]}
-                    </SettingsUI.Header>
-
-                    <SettingsUI.Instructions>
-                        {T.settings.modules.descriptions[module.descriptionKey]}
-                    </SettingsUI.Instructions>
-
-                    <div className="module-settings__controls">
-                        {module.settings.map((setting) => (
-                            <div key={setting.key} className="module-settings__control-group">
-                                <label className="module-settings__label">
-                                    {T.settings.modules.labels[setting.labelKey]}
-                                </label>
-
-                                {renderSettingControl(module.id, setting)}
-                            </div>
-                        ))}
-                    </div>
-                </SettingsUI.Section>
-            ))}
-        </div>
-    );
-}
-
-
-import { useState } from "react";
-import "./preset-settings.css";
-
-import * as SettingsUI from "../Shared/SettingsComponents";
-
-/**
- * PresetSettings Component
- * Manage style presets and custom configurations.
- */
-export default function PresetSettings({
-    settings,
-    applyStyle,
-    saveCustomStyle,
-    deleteCustomStyle,
-    resetToDefaults,
-}) {
-    const [customStyleName, setCustomStyleName] = useState("");
-    const [showSavePrompt, setShowSavePrompt] = useState(false);
-
-    const currentStyle = settings.preferences.appearance.currentStyle;
-
-    const builtInStyles = settings.styles.filter((style) => style.builtIn);
-    const customStyles = settings.styles.filter((style) => !style.builtIn);
-
-    const handleApplyStyle = (styleId) => {
-        applyStyle(styleId);
-    };
-
-    const handleSaveCustomStyle = () => {
-        if (!customStyleName.trim()) return;
-
-        saveCustomStyle(customStyleName.trim());
-
-        setCustomStyleName("");
-        setShowSavePrompt(false);
-    };
-
-    const handleDeleteStyle = (styleId) => {
-        if (window.confirm(`Delete style "${styleId}"?`)) {
-            deleteCustomStyle(styleId);
-        }
-    };
-
-    const handleResetAll = () => {
-        if (window.confirm("Reset all settings to defaults? This cannot be undone.")) {
-            resetToDefaults();
-        }
-    };
-
-    return (
-        <div className="presets-settings">
-            <SettingsUI.PageTitle>Styles & Configuration</SettingsUI.PageTitle>
-
-            <SettingsUI.Section>
-                <SettingsUI.Header>Built-in Styles</SettingsUI.Header>
-
-                <SettingsUI.Instructions>
-                    Switch between predefined appearance styles.
-                </SettingsUI.Instructions>
-
-                <div className="presets-settings__grid">
-                    {builtInStyles.map((style) => (
-                        <button
-                            key={style.id}
-                            className={`presets-settings__preset-card ${
-                                currentStyle === style.id
-                                    ? "presets-settings__preset-card--active"
-                                    : ""
-                            }`}
-                            onClick={() => handleApplyStyle(style.id)}
-                            aria-pressed={currentStyle === style.id}
-                        >
-                            <span className="presets-settings__preset-label">{style.name}</span>
-
-                            {currentStyle === style.id && (
-                                <span className="presets-settings__checkmark">✓</span>
-                            )}
-                        </button>
-                    ))}
-                </div>
-            </SettingsUI.Section>
-
-            {customStyles.length > 0 && (
-                <SettingsUI.Section>
-                    <SettingsUI.Header>Custom Styles</SettingsUI.Header>
-
-                    <SettingsUI.Instructions>
-                        Your saved appearance configurations.
-                    </SettingsUI.Instructions>
-
-                    <div className="presets-settings__custom-presets">
-                        {customStyles.map((style) => (
-                            <div key={style.id} className="presets-settings__custom-item">
-                                <button
-                                    className={`presets-settings__custom-button ${
-                                        currentStyle === style.id
-                                            ? "presets-settings__custom-button--active"
-                                            : ""
-                                    }`}
-                                    onClick={() => handleApplyStyle(style.id)}
-                                >
-                                    <span>{style.name}</span>
-
-                                    {currentStyle === style.id && (
-                                        <span className="presets-settings__checkmark">✓</span>
-                                    )}
-                                </button>
-
-                                <button
-                                    className="presets-settings__delete-btn"
-                                    title="Delete style"
-                                    onClick={() => handleDeleteStyle(style.id)}
-                                >
-                                    ✕
-                                </button>
-                            </div>
-                        ))}
-                    </div>
-                </SettingsUI.Section>
-            )}
-
-            <SettingsUI.Section>
-                <SettingsUI.Header>Save Current Style</SettingsUI.Header>
-
-                <SettingsUI.Instructions>
-                    Store your current appearance as a reusable style.
-                </SettingsUI.Instructions>
-
-                {!showSavePrompt ? (
-                    <button
-                        className="presets-settings__save-btn"
-                        onClick={() => setShowSavePrompt(true)}
-                    >
-                        Save as Custom Style
-                    </button>
-                ) : (
-                    <div className="presets-settings__save-prompt">
-                        <input
-                            type="text"
-                            className="presets-settings__input"
-                            placeholder="Enter style name..."
-                            value={customStyleName}
-                            onChange={(e) => setCustomStyleName(e.target.value)}
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter") {
-                                    handleSaveCustomStyle();
-                                }
-                            }}
-                        />
-
-                        <div className="presets-settings__prompt-buttons">
-                            <button
-                                className="presets-settings__confirm-btn"
-                                disabled={!customStyleName.trim()}
-                                onClick={handleSaveCustomStyle}
-                            >
-                                Save
-                            </button>
-
-                            <button
-                                className="presets-settings__cancel-btn"
-                                onClick={() => {
-                                    setShowSavePrompt(false);
-                                    setCustomStyleName("");
-                                }}
-                            >
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
-                )}
-            </SettingsUI.Section>
-
-            <SettingsUI.Section>
-                <SettingsUI.Header>Reset Settings</SettingsUI.Header>
-
-                <SettingsUI.Instructions>
-                    Restore every setting back to its default value.
-                </SettingsUI.Instructions>
-
-                <button className="presets-settings__reset-btn" onClick={handleResetAll}>
-                    Reset All Settings
-                </button>
-
-                <p className="presets-settings__warning">This action cannot be undone.</p>
-            </SettingsUI.Section>
-        </div>
-    );
-}
-
-
-import "./theme-settings.css";
-
-import { useLanguage } from "../../../hooks/useLanguage";
-
-import * as SettingsUI from "../Shared/SettingsComponents";
-
-/**
- * ThemeSettings Component
- * Configure dashboard appearance style.
- */
-export default function ThemeSettings({ settings, applyStyle }) {
-    const T = useLanguage();
-
-    const currentStyle = settings.preferences.appearance.currentStyle;
-
-    const styles = settings.styles;
-
-    const handleStyleChange = (styleId) => {
-        applyStyle(styleId);
-    };
-
-    return (
-        <div className="theme-settings">
-            <SettingsUI.PageTitle>{T.settings.theme.title}</SettingsUI.PageTitle>
-
-            <SettingsUI.Section>
-                <SettingsUI.Header>{T.settings.theme.presets}</SettingsUI.Header>
-
-                <div className="theme-settings__grid">
-                    {styles.map((style) => (
-                        <button
-                            key={style.id}
-                            className={`theme-settings__card ${
-                                currentStyle === style.id ? "theme-settings__card--active" : ""
-                            }`}
-                            onClick={() => handleStyleChange(style.id)}
-                        >
-                            <span className="theme-settings__preview">{style.name}</span>
-
-                            <span className="theme-settings__label">{style.name}</span>
-                        </button>
-                    ))}
-                </div>
-            </SettingsUI.Section>
-
-            <SettingsUI.Section>
-                <SettingsUI.Header>{T.settings.theme.customization}</SettingsUI.Header>
-
-                <SettingsUI.Instructions>
-                    {T.settings.theme.customizationDescription}
-                </SettingsUI.Instructions>
-            </SettingsUI.Section>
-        </div>
-    );
-}
+# Co:Efficient v1.0 — Master Checklist
+
+**Target finish:** Fri, Aug 28, 2026 (Aug 31 = buffer day)
+**Schedule:** School weeks = 5 hrs/day (3h school block + 2h evening) · Vacation weeks = 3.5 hrs/day evening
+
+---
+
+## WEEK 1 (Jul 20–24) — Backend/Auth from scratch + Dashboard grid audit
+
+> **Revised Jul 21:** File structure review showed Dashboard shell, module framework, and Settings are further along than planned — but Login/Auth doesn't exist yet (no AuthContext, no backend routes) and `backend/` is empty except package.json. Stack chosen: **Node/Express + SQLite.** Auth is a build-from-scratch task, not a polish task — reordering this week around that.
+> 
+
+### Tue Jul 21 — Backend: server + DB + password auth
+
+- Checklist
+    - [ ]  Express server scaffold (entry point, basic route)
+    - [ ]  SQLite DB file + `users` table (id, username, password_hash, role)
+    - [ ]  bcrypt password hashing on account creation
+    - [ ]  Seed/register one test user manually (via script or temp endpoint)
+    - [ ]  `POST /login` endpoint — verify username/password, return success/failure
+
+### Wed Jul 22 — Backend: sessions/tokens
+
+- Checklist
+    - [ ]  Decide token approach (JWT is simplest for a local SQLite setup)
+    - [ ]  `POST /login` issues token on success
+    - [ ]  Auth middleware to verify token on protected routes
+    - [ ]  `GET /me` endpoint — returns current user + role from valid token
+    - [ ]  `POST /logout` endpoint (or client-side token clear, if using JWT)
+
+### Thu Jul 23 — Frontend: Auth wiring
+
+- Checklist
+    - [ ]  `AuthContext` + `useAuth` hook (mirror pattern used by `SettingsContext`/`useSettings`)
+    - [ ]  Login UI component (username/password fields, submit button, error display)
+    - [ ]  Wire login form to `POST /login`, store token, refresh identity via `/me`
+    - [ ]  Protected route wrapper — redirect to Login if no valid session, else render Dashboard
+    - [ ]  Logout button clears token, redirects to Login
+
+### Fri Jul 24 — Integration test + Dashboard grid audit
+
+- Checklist
+    - [ ]  Full loop test: seed user → login → refresh page (still logged in) → logout → redirected to Login
+    - [ ]  Test: visiting dashboard route directly while logged out → redirected to Login
+    - [ ]  Test: wrong password / empty fields show error, don't submit
+    - [ ]  **Audit existing Dashboard code** — check what's actually functional vs. stubbed:
+        - [ ]  Does grid layout render modules, or is it placeholder?
+        - [ ]  Does `DashboardContext` persist layout changes anywhere yet?
+        - [ ]  Do `ModuleManager`/`ModuleRenderer` actually add/remove/resize modules?
+    - [ ]  Write down what's left in Dashboard — carries into Week 2
+    **✅ Week 1 done when:** login → dashboard → refresh → logout works end-to-end against a real backend, and you know exactly what's left in the Dashboard grid.
+
+---
+
+## WEEK 2 (Jul 27–31, vacation) — Weather Module
+
+- Checklist
+    - [ ]  Connect Open-Meteo API
+    - [ ]  Fetch current weather data
+    - [ ]  Fetch daily forecast data
+    - [ ]  Handle API errors
+    - [ ]  Add loading state
+    - [ ]  Display current temperature
+    - [ ]  Display weather condition + icon
+    - [ ]  Display location name
+    - [ ]  Display update time
+    - [ ]  Display today's high/low
+    - [ ]  Display humidity
+    - [ ]  Display wind speed
+    - [ ]  Display sunrise/sunset time
+    - [ ]  Show multi-day forecast (icons + temp range)
+    - [ ]  Use selected location from Settings
+    - [ ]  Update weather when location changes
+    - [ ]  Weather Dashboard component + card layout
+    - [ ]  Responsive design for the card
+    - [ ]  Empty/error states
+    - [ ]  Cache latest weather data
+    - [ ]  Prevent unnecessary API requests
+    - [ ]  Confirm weather loads within ~3 seconds
+
+**✅ Week 2 done when:** Weather card is live on the dashboard with real data.
+
+---
+
+## WEEK 3 (Aug 3–7, vacation) — Announcement Module
+
+- Checklist
+    - [ ]  Create announcement data structure
+    - [ ]  Load announcements
+    - [ ]  Handle empty announcements
+    - [ ]  Handle loading/error state
+    - [ ]  Announcement component: title, message, date, status
+    - [ ]  Mark announcements as read
+    - [ ]  Show unread indicator
+    - [ ]  Open announcement details
+    - [ ]  Add announcement section to Dashboard
+    - [ ]  Display latest announcements first
+    - [ ]  Limit displayed announcements (e.g. last 5)
+    - [ ]  (Optional v1.0) Add announcement creation
+    - [ ]  (Optional v1.0) Add announcement editing
+    - [ ]  (Optional v1.0) Add announcement deletion
+
+**✅ Week 3 done when:** Announcement card is live and interactive on the dashboard.
+
+---
+
+## WEEK 4 (Aug 10–14, vacation) — Schedule Module
+
+- Checklist
+    - [ ]  Create schedule data structure
+    - [ ]  Store schedule items
+    - [ ]  Load saved schedules
+    - [ ]  Handle empty schedule state
+    - [ ]  Create schedule component
+    - [ ]  Display current date
+    - [ ]  Display today's schedule
+    - [ ]  Display upcoming events
+    - [ ]  Show event title and time
+    - [ ]  Add new schedule/event
+    - [ ]  Edit schedule/event
+    - [ ]  Delete schedule/event
+    - [ ]  Set event date and time
+    - [ ]  Add event description (optional)
+    - [ ]  Highlight current/upcoming events
+    - [ ]  Sort events by date and time
+    - [ ]  (Optional) Notifications/reminders
+    - [ ]  Add schedule section to Dashboard
+    - [ ]  Display next upcoming event
+    - [ ]  Display daily overview
+
+**✅ Week 4 done when:** Schedule card is live; Weather + Announcement + Schedule all sit together on the dashboard.
+
+---
+
+## WEEK 5 (Aug 17–21, school resumes) — Settings Completion
+
+- Checklist
+    - [ ]  Settings sidebar + page navigation
+    - [ ]  Auto-save settings
+    - [ ]  Reset to defaults
+    - [ ]  Manage Locations dialog
+    - [ ]  Add location
+    - [ ]  Edit location
+    - [ ]  Delete location
+    - [ ]  Set default location
+    - [ ]  Use current location (GPS)
+    - [ ]  Search location
+    - [ ]  Coordinate validation
+    - [ ]  Theme selection + apply theme
+    - [ ]  Language selection
+    - [ ]  Grid layout settings (in Settings)
+    - [ ]  Module default settings
+    - [ ]  Version info (About)
+    - [ ]  Confirm Settings changes propagate live to Weather/Announcement/Schedule without reload
+
+**✅ Week 5 done when:** every module can be fully configured through Settings, live.
+
+---
+
+## WEEK 6 (Aug 24–28, school) — Hardening & Testing
+
+- Checklist
+    - [ ]  Loading states consistent across all modules
+    - [ ]  Error handling consistent across all modules
+    - [ ]  Responsive layout check (multiple screen sizes)
+    - [ ]  Animation/spacing polish pass
+    - [ ]  Full manual test: every checklist item above, re-verified
+    - [ ]  Fix bugs found during test pass
+    - [ ]  Buffer days (Aug 31+): absorb whatever slipped
+
+**✅ Project done when:** every box above is checked and the app survives a full login → use every module → logout cycle without errors.
+
+---
+
+## Known v1.0 Gaps (deliberately out of scope — park for v1.1)
+
+- Checklist
+    - [ ]  Announcement: Archive system (auto-archive, browse/restore)
+    - [ ]  Announcement: Authority-based posting permissions & priority display
+    - [ ]  Schedule: Tag system (multi-tag, color priority)
+    - [ ]  Schedule: Absolute vs. Relative view toggle (month/week modes)
+    - [ ]  Weather: Graph (time-series chart)
+    - [ ]  Weather: Metrics cards (selectable data types)
+    - [ ]  Login: Admin user account management (create/edit/delete users, roles)
+    - [ ]  Dashboard: Manager/Admin-only grid permission gating
+    - [ ]  Multi-device real-time sync (Announcement + Schedule)
