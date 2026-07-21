@@ -1,186 +1,46 @@
-# Co:Efficient v1.0 — Master Checklist
+Co:Efficient Development Progress Summary (as of Jul 21, 2026)
 
-**Target finish:** Fri, Aug 28, 2026 (Aug 31 = buffer day)
-**Schedule:** School weeks = 5 hrs/day (3h school block + 2h evening) · Vacation weeks = 3.5 hrs/day evening
+Backend 
+- Express server configured with dotenv and CORS. 
+- SQLite database connected successfully. 
+- Users table created. 
+- Seed admin account created.
+- Password hashing using bcrypt.
+- JWT authentication implemented.
+- POST /api/auth/login implemented and verified. 
+- Authentication middleware implemented. 
+- GET /api/auth/me implemented and verified using Bearer token.
 
----
+Frontend
+- Planned authentication architecture mirrors Settings architecture. 
+- Added: 
+	- context/AuthContext.jsx 
+	- hooks/useAuth.js
+	- constants/api.js
+	- App provider tree updated to include AuthProvider.
+	- Login component planned (not yet fully integrated).
+	- UserButton will later consume AuthContext instead of hardcoded state.
 
-## WEEK 1 (Jul 20–24) — Backend/Auth from scratch + Dashboard grid audit
+Project Architecture 
+- Context -> Hook -> Components pattern maintained.
+- API base URL centralized in constants/api.js. 
+- Session persistence will use localStorage key: co-efficient-token
 
-> **Revised Jul 21:** File structure review showed Dashboard shell, module framework, and Settings are further along than planned — but Login/Auth doesn't exist yet (no AuthContext, no backend routes) and `backend/` is empty except package.json. Stack chosen: **Node/Express + SQLite.** Auth is a build-from-scratch task, not a polish task — reordering this week around that.
-> 
+Design System 
+- variable.css established as the application’s global design token source.
+- Future components should use CSS variables instead of hardcoded colors.
 
-### Tue Jul 21 — Backend: server + DB + password auth
+Verified Working ✓ 
+Backend starts successfully. ✓ 
+SQLite connection successful. ✓ 
+Login endpoint returns JWT. ✓ 
+JWT middleware validates tokens. ✓ 
+Protected /api/auth/me endpoint returns authenticated user.
 
-- Checklist
-    - [ ]  Express server scaffold (entry point, basic route)
-    - [ ]  SQLite DB file + `users` table (id, username, password_hash, role)
-    - [ ]  bcrypt password hashing on account creation
-    - [ ]  Seed/register one test user manually (via script or temp endpoint)
-    - [ ]  `POST /login` endpoint — verify username/password, return success/failure
-
-### Wed Jul 22 — Backend: sessions/tokens
-
-- Checklist
-    - [ ]  Decide token approach (JWT is simplest for a local SQLite setup)
-    - [ ]  `POST /login` issues token on success
-    - [ ]  Auth middleware to verify token on protected routes
-    - [ ]  `GET /me` endpoint — returns current user + role from valid token
-    - [ ]  `POST /logout` endpoint (or client-side token clear, if using JWT)
-
-### Thu Jul 23 — Frontend: Auth wiring
-
-- Checklist
-    - [ ]  `AuthContext` + `useAuth` hook (mirror pattern used by `SettingsContext`/`useSettings`)
-    - [ ]  Login UI component (username/password fields, submit button, error display)
-    - [ ]  Wire login form to `POST /login`, store token, refresh identity via `/me`
-    - [ ]  Protected route wrapper — redirect to Login if no valid session, else render Dashboard
-    - [ ]  Logout button clears token, redirects to Login
-
-### Fri Jul 24 — Integration test + Dashboard grid audit
-
-- Checklist
-    - [ ]  Full loop test: seed user → login → refresh page (still logged in) → logout → redirected to Login
-    - [ ]  Test: visiting dashboard route directly while logged out → redirected to Login
-    - [ ]  Test: wrong password / empty fields show error, don't submit
-    - [ ]  **Audit existing Dashboard code** — check what's actually functional vs. stubbed:
-        - [ ]  Does grid layout render modules, or is it placeholder?
-        - [ ]  Does `DashboardContext` persist layout changes anywhere yet?
-        - [ ]  Do `ModuleManager`/`ModuleRenderer` actually add/remove/resize modules?
-    - [ ]  Write down what's left in Dashboard — carries into Week 2
-    **✅ Week 1 done when:** login → dashboard → refresh → logout works end-to-end against a real backend, and you know exactly what's left in the Dashboard grid.
-
----
-
-## WEEK 2 (Jul 27–31, vacation) — Weather Module
-
-- Checklist
-    - [ ]  Connect Open-Meteo API
-    - [ ]  Fetch current weather data
-    - [ ]  Fetch daily forecast data
-    - [ ]  Handle API errors
-    - [ ]  Add loading state
-    - [ ]  Display current temperature
-    - [ ]  Display weather condition + icon
-    - [ ]  Display location name
-    - [ ]  Display update time
-    - [ ]  Display today's high/low
-    - [ ]  Display humidity
-    - [ ]  Display wind speed
-    - [ ]  Display sunrise/sunset time
-    - [ ]  Show multi-day forecast (icons + temp range)
-    - [ ]  Use selected location from Settings
-    - [ ]  Update weather when location changes
-    - [ ]  Weather Dashboard component + card layout
-    - [ ]  Responsive design for the card
-    - [ ]  Empty/error states
-    - [ ]  Cache latest weather data
-    - [ ]  Prevent unnecessary API requests
-    - [ ]  Confirm weather loads within ~3 seconds
-
-**✅ Week 2 done when:** Weather card is live on the dashboard with real data.
-
----
-
-## WEEK 3 (Aug 3–7, vacation) — Announcement Module
-
-- Checklist
-    - [ ]  Create announcement data structure
-    - [ ]  Load announcements
-    - [ ]  Handle empty announcements
-    - [ ]  Handle loading/error state
-    - [ ]  Announcement component: title, message, date, status
-    - [ ]  Mark announcements as read
-    - [ ]  Show unread indicator
-    - [ ]  Open announcement details
-    - [ ]  Add announcement section to Dashboard
-    - [ ]  Display latest announcements first
-    - [ ]  Limit displayed announcements (e.g. last 5)
-    - [ ]  (Optional v1.0) Add announcement creation
-    - [ ]  (Optional v1.0) Add announcement editing
-    - [ ]  (Optional v1.0) Add announcement deletion
-
-**✅ Week 3 done when:** Announcement card is live and interactive on the dashboard.
-
----
-
-## WEEK 4 (Aug 10–14, vacation) — Schedule Module
-
-- Checklist
-    - [ ]  Create schedule data structure
-    - [ ]  Store schedule items
-    - [ ]  Load saved schedules
-    - [ ]  Handle empty schedule state
-    - [ ]  Create schedule component
-    - [ ]  Display current date
-    - [ ]  Display today's schedule
-    - [ ]  Display upcoming events
-    - [ ]  Show event title and time
-    - [ ]  Add new schedule/event
-    - [ ]  Edit schedule/event
-    - [ ]  Delete schedule/event
-    - [ ]  Set event date and time
-    - [ ]  Add event description (optional)
-    - [ ]  Highlight current/upcoming events
-    - [ ]  Sort events by date and time
-    - [ ]  (Optional) Notifications/reminders
-    - [ ]  Add schedule section to Dashboard
-    - [ ]  Display next upcoming event
-    - [ ]  Display daily overview
-
-**✅ Week 4 done when:** Schedule card is live; Weather + Announcement + Schedule all sit together on the dashboard.
-
----
-
-## WEEK 5 (Aug 17–21, school resumes) — Settings Completion
-
-- Checklist
-    - [ ]  Settings sidebar + page navigation
-    - [ ]  Auto-save settings
-    - [ ]  Reset to defaults
-    - [ ]  Manage Locations dialog
-    - [ ]  Add location
-    - [ ]  Edit location
-    - [ ]  Delete location
-    - [ ]  Set default location
-    - [ ]  Use current location (GPS)
-    - [ ]  Search location
-    - [ ]  Coordinate validation
-    - [ ]  Theme selection + apply theme
-    - [ ]  Language selection
-    - [ ]  Grid layout settings (in Settings)
-    - [ ]  Module default settings
-    - [ ]  Version info (About)
-    - [ ]  Confirm Settings changes propagate live to Weather/Announcement/Schedule without reload
-
-**✅ Week 5 done when:** every module can be fully configured through Settings, live.
-
----
-
-## WEEK 6 (Aug 24–28, school) — Hardening & Testing
-
-- Checklist
-    - [ ]  Loading states consistent across all modules
-    - [ ]  Error handling consistent across all modules
-    - [ ]  Responsive layout check (multiple screen sizes)
-    - [ ]  Animation/spacing polish pass
-    - [ ]  Full manual test: every checklist item above, re-verified
-    - [ ]  Fix bugs found during test pass
-    - [ ]  Buffer days (Aug 31+): absorb whatever slipped
-
-**✅ Project done when:** every box above is checked and the app survives a full login → use every module → logout cycle without errors.
-
----
-
-## Known v1.0 Gaps (deliberately out of scope — park for v1.1)
-
-- Checklist
-    - [ ]  Announcement: Archive system (auto-archive, browse/restore)
-    - [ ]  Announcement: Authority-based posting permissions & priority display
-    - [ ]  Schedule: Tag system (multi-tag, color priority)
-    - [ ]  Schedule: Absolute vs. Relative view toggle (month/week modes)
-    - [ ]  Weather: Graph (time-series chart)
-    - [ ]  Weather: Metrics cards (selectable data types)
-    - [ ]  Login: Admin user account management (create/edit/delete users, roles)
-    - [ ]  Dashboard: Manager/Admin-only grid permission gating
-    - [ ]  Multi-device real-time sync (Announcement + Schedule)
+Next Tasks 
+1. Finish useAuth.js implementation. 
+2. Create Login.jsx and login.css. 
+3. Render Login/Dashboard conditionally. 
+4. Connect UserButton to AuthContext.
+5. Implement logout flow.
+6. Finish end-to-end login persistence.
