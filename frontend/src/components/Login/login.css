@@ -1,0 +1,20 @@
+.login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100vw;
+    height: 100vh;
+}
+
+.login__card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    width: 320px;
+}
+
+.login__error {
+    color: red;
+}

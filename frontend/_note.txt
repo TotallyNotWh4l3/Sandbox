@@ -105,3 +105,13 @@ Sandbox
     │       ├── global.css
     │       └── variable.css
     └── vite.config.js
+
+
+    $token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5h..."
+
+Invoke-RestMethod `
+    -Uri "http://localhost:3001/api/auth/me" `
+    -Method GET `
+    -Headers @{
+        Authorization = "Bearer $token"
+    }
