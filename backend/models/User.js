@@ -1,45 +1,59 @@
 import db from "../config/database.js";
 
-function findByUserId(userId) {
+function findById(id) {
     return new Promise((resolve, reject) => {
         db.get(
             `
             SELECT *
-            FROM user_settings
-            WHERE user_id = ?
+            FROM users
+            WHERE id = ?
             `,
-            [userId],
+            [id],
             (error, row) => {
                 if (error) {
                     reject(error);
                     return;
                 }
 
-                if (!row) {
-                    resolve(null);
-                    return;
-                }
-
-                resolve({
-                    ...row,
-                    settings: JSON.parse(row.settings_json),
-                });
+                resolve(row);
             },
         );
     });
 }
 
-function create(userId, settings) {
+function findByUsername(username) {
+    return new Promise((resolve, reject) => {
+        db.get(
+            `
+            SELECT *
+            FROM users
+            WHERE username = ?
+            `,
+            [username],
+            (error, row) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+
+                resolve(row);
+            },
+        );
+    });
+}
+
+function create(username, passwordHash, role = "user") {
     return new Promise((resolve, reject) => {
         db.run(
             `
-            INSERT INTO user_settings (
-                user_id,
-                settings_json
+            INSERT INTO users (
+                username,
+                password_hash,
+                role
             )
-            VALUES (?, ?)
+            VALUES (?, ?, ?)
             `,
-            [userId, JSON.stringify(settings)],
+            [username, passwordHash, role],
             function (error) {
                 if (error) {
                     reject(error);
@@ -52,18 +66,15 @@ function create(userId, settings) {
     });
 }
 
-function updateByUserId(userId, settings) {
+function updateRole(id, role) {
     return new Promise((resolve, reject) => {
         db.run(
             `
-            UPDATE user_settings
-            SET
-                settings_json = ?,
-                updated_at = CURRENT_TIMESTAMP
-            WHERE
-                user_id = ?
+            UPDATE users
+            SET role = ?
+            WHERE id = ?
             `,
-            [JSON.stringify(settings), userId],
+            [role, id],
             function (error) {
                 if (error) {
                     reject(error);
@@ -76,15 +87,14 @@ function updateByUserId(userId, settings) {
     });
 }
 
-function deleteByUserId(userId) {
+function deleteById(id) {
     return new Promise((resolve, reject) => {
         db.run(
             `
-            DELETE FROM user_settings
-            WHERE
-                user_id = ?
+            DELETE FROM users
+            WHERE id = ?
             `,
-            [userId],
+            [id],
             function (error) {
                 if (error) {
                     reject(error);
@@ -95,24 +105,13 @@ function deleteByUserId(userId) {
             },
         );
     });
-}
-
-async function upsert(userId, settings) {
-    const existing = await findByUserId(userId);
-
-    if (existing) {
-        return updateByUserId(userId, settings);
-    }
-
-    return create(userId, settings);
 }
 
 export default {
-    findByUserId,
+    findById,
+    findByUsername,
 
     create,
-    updateByUserId,
-    deleteByUserId,
-
-    upsert,
+    updateRole,
+    deleteById,
 };

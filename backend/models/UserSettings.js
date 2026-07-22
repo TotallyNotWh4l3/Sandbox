@@ -1,6 +1,6 @@
 import db from "../config/database.js";
 
-function getByUserId(userId) {
+function findByUserId(userId) {
     return new Promise((resolve, reject) => {
         db.get(
             `
@@ -15,7 +15,15 @@ function getByUserId(userId) {
                     return;
                 }
 
-                resolve(row);
+                if (!row) {
+                    resolve(null);
+                    return;
+                }
+
+                resolve({
+                    ...row,
+                    settings: JSON.parse(row.settings_json),
+                });
             },
         );
     });
@@ -44,7 +52,7 @@ function create(userId, settings) {
     });
 }
 
-function update(userId, settings) {
+function updateByUserId(userId, settings) {
     return new Promise((resolve, reject) => {
         db.run(
             `
@@ -68,7 +76,7 @@ function update(userId, settings) {
     });
 }
 
-function remove(userId) {
+function deleteByUserId(userId) {
     return new Promise((resolve, reject) => {
         db.run(
             `
@@ -88,9 +96,22 @@ function remove(userId) {
     });
 }
 
+async function upsert(userId, settings) {
+    const existing = await findByUserId(userId);
+
+    if (existing) {
+        return updateByUserId(userId, settings);
+    }
+
+    return create(userId, settings);
+}
+
 export default {
-    getByUserId,
+    findByUserId,
+
     create,
-    update,
-    remove,
+    updateByUserId,
+    deleteByUserId,
+
+    upsert,
 };
