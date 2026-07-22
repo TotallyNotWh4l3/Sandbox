@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@carefully-coded/react-text-gradient": "^1.0.6",
     "@radix-ui/react-dialog": "^1.1.17",
     "@radix-ui/react-dropdown-menu": "^2.1.19",
     "@radix-ui/react-popover": "^1.1.17",
@@ -28,8 +27,7 @@
     "react-dom": "^19.2.7",
     "react-grid-layout": "^2.2.3",
     "react-hot-toast": "^2.6.0",
-    "react-select": "^5.10.2",
-    "react-text-gradients": "^1.0.2"
+    "react-select": "^5.10.2"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
