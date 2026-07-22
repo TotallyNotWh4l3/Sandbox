@@ -1,14 +1,11 @@
 import db from "../config/database.js";
 
+import usersTable from "./schema/users.js";
+import userSettingsTable from "./schema/userSettings.js";
+
 db.serialize(() => {
-    db.run(`
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE NOT NULL,
-            password_hash TEXT NOT NULL,
-            role TEXT NOT NULL DEFAULT 'user'
-        )
-    `);
+    db.run(usersTable);
+    db.run(userSettingsTable);
 
     console.log("Database initialized.");
 });

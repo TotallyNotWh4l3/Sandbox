@@ -1,13 +1,13 @@
-// JSX
 import Dashboard from "./components/Dashboard/Dashboard";
 import DialogManager from "./components/Settings/Components/UI/Dialog/DialogManager";
+import Login from "./components/Login/Login";
 
 // Hooks
 import { useSettingsState } from "./hooks/useSettings";
 import { useDashboardState } from "./hooks/useDashboard";
 import { useDialogState } from "./hooks/useDialog";
 import { useTheme } from "./hooks/useTheme";
-import { useAuthState } from "./hooks/useAuth";
+import { useAuthState, useAuth } from "./hooks/useAuth";
 
 // Context
 import { SettingsProvider } from "./context/SettingsContext";
@@ -24,22 +24,36 @@ function ThemeApplier() {
     return null;
 }
 
+function AppContent() {
+    const { user, loading } = useAuth();
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    return (
+        <>
+            <ThemeApplier />
+
+            {user ? <Dashboard /> : <Login />}
+
+            <DialogManager />
+        </>
+    );
+}
+
 export default function App() {
+    const authState = useAuthState();
     const settingsState = useSettingsState();
     const dashboardState = useDashboardState();
     const dialogState = useDialogState();
-    const authState = useAuthState();
 
     return (
         <AuthProvider value={authState}>
             <SettingsProvider value={settingsState}>
                 <DashboardProvider value={dashboardState}>
                     <DialogProvider value={dialogState}>
-                        <ThemeApplier />
-
-                        <Dashboard />
-
-                        <DialogManager />
+                        <AppContent />
                     </DialogProvider>
                 </DashboardProvider>
             </SettingsProvider>

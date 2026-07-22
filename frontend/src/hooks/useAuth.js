@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useAuthContext } from "../context/AuthContext";
-import API_URL from "../constants/api";
+import * as AuthService from "../services/authService";
 
 export function useAuthState() {
     const [auth, setAuth] = useState({
@@ -14,64 +14,49 @@ export function useAuthState() {
             const storedToken = localStorage.getItem("co-efficient-token");
 
             if (!storedToken) {
-                setLoading(false);
+                setAuth((prev) => ({
+                    ...prev,
+                    loading: false,
+                }));
                 return;
             }
 
             try {
-                const response = await fetch(`${API_URL}/api/auth/me`, {
-                    headers: {
-                        Authorization: `Bearer ${storedToken}`,
-                    },
+                const currentUser = await AuthService.getCurrentUser(storedToken);
+
+                setAuth({
+                    user: currentUser,
+                    token: storedToken,
+                    loading: false,
                 });
-
-                if (!response.ok) {
-                    throw new Error("Invalid session");
-                }
-
-                const currentUser = await response.json();
-
-                setToken(storedToken);
-                setUser(currentUser);
 
                 console.log("[Auth] Session restored.");
             } catch {
                 localStorage.removeItem("co-efficient-token");
 
-                setUser(null);
-                setToken(null);
+                setAuth({
+                    user: null,
+                    token: null,
+                    loading: false,
+                });
 
                 console.log("[Auth] Session expired.");
             }
-
-            setLoading(false);
         }
 
         restoreSession();
     }, []);
 
     const login = useCallback(async (username, password) => {
-        const response = await fetch(`${API_URL}/api/auth/login`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                username,
-                password,
-            }),
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.message);
-        }
+        const data = await AuthService.login(username, password);
 
         localStorage.setItem("co-efficient-token", data.token);
 
-        setToken(data.token);
-        setUser(data.user);
+        setAuth({
+            user: data.user,
+            token: data.token,
+            loading: false,
+        });
 
         console.log("[Auth] Login successful.");
     }, []);
@@ -79,16 +64,17 @@ export function useAuthState() {
     const logout = useCallback(() => {
         localStorage.removeItem("co-efficient-token");
 
-        setUser(null);
-        setToken(null);
+        setAuth({
+            user: null,
+            token: null,
+            loading: false,
+        });
 
         console.log("[Auth] Logged out.");
     }, []);
 
     return {
-        user,
-        token,
-        loading,
+        ...auth,
 
         login,
         logout,

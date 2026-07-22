@@ -24,9 +24,10 @@ export default function Login() {
     return (
         <main className="login">
             <form className="login__card" onSubmit={handleSubmit}>
-                <h1>Co:Efficient</h1>
+                <h1 className="login__title">Co:Efficient</h1>
 
                 <input
+                    className="login__input"
                     type="text"
                     placeholder="Username"
                     value={username}
@@ -34,15 +35,18 @@ export default function Login() {
                 />
 
                 <input
+                    className="login__input"
                     type="password"
                     placeholder="Password"
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
                 />
 
-                {error && <p className="login__error">{error}</p>}
+                {error && <div className="login__error">{error}</div>}
 
-                <button type="submit">Login</button>
+                <button className="login__button" type="submit">
+                    Login
+                </button>
             </form>
         </main>
     );
