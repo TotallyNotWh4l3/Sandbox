@@ -15,8 +15,12 @@ import { Computer } from "lucide-react";
 export default function InterfaceSettings() {
     const { loading, settings, updatePreference, applyTheme, applyLocation } = useSettings();
 
-    if (loading || !settings) {
-        return null;
+    if (loading) {
+        return <div className="interface-settings">Loading settings...</div>;
+    }
+
+    if (!settings) {
+        return <div className="interface-settings">Unable to load settings.</div>;
     }
 
     const { locationOptions } = useLocation();

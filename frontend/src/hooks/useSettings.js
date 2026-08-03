@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useSettingsContext } from "../context/SettingsContext";
 import * as SettingsService from "../services/settingsService";
 
-export function useSettingsState(user) {
+export function useSettingsState(authState) {
     const [settings, setSettings] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -12,8 +12,13 @@ export function useSettingsState(user) {
     // =====================================================
 
     useEffect(() => {
-        // Wait until authentication has completed.
-        if (!user) {
+        if (!authState || authState.loading) {
+            setLoading(true);
+            return;
+        }
+
+        if (!authState.user) {
+            setSettings(null);
             setLoading(false);
             return;
         }
@@ -37,7 +42,7 @@ export function useSettingsState(user) {
         }
 
         loadSettings();
-    }, [user]);
+    }, [authState?.loading, authState?.user]);
 
     // =====================================================
     // Auto Save

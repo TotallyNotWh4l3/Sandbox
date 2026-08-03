@@ -19,7 +19,13 @@ export default function SettingsContent({ currentPage }) {
 
     return (
         <main className="settings__content">
-            <CurrentPage />
+            {CurrentPage ? (
+                <CurrentPage />
+            ) : (
+                <div className="settings-content__empty">
+                    <p>Unable to load settings content.</p>
+                </div>
+            )}
         </main>
     );
 }
