@@ -1,14 +1,15 @@
 import { defineConfig } from "vite";
-import react, { reactCompilerPreset } from "@vitejs/plugin-react";
-import babel from "@rolldown/plugin-babel";
+import react from "@vitejs/plugin-react";
+import path from "node:path";
 
-// https://vite.dev/config/
 export default defineConfig({
-    plugins: [react(), babel({ presets: [reactCompilerPreset()] })],
-    css: {
-        devSourcemap: true,
-    },
-    server: {
-        host: true,
-    },
+  plugins: [react()],
+  resolve: {
+    alias: { "@shared": path.resolve(__dirname, "../shared") },
+  },
+  server: {
+    port: 5173,
+    fs: { allow: [".."] },
+    proxy: { "/api": "http://localhost:3001" },
+  },
 });

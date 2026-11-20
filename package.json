@@ -1,0 +1,14 @@
+{
+  "name": "ui-sandbox",
+  "private": true,
+  "type": "module",
+  "workspaces": ["frontend", "backend"],
+  "scripts": {
+    "dev": "concurrently -n fe,be -c cyan,green \"npm run dev -w frontend\" \"npm run dev -w backend\"",
+    "dev:frontend": "npm run dev -w frontend",
+    "dev:backend": "npm run dev -w backend"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}
